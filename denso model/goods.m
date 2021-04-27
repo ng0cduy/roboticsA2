@@ -12,6 +12,9 @@ classdef goods <handle
     updatePose;
     nameModel;
     pos_ = eye(4);
+    x;
+    y;
+    z;
     end
     methods (Access = public)
         function self = goods(name,pos)
@@ -29,6 +32,7 @@ classdef goods <handle
             self.plotModel();
             self.MoveObject(pos);
             self.Find_faceNormal();
+            self.getGoodsSize();
         end
         function plotModel(self)
             %compute the number of vertices
@@ -62,9 +66,12 @@ classdef goods <handle
         end
         
         function [x,y,z] = getGoodsSize(self)
-            x = max(self.data.vertex.x) - min(self.data.vertex.x);
-            y = max(self.data.vertex.y) - min(self.data.vertex.y);
-            z = max(self.data.vertex.z) - min(self.data.vertex.z);
+            self.x = max(self.data.vertex.x) - min(self.data.vertex.x);
+            self.y = max(self.data.vertex.y) - min(self.data.vertex.y);
+            self.z = max(self.data.vertex.z) - min(self.data.vertex.z);
+            x=self.x;
+            y=self.y;
+            z=self.z;
         end
                 
     end

@@ -119,8 +119,6 @@ classdef DensoVS060<handle
               self.qMatrix = jtraj(self.model.getpos, qNew,steps);
 %               check if the object collide with the trajectory
               for i = 1:1:steps
-%                    self.model.animate(self.qMatrix(i,:));
-%                    drawnow();
                    result(i) = IsCollision(self,self.qMatrix(i,:),object.f,object.vUpdate,object.faceNormals);
                    if result(i) == 1
                         disp('Intersect');
@@ -135,14 +133,14 @@ classdef DensoVS060<handle
               while (isCollision)
                     self.qMatrix=[];
                     startWaypoint = checkedTillWaypoint;
-                    for i = startWaypoint:size(qWaypoints,1)-1
+                    for i = startWaypoint:1:size(qWaypoints,1)-1
                         qMatrixJoin = InterpolateWaypointRadians(qWaypoints(i:i+1,:),deg2rad(10));
                         if ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
                             self.qMatrix = [self.qMatrix; qMatrixJoin];
                             isCollision = false;
                             checkedTillWaypoint = i+1;
                             % Now try and join to the final goal (q2)
-                            qMatrixJoin = InterpolateWaypointRadians([self.qMatrix(end,:); qNew],deg2rad(10));
+                            qMatrixJoin = InterpolateWaypointRadians([self.qMatrix(end,:); qNew],deg2rad(5));
                             if ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
                                 self.qMatrix = [self.qMatrix;qMatrixJoin];
                                 % Reached goal without collision, so break out
@@ -153,14 +151,13 @@ classdef DensoVS060<handle
                 %             qRand = (2 * rand(1,6) - 1) * pi;
                             a=eye(4);
                             a(1:3,4) = self.endEffector(1:3,4);
-                            qRand = self.IKine(a*transl(0,0,0.15));
+                            qRand = self.IKine(a*transl(0,0,rand(1,1)));
                             while ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
                 %                 qRand = (2 * rand(1,6) - 1) * pi;
-%                                 a(1:3,4) = self.endEffector(1:3,4);
-                                qRand = self.IKine(a*transl(0,0,0.15));
+                                qRand = self.IKine(a*transl(0,0,rand(1,1)));
                             end
                             qWaypoints =[ qWaypoints(1:i,:); qRand; qWaypoints(i+1:end,:)];
-                            isCollision = true;
+%                             isCollision = true;
                             break;
                         end
                     end
