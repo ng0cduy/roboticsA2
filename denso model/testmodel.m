@@ -1,7 +1,6 @@
 
 %%
 clf
-clear all
 a = DensoVS060(false,transl(0,0,0),'denso');
 % a.model.teach;
 hold on;
@@ -15,7 +14,7 @@ q = a.IKine(pose);
 a.Animate(green.pos_,50,green);
 % a.Reset()
 %% test collision
-
+keyboard;
 clc;
 close all;
 % mdl_planar3

@@ -33,7 +33,7 @@ classdef DensoVS060<handle
             L6=Link('alpha',0,'a',0, 'd',0.06, 'offset',0,'qlim',[deg2rad(-360), deg2rad(360)]);
 %             L1.qlim = [-0.8 0];            
             self.model = SerialLink([L1 L2 L3 L4 L5 L6],'name',self.name);
-%             self.model.teach();
+            self.model.teach();
         end
         %% Set Denso Base Location 
         function SetBase(self,base)

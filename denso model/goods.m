@@ -26,7 +26,7 @@ classdef goods <handle
             [self.f,self.v,self.data] = plyread(self.nameModel,'tri'); 
             self.plotModel();
             self.MoveObject(pos);
-            self.Find_faceNormal()
+            self.Find_faceNormal();
         end
         function plotModel(self)
             %compute the number of vertices
@@ -50,7 +50,6 @@ classdef goods <handle
             self.pos_ = pose;
         end
         function Find_faceNormal(self)
-%             if 2 < nargout
                 self.faceNormals = zeros(size(self.f,1),3);
                 for faceIndex = 1:size(self.f,1)
                     v1 = self.v(self.f(faceIndex,1)',:);
@@ -58,7 +57,6 @@ classdef goods <handle
                     v3 = self.v(self.f(faceIndex,3)',:);
                     self.faceNormals(faceIndex,:) = unit(cross(v2-v1,v3-v1));
                 end
-%             end
         end
         
         function [x,y,z] = getGoodsSize(self)
