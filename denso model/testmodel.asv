@@ -11,7 +11,7 @@ green= goods('green',transl(0.4,0,0)*troty(pi));
 a.Animate(green.pos_,50,green);
 % a.Reset()
 %% test collision
-nghikeyboard;
+keyboard;
 clc;
 % mdl_planar3
 [vertex,faces,faceNormals] =RectangularPrism([0.8,-.11,-.5], [.2,.11,.5]);
@@ -20,7 +20,7 @@ camlight
 q1 = [-pi/3,0,0,0,0,0];
 q2 =  [pi/3,0,0,0,0,0];
 % keyboard;
-a.model.animate(q1)
+a.model.plot(q1)
 steps = 50;
 qMatrix = jtraj(q1,q2,steps);
 
@@ -37,7 +37,6 @@ end
 %% 
 clc;
 close all;
-clear all;
 a = DensoVS060(false,transl(0,0,0),'denso');
 [vertex,faces,faceNormals] =RectangularPrism([0.8,-.11,-.5], [.2,.11,.5]);
 q1 = [-pi/3,0,0,0,0,0];
@@ -45,7 +44,7 @@ q2 =  [pi/3,0,0,0,0,0];
 qWaypoints = [q1;q2];
 isCollision = true;
 checkedTillWaypoint = 1;
-a.model.animate(q1);
+robot.animate(q1);
 qMatrix = [];
 while (isCollision)
     startWaypoint = checkedTillWaypoint;
@@ -53,6 +52,8 @@ while (isCollision)
         qMatrixJoin = InterpolateWaypointRadians(qWaypoints(i:i+1,:),deg2rad(10));
         if ~IsCollision(a,qMatrixJoin,faces,vertex,faceNormals)
             qMatrix = [qMatrix; qMatrixJoin]; %#ok<AGROW>
+            a.model.animate(qMatrixJoin(i,:));
+            size(qMatrix)
             isCollision = false;
             checkedTillWaypoint = i+1;
             % Now try and join to the final goal (q2)
@@ -74,13 +75,7 @@ while (isCollision)
         end
     end
 end
-%% 
-keyboard;
-[row,col] = size(qMatrix);
-for i=1:1:row
-    a.model.animate(qMatrix(i,:));
-    pause(0.03);
-end
+    a.model.animate(qMatrix);
 
 
 %% InterpolateWaypointRadians
@@ -109,5 +104,3 @@ while ~isempty(find(maxStepRadians < abs(diff(jtraj(q1,q2,steps))),1))
 end
 qMatrix = jtraj(q1,q2,steps);
 end
-
-
