@@ -24,27 +24,28 @@ classdef DensoVS060<handle
         end
         %% Create Denso Links
         function getDensoVS060(self)       
-            L1 = Link([pi     0       0       pi/2    1.001]);
-            L2=Link('alpha',pi/2,'a',0, 'd',0.148, 'offset',pi,'qlim',[deg2rad(-170), deg2rad(170)] );
-            L3=Link('alpha',0,'a',0.305, 'd',0, 'offset',pi/2,'qlim',[deg2rad(-120), deg2rad(120)]);
-            L4=Link('alpha',-pi/2,'a',0, 'd',0, 'offset',0,'qlim',[deg2rad(-125), deg2rad(155)]);
-            L5=Link('alpha',pi/2,'a',0, 'd',0.3, 'offset',0,'qlim',[deg2rad(-270), deg2rad(270)]);
-            L6=Link('alpha',-pi/2,'a',0, 'd',0, 'offset',pi/2,'qlim',[deg2rad(-120), deg2rad(120)]);
-            L7=Link('alpha',0,'a',0, 'd',0.06, 'offset',0,'qlim',[deg2rad(-360), deg2rad(360)]);
-            L1.qlim = [-0.8 0];            
-            self.model = SerialLink([L1 L2 L3 L4 L5 L6 L7],'name',self.name);
+%             L1 = Link([pi     0       0       pi/2    1.001]);
+            L1=Link('alpha',pi/2,'a',0, 'd',0.148, 'offset',pi,'qlim',[deg2rad(-170), deg2rad(170)] );
+            L2=Link('alpha',0,'a',0.305, 'd',0, 'offset',pi/2,'qlim',[deg2rad(-120), deg2rad(120)]);
+            L3=Link('alpha',-pi/2,'a',0, 'd',0, 'offset',0,'qlim',[deg2rad(-125), deg2rad(155)]);
+            L4=Link('alpha',pi/2,'a',0, 'd',0.3, 'offset',0,'qlim',[deg2rad(-270), deg2rad(270)]);
+            L5=Link('alpha',-pi/2,'a',0, 'd',0, 'offset',pi/2,'qlim',[deg2rad(-120), deg2rad(120)]);
+            L6=Link('alpha',0,'a',0, 'd',0.06, 'offset',0,'qlim',[deg2rad(-360), deg2rad(360)]);
+%             L1.qlim = [-0.8 0];            
+            self.model = SerialLink([L1 L2 L3 L4 L5 L6],'name',self.name);
 %             self.model.teach();
         end
         %% Set Denso Base Location 
         function SetBase(self,base)
-            self.model.base=base*trotz(-pi/2)*trotx(pi/2);
+%             self.model.base=base*trotz(-pi/2)*trotx(pi/2);
+            self.model.base = base;
             self.PlotandColorUR3();
         end
         
         %% Import PLY files to get the 3D model
         function PlotandColorUR3(self)
             for linkIndex = 0:self.model.n
-                [ faceData, vertexData, plyData{linkIndex + 1} ] = plyread(['L',num2str(linkIndex),'.ply'],'tri'); 
+                [ faceData, vertexData, plyData{linkIndex + 1} ] = plyread(['J',num2str(linkIndex),'.ply'],'tri'); 
                 self.model.faces{linkIndex + 1} = faceData;
                 self.model.points{linkIndex + 1} = vertexData;
             end
@@ -120,5 +121,9 @@ classdef DensoVS060<handle
                    drawnow();
               end
         end
+        %% Collision Detection
+%         function Collision
+%         end
+        
     end
 end
