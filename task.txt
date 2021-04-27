@@ -1,0 +1,27 @@
+Path plan between several poses and the final joint state given a unique and safe environment (developed by each group) and the simulated model.
+
+Use RMRC, collision avoidance and a GUI where appropriate.
+
+Creatively use a real robotthat mimics and/or enhances the simulation and application.
+
+Safetyin Demo: 
+
+(1) System reactsto user’s emergency stop action(minusmarks if no estop)
+
+(2) Trajectory reacts to simulated sensor input (e.g. light curtain)
+
+(3) Trajectory reacts to a forced simulated upcoming collision
+
+(4) Make the robot retreat from a simulated safety symbol using visual servoing and RMRC
+
+
+The simulated system must:
+1)	Include a Matlab graphical user interface(GUI) to interact with the system. The GUI should have advanced “teach” functionality that allows jogging the robot. It should include both individual joint movements (like the Toolbox’s “teach”) plus enable [x,y,z] Cartesian movements. A valid addition is to use a joystick or gamepad instead of GUI-based button presses.
+
+2)	Incorporate a functional estop (can be simulated or real) that immediately stops operations. Disengaging the estop must not immediately resumethe robot system but only permitresuming (meaning two actions are necessary to resume). For full marks yoursystem must be able to recover/resumeafter an e-stop event.
+
+3)	Place the system in a simulated environment that includes safety hardware (e.g. barriers, warning signs/lights/sirens), and if relevant this may be implemented on the real robot as well and augmented with active sensors(BONUS)where some signals are passed back to the main Matlabprogram. 
+
+4)	Incorporate safetyfunctionalitya)To react to an asynchronous stop signal by a user. The system willstop based upon an action from the user (e.g. simulated (or real) sensing of something/someone enteringan unsafe zone).b)To prevent collisions. When a simulated object (that you make and control) is placed in the path of the robot, it will stop until there is no predicted collisionor move to avoid the collision.Active collision avoidance will be marked higher than simply detecting a collision and stopping.c)To make the robot retreat from a simulated safety symbol using visual servoing and RMRC
+
+5)	Ensure theteam’s Matlab code is available on a code repository for tutors to access and download. The code and your understanding will be scrutinised during the individual code viva. You are expected to still adhere to the given code standard.
