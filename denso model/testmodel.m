@@ -19,8 +19,8 @@ for i =1:size(qMatrix,1)
 end
 %%
 a.Reset;
-a.Animate(transl(0.5,0.2,0)*troty(pi),50,green);
-a.Animate(transl(0.5,-0.4,0)*troty(pi),50,green);
+a.Animate(transl(0.5,0.2,-0.13)*troty(pi),50,green);
+a.Animate(transl(0.5,-0.4,-0.13)*troty(pi),50,green);
 % a.Reset;
 
 

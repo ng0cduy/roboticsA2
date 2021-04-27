@@ -175,11 +175,11 @@ classdef DensoVS060<handle
                             % Randomly pick a pose that is not in collision
                 %             qRand = (2 * rand(1,6) - 1) * pi;
                             a=eye(4);
-                            a(1:3,4) = self.endEffector(1:3,4);
-                            qRand = self.IKine(a*transl(0,0,rand(1,1)));
+                            a(1:2,4) = self.endEffector(1:2,4);
+                            qRand = self.IKine(a*transl(0,0,object.z*2)*troty(pi));
                             while ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
                 %                 qRand = (2 * rand(1,6) - 1) * pi;
-                                qRand = self.IKine(a*transl(0,0,rand(1,1)));
+                                qRand = self.IKine(a*transl(0,0,object.z*2)*troty(pi));
                             end
                             qWaypoints =[ qWaypoints(1:i,:); qRand; qWaypoints(i+1:end,:)];
 %                             isCollision = true;
