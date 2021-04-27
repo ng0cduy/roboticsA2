@@ -109,6 +109,30 @@ classdef DensoVS060<handle
                    self.model.animate(self.qz);
                end
         end
+        %% RMRC: q generating using RMRC
+        function qMatrix = GenerateRMRC(self,pose,steps)
+            q1 = self.model.getpos;
+            q2 = self.IKine(pose);
+            T1 = self.FKine(q1);
+            T2 = pose;
+            x1 = [T1(1:3,4);tr2rpy(T1)'];
+            x2 = [T2(1:3,4);tr2rpy(T2)'];
+            deltaTime = 0.05;
+            x = zeros(6,steps);
+            s = lspb(0,1,steps);
+            for i = 1:steps
+                x(:,i) = x1*(1-s(i)) + s(i)*x2;
+            end
+            qMatrixx = nan(steps,6);
+            qMatrixx(1,:) = q1;
+            for i = 1:steps-1
+                xdot = (x(:,i+1) - x(:,i))/deltaTime;
+                J = self.model.jacob0(qMatrixx(i,:));
+                qdot = J\xdot;
+                qMatrixx(i+1,:) = qMatrixx(i,:) + deltaTime* qdot';
+            end
+            qMatrix = qMatrixx;
+        end
         
         %% Trajectory using Quintic Polynomial 
         function Animate(self,pose,steps,object)
