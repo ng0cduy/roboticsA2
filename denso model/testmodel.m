@@ -1,22 +1,22 @@
 
 %%
 clf
+clear all
+clc
 a = DensoVS060(false,transl(0,0,0),'denso');
 % a.model.teach;
 hold on;
-green= goods('green',transl(0.4,0.3,-0.13)*troty(pi));
+green= goods('green',transl(0.4,0,0)*troty(pi));
 
 %%
-keyboard
-clc
 pose = transl(0,0,0.5)*troty(pi);
 q = a.IKine(pose);
+%%
 a.Animate(green.pos_,50,green);
 % a.Reset()
 %% test collision
 keyboard;
 clc;
-close all;
 % mdl_planar3
 [vertex,faces,faceNormals] =RectangularPrism([0.8,-.11,-.5], [.2,.11,.5]);
 axis equal

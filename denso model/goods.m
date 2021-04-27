@@ -2,6 +2,7 @@ classdef goods <handle
     properties(Access = public)
     f;
     v;
+    vUpdate;
     data;
     faceNormals;
     mesh_h;
@@ -24,6 +25,7 @@ classdef goods <handle
                 self.nameModel ='green.ply';
             end
             [self.f,self.v,self.data] = plyread(self.nameModel,'tri'); 
+            self.vUpdate = self.v + pos(1:3,4)'; 
             self.plotModel();
             self.MoveObject(pos);
             self.Find_faceNormal();

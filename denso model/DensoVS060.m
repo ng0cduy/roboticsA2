@@ -33,7 +33,6 @@ classdef DensoVS060<handle
             L6=Link('alpha',0,'a',0, 'd',0.06, 'offset',0,'qlim',[deg2rad(-360), deg2rad(360)]);
 %             L1.qlim = [-0.8 0];            
             self.model = SerialLink([L1 L2 L3 L4 L5 L6],'name',self.name);
-            self.model.teach();
         end
         %% Set Denso Base Location 
         function SetBase(self,base)
@@ -119,11 +118,14 @@ classdef DensoVS060<handle
               for i = 1:1:steps
                    self.model.animate(self.qMatrix(i,:));
                    drawnow();
-                   result(i) = IsCollision(self,self.qMatrix(i,:),object.f,object.v,object.faceNormals);
-                   if result(i) >= 1
+                   result(i) = IsCollision(self,self.qMatrix(i,:),object.f,object.vUpdate,object.faceNormals);
+                   if result(i) == 1
                         display(num2str(self.qMatrix(i,:)));
-%                         break
+                        break
+                   else 
+                       disp('not intersect');
                    end
+                   
               end
             else
                 qNew = self.IKine(pose);
@@ -131,6 +133,7 @@ classdef DensoVS060<handle
                 for i = 1:1:steps
                     self.model.animate(self.qMatrix(i,:));
                     drawnow();
+                    pause(0.05);
                 end
             end
             
