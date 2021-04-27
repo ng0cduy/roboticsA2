@@ -11,7 +11,7 @@ green= goods('green',transl(0.4,0,0)*troty(pi));
 a.Animate(green.pos_,50,green);
 % a.Reset()
 %% test collision
-nghikeyboard;
+keyboard;
 clc;
 % mdl_planar3
 [vertex,faces,faceNormals] =RectangularPrism([0.8,-.11,-.5], [.2,.11,.5]);
@@ -31,20 +31,19 @@ for i= 1:1:steps
         checkedTillWaypoint = 1;
         break
     end
-    a.model.animate(qMatrix(i,:));
+%     a.model.animate(qMatrix(i,:));
 end
 
 %% 
 clc;
-close all;
-clear all;
-a = DensoVS060(false,transl(0,0,0),'denso');
+% close all;
+% clear all;
+% a = DensoVS060(false,transl(0,0,0),'denso');
 [vertex,faces,faceNormals] =RectangularPrism([0.8,-.11,-.5], [.2,.11,.5]);
 q1 = [-pi/3,0,0,0,0,0];
 q2 =  [pi/3,0,0,0,0,0];
 qWaypoints = [q1;q2];
-isCollision = true;
-checkedTillWaypoint = 1;
+
 a.model.animate(q1);
 qMatrix = [];
 while (isCollision)
@@ -64,9 +63,11 @@ while (isCollision)
             end
         else
             % Randomly pick a pose that is not in collision
-            qRand = (2 * rand(1,6) - 1) * pi;
+%             qRand = (2 * rand(1,6) - 1) * pi;
+            qRand = a.IKine(a.endEffector*transl(0,0,-0.15));
             while IsCollision(a,qRand,faces,vertex,faceNormals)
-                qRand = (2 * rand(1,6) - 1) * pi;
+%                 qRand = (2 * rand(1,6) - 1) * pi;
+                qRand = a.IKine(a.endEffector*transl(0,-0.03,-0.15));
             end
             qWaypoints =[ qWaypoints(1:i,:); qRand; qWaypoints(i+1:end,:)];
             isCollision = true;
