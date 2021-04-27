@@ -140,7 +140,8 @@ classdef DensoVS060<handle
             isCollision =false;
             if(nargin>3)
               qNew = self.IKine(pose);
-              self.qMatrix = jtraj(self.model.getpos, qNew,steps);
+%               self.qMatrix = jtraj(self.model.getpos, qNew,steps);
+              self.qMatrix = GenerateRMRC(self,pose,steps);
 %               check if the object collide with the trajectory
               for i = 1:1:steps
                    result(i) = IsCollision(self,self.qMatrix(i,:),object.f,object.vUpdate,object.faceNormals);
