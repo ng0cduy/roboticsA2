@@ -1,6 +1,6 @@
 classdef DensoVS060<handle
     properties (Constant)
-        qz = zeros(1,7);
+        qz = zeros(1,6);
     end
     properties(Access =public)
         base;
@@ -9,7 +9,7 @@ classdef DensoVS060<handle
         qMatrix;
         useGripper = false;   
         name;
-        initialPose=zeros(1,7);
+        initialPose=zeros(1,6);
         pose
         workspace = [-1 1 -1 1 -0.3 1]; 
     end
@@ -112,18 +112,31 @@ classdef DensoVS060<handle
         end
         
         %% Trajectory using Quintic Polynomial 
-        function Animate(self,pose,steps)
+        function Animate(self,pose,steps,object)
+            if(nargin>3)
               qNew = self.IKine(pose);
               self.qMatrix = jtraj(self.model.getpos, qNew,steps);
-%               self.initialPose = self.model.getpos;
               for i = 1:1:steps
                    self.model.animate(self.qMatrix(i,:));
                    drawnow();
+                   result(i) = IsCollision(self,self.qMatrix(i,:),object.f,object.v,object.faceNormals);
+                   if result(i) >= 1
+                        display(num2str(self.qMatrix(i,:)));
+%                         break
+                   end
               end
+            else
+                qNew = self.IKine(pose);
+                self.qMatrix = jtraj(self.model.getpos, qNew,steps);
+                for i = 1:1:steps
+                    self.model.animate(self.qMatrix(i,:));
+                    drawnow();
+                end
+            end
+            
         end
         %% Collision Detection
-%         function Collision
-%         end
+
         
     end
 end

@@ -3,6 +3,7 @@ classdef goods <handle
     f;
     v;
     data;
+    faceNormals;
     mesh_h;
     midpoint;
     modelVertexCount;
@@ -25,6 +26,7 @@ classdef goods <handle
             [self.f,self.v,self.data] = plyread(self.nameModel,'tri'); 
             self.plotModel();
             self.MoveObject(pos);
+            self.Find_faceNormal()
         end
         function plotModel(self)
             %compute the number of vertices
@@ -47,6 +49,18 @@ classdef goods <handle
             self.UpdatePose(pose);
             self.pos_ = pose;
         end
+        function Find_faceNormal(self)
+%             if 2 < nargout
+                self.faceNormals = zeros(size(self.f,1),3);
+                for faceIndex = 1:size(self.f,1)
+                    v1 = self.v(self.f(faceIndex,1)',:);
+                    v2 = self.v(self.f(faceIndex,2)',:);
+                    v3 = self.v(self.f(faceIndex,3)',:);
+                    self.faceNormals(faceIndex,:) = unit(cross(v2-v1,v3-v1));
+                end
+%             end
+        end
+        
         function [x,y,z] = getGoodsSize(self)
             x = max(self.data.vertex.x) - min(self.data.vertex.x);
             y = max(self.data.vertex.y) - min(self.data.vertex.y);
