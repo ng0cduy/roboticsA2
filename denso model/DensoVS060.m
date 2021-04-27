@@ -151,10 +151,13 @@ classdef DensoVS060<handle
                         else
                             % Randomly pick a pose that is not in collision
                 %             qRand = (2 * rand(1,6) - 1) * pi;
-                            qRand = self.IKine(self.endEffector*transl(0,0,-0.2));
+                            a=eye(4);
+                            a(1:3,4) = self.endEffector(1:3,4);
+                            qRand = self.IKine(a*transl(0,0,0.15));
                             while ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
                 %                 qRand = (2 * rand(1,6) - 1) * pi;
-                                qRand = self.IKine(self.endEffector*transl(0,0,-0.2));
+%                                 a(1:3,4) = self.endEffector(1:3,4);
+                                qRand = self.IKine(a*transl(0,0,0.15));
                             end
                             qWaypoints =[ qWaypoints(1:i,:); qRand; qWaypoints(i+1:end,:)];
                             isCollision = true;
@@ -162,11 +165,8 @@ classdef DensoVS060<handle
                         end
                     end
               end
-              [row,col] = size(self.qMatrix);
-              for i=1:1:row
-                    self.model.animate(self.qMatrix(i,:));
-                    pause(0.03);
-              end
+%             Move the arm prior to qMatrix
+              self.Plot(self.qMatrix);
             else
                 qNew = self.IKine(pose);
                 self.qMatrix = jtraj(self.model.getpos, qNew,steps);
@@ -178,7 +178,13 @@ classdef DensoVS060<handle
             end
         end
         %% Collision Detection
-
+        function Plot(self,qMatrix)
+            [row,col] = size(qMatrix);
+            for i=1:1:row
+                    self.model.animate(qMatrix(i,:));
+                    pause(0.03);
+            end
+        end
 
 
 
