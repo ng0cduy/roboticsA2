@@ -49,6 +49,7 @@ classdef DensoVS060<handle
                 self.model.points{linkIndex + 1} = vertexData;
             end
             self.model.plot3d(zeros(1,self.model.n),'noarrow','workspace',self.workspace);
+%             self.model.plot3d(zeros(1,self.model.n),'workspace',self.workspace);
             if isempty(findobj(get(gca,'Children'),'Type','Light'))
                 camlight
             end  
