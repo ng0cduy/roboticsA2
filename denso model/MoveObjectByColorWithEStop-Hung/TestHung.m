@@ -13,7 +13,7 @@ pose = red.pos_;
 % change these to RMRC
 qNew = robot.IKine(pose);
 qMatrix = jtraj(robot.model.getpos, qNew,steps);
-
+%%
 i = 1;
 while (1)
     for i = i:steps
@@ -64,19 +64,30 @@ machine_state =0;
 working = true;
 i=1
 while(working)
+    i
 	% Working, press eStop to stop
     if (machine_state == 0)
 		Animation(robot,qMatrix(i,:));
 		i =i+1;
 		pause(0.05);
+        if i ==20
+            a = input('a');
+            if a==1
+                machine_state = 1;
+            end
+        end 
         if (robot.eStop == 1)
             machine_state =1;
         end
-    end
+    end  
     % Stop , press eStop to asking permission
     if (machine_state ==1)
         pause(1);
         if (robot.eStop ==1)
+            machine_state =2;
+        end
+        a= input('a');
+        if a ==1
             machine_state =2;
         end
     end
@@ -84,6 +95,10 @@ while(working)
     if (machine_state ==2)
         pause(1);
         if (robot.eStop ==1)
+            machine_state =0;
+        end
+        a= input('a');
+        if a ==1
             machine_state =0;
         end
     end
