@@ -19,7 +19,7 @@ qMatrix = a.GenerateRMRC(transl(-0.4,0,0)*troty(pi),50);
 % end
 %%
 a.Reset;
-a.Animate('jtraj',transl(-0.4,0.2,0.02)*troty(pi),50,red,table);
-a.Animate('rmrc',transl(-0.4,-0.2,0.05)*troty(pi),50,red,table);
+a.Animate('jtraj',transl(-0.5,0.2,0.02)*troty(pi),50,red,table);
+a.Animate('jtra',transl(-0.5,-0.2,0.05)*troty(pi),50,red,table);
 %% 
 

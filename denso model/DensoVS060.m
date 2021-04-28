@@ -108,7 +108,7 @@ classdef DensoVS060<handle
         function Reset(self)
                poseNew = self.FKine(self.qz);
                if self.model.getpos() ~= self.qz
-                   self.Animate(poseNew,50);
+                   self.Animate('jtraj',poseNew,50);
                else
                    self.model.animate(self.qz);
                end
@@ -139,14 +139,19 @@ classdef DensoVS060<handle
         end
         
         %% Trajectory using Quintic Polynomial 
-        function Animate(self,pose,steps,object,table)
+        function Animate(self,option,pose,steps,object,table)
             self.qMatrix = [];
             self.isCollision =false;
             qNew = self.IKine(pose);
+            if strcmpi(option,'jtraj') == 1
+                self.qMatrix = jtraj(self.model.getpos, qNew,steps);
+            elseif strcmpi(option,'rmrc') == 1
+                 self.qMatrix = GenerateRMRC(self,pose,steps);
+            end
             
-            if(nargin>3)
-%               self.qMatrix = jtraj(self.model.getpos, qNew,steps);
-              self.qMatrix = GenerateRMRC(self,pose,steps);
+            if(nargin>4)
+              
+%              
               
 %               check if the trajectory collide with the table
               self.qMatrix = Check_Collision(self,qNew,table);
@@ -167,7 +172,7 @@ classdef DensoVS060<handle
             [row,col] = size(qMatrix);
             for i=1:1:row
                     self.model.animate(qMatrix(i,:));
-                    pause(0.03);
+                    pause(0.05);
             end
         end
         %% Check collision Function
@@ -204,10 +209,10 @@ classdef DensoVS060<handle
                             % Randomly pick a pose that is not in collision
                             a=eye(4);
                             a(1:2,4) = self.endEffector(1:2,4);
-                            qRand = self.IKine(a*transl(0,0,object.z*2)*troty(pi));
-                            while ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
-                                qRand = self.IKine(a*transl(0,0,object.z*2)*troty(pi));
-                            end
+                            qRand = self.IKine(a*transl(.05,-.05,object.z+0.2)*troty(pi));
+%                             while ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
+%                                 qRand = self.IKine(a*transl(-.05,0.05,object.z+0.15)*troty(pi));
+%                             end
                             qWaypoints =[ qWaypoints(1:i,:); qRand; qWaypoints(i+1:end,:)];
                             break;
                         end
