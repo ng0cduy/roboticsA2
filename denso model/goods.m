@@ -1,5 +1,5 @@
 classdef goods <handle
-    properties(Access = public)
+    properties(Access = public)        
     f;
     v;
     vUpdate;
@@ -11,6 +11,7 @@ classdef goods <handle
     modelVert;
     updatePose;
     nameModel;
+    color;
     pos_ = eye(4);
     x;
     y;
@@ -30,7 +31,7 @@ classdef goods <handle
 %             elseif strcmpi(name,'table') == 1
 %                 self.nameModel ='table.ply';
 %             end
-           
+                       
             [self.f,self.v,self.data] = plyread(name,'tri'); 
             self.nameModel=name;
             self.vUpdate = self.v + pos(1:3,4)'; 
@@ -38,6 +39,20 @@ classdef goods <handle
             self.MoveObject(pos);
             self.Find_faceNormal();
             self.getGoodsSize();
+            
+            % set color temporary
+            if contains(name,'red') 
+                self.color = 'red';
+            
+            elseif contains(name,'blue') 
+                self.color = 'blue';
+              
+            elseif contains(name,'green') 
+                self.color ='green';
+            else
+                self.color = 'not_important';
+            end
+            
         end
         function plotModel(self)
             %compute the number of vertices
