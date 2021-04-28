@@ -10,6 +10,7 @@ classdef DensoVS060<handle
         endEffector;
         model;
         qMatrix;
+        eStop = 0;
         useGripper = false;   
         name;
         initialPose=zeros(1,6);
@@ -221,6 +222,11 @@ classdef DensoVS060<handle
               qMatrix = self.qMatrix;
         end
 
+        %% Toggle estop to stop or continue doing task
+        function eStop = eStopToggle(self)
+            eStop = ~self.eStop;
+            self.eStop = eStop;
+        end
 
 
     end
