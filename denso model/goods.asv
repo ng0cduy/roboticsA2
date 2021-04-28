@@ -30,9 +30,7 @@ classdef goods <handle
 %             elseif strcmpi(name,'table') == 1
 %                 self.nameModel ='table.ply';
 %             end
-           
-            [self.f,self.v,self.data] = plyread(name,'tri'); 
-            self.nameModel=name;
+            [self.f,self.v,self.data] = plyread(self.nameModel,'tri'); 
             self.vUpdate = self.v + pos(1:3,4)'; 
             self.plotModel();
             self.MoveObject(pos);

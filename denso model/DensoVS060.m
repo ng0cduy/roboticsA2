@@ -3,6 +3,9 @@ classdef DensoVS060<handle
         qz = zeros(1,6);
     end
     properties(Access =public)
+        steps = 50;
+        isCollision = false;
+%                         checkedTillWaypoint = 1;
         base;
         endEffector;
         model;
@@ -37,7 +40,8 @@ classdef DensoVS060<handle
         %% Set Denso Base Location 
         function SetBase(self,base)
 %             self.model.base=base*trotz(-pi/2)*trotx(pi/2);
-            self.model.base = base;
+            self.model.base = base * transl(0,0,0.202);
+            base = self.model.base;
             self.PlotandColorUR3();
         end
         
@@ -135,68 +139,27 @@ classdef DensoVS060<handle
         end
         
         %% Trajectory using Quintic Polynomial 
-        function Animate(self,pose,steps,object)
+        function Animate(self,pose,steps,object,table)
             self.qMatrix = [];
-            isCollision =false;
+            self.isCollision =false;
+            qNew = self.IKine(pose);
+            
             if(nargin>3)
-              qNew = self.IKine(pose);
 %               self.qMatrix = jtraj(self.model.getpos, qNew,steps);
               self.qMatrix = GenerateRMRC(self,pose,steps);
+              
+%               check if the trajectory collide with the table
+              self.qMatrix = Check_Collision(self,qNew,table);
+
 %               check if the object collide with the trajectory
-              for i = 1:1:steps
-                   result(i) = IsCollision(self,self.qMatrix(i,:),object.f,object.vUpdate,object.faceNormals);
-                   if result(i) == 1
-                        disp('Intersect');
-                        isCollision = true;
-                        checkedTillWaypoint = 1;
-                   else 
-                       disp('not intersect');
-                   end 
-              end
-%               obstacle avoid
-              qWaypoints = [self.model.getpos;qNew];
-              while (isCollision)
-                    self.qMatrix=[];
-                    startWaypoint = checkedTillWaypoint;
-                    for i = startWaypoint:1:size(qWaypoints,1)-1
-                        qMatrixJoin = InterpolateWaypointRadians(qWaypoints(i:i+1,:),deg2rad(10));
-                        if ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
-                            self.qMatrix = [self.qMatrix; qMatrixJoin];
-                            isCollision = false;
-                            checkedTillWaypoint = i+1;
-                            % Now try and join to the final goal (q2)
-                            qMatrixJoin = InterpolateWaypointRadians([self.qMatrix(end,:); qNew],deg2rad(5));
-                            if ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
-                                self.qMatrix = [self.qMatrix;qMatrixJoin];
-                                % Reached goal without collision, so break out
-                                break;
-                            end
-                        else
-                            % Randomly pick a pose that is not in collision
-                %             qRand = (2 * rand(1,6) - 1) * pi;
-                            a=eye(4);
-                            a(1:2,4) = self.endEffector(1:2,4);
-                            qRand = self.IKine(a*transl(0,0,object.z*2)*troty(pi));
-                            while ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
-                %                 qRand = (2 * rand(1,6) - 1) * pi;
-                                qRand = self.IKine(a*transl(0,0,object.z*2)*troty(pi));
-                            end
-                            qWaypoints =[ qWaypoints(1:i,:); qRand; qWaypoints(i+1:end,:)];
-%                             isCollision = true;
-                            break;
-                        end
-                    end
-              end
+              self.qMatrix = Check_Collision(self,qNew,object);
 %             Move the arm prior to qMatrix
               self.Plot(self.qMatrix);
+%               Only move the arm without checking the collision
             else
-                qNew = self.IKine(pose);
                 self.qMatrix = jtraj(self.model.getpos, qNew,steps);
-                for i = 1:1:steps
-                    self.model.animate(self.qMatrix(i,:));
-                    drawnow();
-                    pause(0.05);
-                end
+%                 self.qMatrix = Check_Collision(self,qNew,table);
+                self.Plot(self.qMatrix);
             end
         end
         %% Collision Detection
@@ -206,6 +169,51 @@ classdef DensoVS060<handle
                     self.model.animate(qMatrix(i,:));
                     pause(0.03);
             end
+        end
+        %% Check collision Function
+        function qMatrix = Check_Collision(self,q,object)
+            for i = 1:1:self.steps
+                   result= IsCollision(self,self.qMatrix(i,:),object.f,object.vUpdate,object.faceNormals);
+                   if result == 1
+                        disp('Intersect');
+                        self.isCollision = true;
+                        checkedTillWaypoint = 1;
+                   else 
+                       disp('not intersect');
+                   end 
+            end
+%               obstacle avoid
+              qWaypoints = [self.model.getpos;q];
+              while (self.isCollision)
+                    self.qMatrix=[];
+                    startWaypoint = checkedTillWaypoint;
+                    for i = startWaypoint:1:size(qWaypoints,1)-1
+                        qMatrixJoin = InterpolateWaypointRadians(qWaypoints(i:i+1,:),deg2rad(10));
+                        if ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
+                            self.qMatrix = [self.qMatrix; qMatrixJoin];
+                            self.isCollision = false;
+                            checkedTillWaypoint = i+1;
+                            % Now try and join to the final goal (q2)
+                            qMatrixJoin = InterpolateWaypointRadians([self.qMatrix(end,:); q],deg2rad(5));
+                            if ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
+                                self.qMatrix = [self.qMatrix;qMatrixJoin];
+                                % Reached goal without collision, so break out
+                                break;
+                            end
+                        else
+                            % Randomly pick a pose that is not in collision
+                            a=eye(4);
+                            a(1:2,4) = self.endEffector(1:2,4);
+                            qRand = self.IKine(a*transl(0,0,object.z*2)*troty(pi));
+                            while ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
+                                qRand = self.IKine(a*transl(0,0,object.z*2)*troty(pi));
+                            end
+                            qWaypoints =[ qWaypoints(1:i,:); qRand; qWaypoints(i+1:end,:)];
+                            break;
+                        end
+                    end
+              end
+              qMatrix = self.qMatrix;
         end
 
 

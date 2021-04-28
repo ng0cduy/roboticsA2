@@ -1,13 +1,13 @@
 
 %%
-clf
-clear all
+clf;
 clc
 a = DensoVS060(false,transl(0,0,0),'denso');
 % a.model.teach;
 hold on;
-green= goods('green',transl(0.4,0,0)*troty(pi));
-red= goods('red',transl(-0.4,0,-0.13)*troty(pi));
+blue= goods('blue.ply',transl(0.4,0,0.05)*troty(pi));
+red= goods('red.ply',transl(-0.4,0,0.05)*troty(pi));
+table=goods('table1.ply',transl(0,0,-0.3));
 %% Test rmrc
 clc
 qMatrix = a.GenerateRMRC(transl(-0.4,0,0)*troty(pi),50);
@@ -19,8 +19,8 @@ for i =1:size(qMatrix,1)
 end
 %%
 a.Reset;
-a.Animate(transl(0.5,0.2,-0.13)*troty(pi),50,green);
-a.Animate(transl(0.5,-0.4,-0.13)*troty(pi),50,green);
-% a.Reset;
-
+a.Animate(transl(0.5,0.2,0)*troty(pi),50,blue,table);
+a.Animate(transl(0.5,-0.4,0)*troty(pi),50,blue,table);
+a.Reset;
+%% 
 
