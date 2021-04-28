@@ -63,8 +63,10 @@ clc
 machine_state =0;
 working = true;
 i=1
+a=0
 while(working)
     i
+    a
 	% Working, press eStop to stop
     if (machine_state == 0)
 		Animation(robot,qMatrix(i,:));
@@ -85,10 +87,12 @@ while(working)
         pause(1);
         if (robot.eStop ==1)
             machine_state =2;
+            robot.eStop =0;
         end
         a= input('a');
         if a ==1
             machine_state =2;
+            a = 0;
         end
     end
     % permit, press eStop to resume  
