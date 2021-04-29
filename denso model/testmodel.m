@@ -3,10 +3,10 @@
 clf;
 clc
 clear all;
-% a = DensoVS060(false,transl(0,0,0),'denso');
+a = DensoVS060(false,transl(0,0,0),'denso');
 % % a.model.teach;
-% hold on;
-% blue= goods('blue.ply',transl(0.4,0,0.05)*troty(pi));
+hold on;
+blue= goods('blue.ply',transl(0.4,0,0.05)*troty(pi));
 % red= goods('red.ply',transl(-0.4,0,0.05)*troty(pi));
 % table=goods('table1.ply',transl(0,0,-0.3));
 % %% Test rmrc
