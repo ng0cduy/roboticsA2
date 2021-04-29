@@ -6,14 +6,15 @@ robot = DensoVS060(false,transl(0,0,0),'denso');
 hold on;
 red = goods('red.ply',transl(0.4,0,0)*troty(pi));
 %% animation
-% coming to objects
+%% coming to objects
+%% define parameters
 steps = 50;
 pose = red.pos_;
 
 % change these to RMRC
 qNew = robot.IKine(pose);
 qMatrix = jtraj(robot.model.getpos, qNew,steps);
-%%
+%% animation
 i = 1;
 while (1)
     for i = i:steps
@@ -32,7 +33,8 @@ while (1)
     end
 end
 
-% delivering objects
+%% delivering objects
+%% define parameters
 order = 1;      % the first item of this kind.
 pose = [eye(3), (GetGoodsDes(red,red.color,order))';ones(1,4)]*troty(pi); % change goodsObj.name to color info later
 
@@ -41,6 +43,7 @@ pose = [eye(3), (GetGoodsDes(red,red.color,order))';ones(1,4)]*troty(pi); % chan
 qNew = robot.IKine(pose);
 qMatrix = jtraj(robot.model.getpos, qNew,steps);
 
+%% animation
 i = 1;
 while (1)
     for i = i:steps
@@ -73,7 +76,7 @@ while(working)
 		i =i+1;
 		pause(0.05);
         if i ==20
-            a = input('a');
+            a = input('a = ');
             if a==1
                 machine_state = 1;
             end
@@ -89,7 +92,7 @@ while(working)
             machine_state =2;
             robot.eStop =0;
         end
-        a= input('a');
+        a= input('a = ');
         if a ==1
             machine_state =2;
             a = 0;
@@ -101,7 +104,7 @@ while(working)
         if (robot.eStop ==1)
             machine_state =0;
         end
-        a= input('a');
+        a= input('a = ');
         if a ==1
             machine_state =0;
         end
