@@ -6,9 +6,10 @@ function Main
     % a.model.teach;
     hold on;
     red = goods('red.ply',transl(0.4,0,0)*troty(pi)); 
+    robot.Reset;
     %% coming to objects
     %% define parameters
-    steps = 50;
+    steps = 200;
     pose = red.pos_;
 
     % change these to RMRC
@@ -17,9 +18,10 @@ function Main
     %% animation
     i = 1;
     global eStop
+    TestApp
     working = true;
     machineState = 1;  %working, 0 means not working.
-    
+    %%
     while (working)
         if machineState == 1
             Animation(robot,qMatrix(i,:));
@@ -31,12 +33,13 @@ function Main
         end
         
         if machineState == 0
-                if eStop == 0 % eStop switch is turned off
-                    machineState = 1;
-                end
+            qMatrix(i,:);
+            if eStop == 0 % eStop switch is turned off
+                machineState = 1;
+            end
         end
 
-        if 50 < i %finish the task
+        if steps < i %finish the task
             working = false;
         end
         eStop
