@@ -13,17 +13,18 @@ clf
 pStar = [662 362 362 662; 362 362 662 662];
 
 %Create 3D points
-P=[0.8,0.8,0.8,0.8;
--0.25,0.25,0.25,-0.25;
- 1.25,1.25,0.75,0.75];
+P=[0.8,0.8,0.5,0.5;
+-0.2,0.1,0.1,-0.2;
+ -.5,-.5,-0.5,-0.5];
 
 
 % Make a UR10
-r = DensoVS060(false,transl(0,0,0),'denso');              
+r = DensoVS060(false,transl(0.2,0,0),'denso');             
 
 %Initial pose
-q0 = [0; 0; 0; 0; 0; 0];
-
+% q0 = [ 0  ; -1.4451  ; -1.0681  ; -2.1991  ;  1.5708    ;     0];
+q0=[0;0;0;0;0;0];
+% q0 = [pi/2; -pi/3; -pi/3; -pi/6; 0; 0];
 % Add the camera
 cam = CentralCamera('focal', 0.08, 'pixel', 10e-5, ...
 'resolution', [1024 1024], 'centre', [512 512],'name', 'UR10camera');
@@ -35,7 +36,8 @@ fps = 25;
 %gain of the controler
 lambda = 0.6;
 %depth of the IBVS
-depth = mean (P(1,:));
+
+% keyboard;
 
 %% 1.2 Initialise Simulation (Display in 3D)
 
@@ -49,15 +51,16 @@ cam.T = Tc0;
 
 % Display points in 3D and the camera
 cam.plot_camera('Tcam',Tc0, 'label','scale',0.05);
-plot_sphere(P, 0.05, 'b')
+% plot_sphere(P, 0.05, 'b')
 lighting gouraud
 light
 
 %% 1.3 Initialise Simulation (Display in Image view)
 hold on;
-red= goods('red.ply',transl(0.4,0,0.05)*troty(pi));
+% red= goods('red.ply',transl(0.6,0,-0.1)*troty(pi));
+depth = mean (P(1,:));
 %Project points to the image
-p = cam.plot(P, 'Tcam', Tc0);
+% p = cam.plot(red.vUpdate', 'Tcam', Tc0);
 
 %camera view and plotting
 cam.clf()
@@ -68,17 +71,15 @@ cam.hold(true);
 % cam.hold(true);
 % cam.plot(P);    % show initial view
 %% 
-a=red.vUpdate;
-b =[a,zeros(size(a,1),1)];
-plot_sphere(red.P, 0.05, 'b');
-% plot_sphere(P, 0.05, 'b');
-c = cam.plot(red.P); % create the camera view
+plot_sphere(P, 0.05, 'b');
+plot_sphere(P, 0.05, 'r');
+c = cam.plot(P); % create the camera view
 
 %Initialise display arrays
 vel_p = [];
 uv_p = [];
 history = [];
-% keyboard;
+keyboard;
 % end
 %% 1.4 Loop
 % loop of the visual servoing
@@ -87,7 +88,7 @@ ksteps = 0;
         ksteps = ksteps + 1;
         
         % compute the view of the camera
-        uv = cam.plot(red.P);
+        uv = cam.plot(P);
         
         % compute image plane error as a column
         e = pStar-uv;   % feature error

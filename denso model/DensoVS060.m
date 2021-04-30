@@ -15,7 +15,7 @@ classdef DensoVS060<handle
         name;
         initialPose=zeros(1,6);
         pose
-        workspace = [-1 1 -1 1 -0.3 1]; 
+        workspace = [-1 1 -1 1 -1 1]; 
     end
     methods (Access = public) %% Class for DensoVS060 robot simulation
         %% Define robot Function  
@@ -117,7 +117,7 @@ classdef DensoVS060<handle
         %% RMRC: q generating using RMRC
         function qMatrix = GenerateRMRC(self,pose,steps)
             q1 = self.model.getpos;
-            q2 = self.IKine(pose);
+%             q2 = self.IKine(pose);
             T1 = self.FKine(q1);
             T2 = pose;
             x1 = [T1(1:3,4);tr2rpy(T1)'];
