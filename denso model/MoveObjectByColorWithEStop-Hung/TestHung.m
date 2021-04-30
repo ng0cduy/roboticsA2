@@ -10,7 +10,7 @@ red = goods('red.ply',transl(0.4,0,0)*troty(pi));
 %% define parameters
 steps = 50;
 pose = red.pos_;
-
+gui = TestApp;
 % change these to RMRC
 qNew = robot.IKine(pose);
 qMatrix = jtraj(robot.model.getpos, qNew,steps);
