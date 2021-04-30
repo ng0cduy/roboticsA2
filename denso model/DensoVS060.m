@@ -140,7 +140,7 @@ classdef DensoVS060<handle
         end
         
         %% Trajectory using Quintic Polynomial 
-        function Animate(self,option,pose,steps,object,table)
+        function Animate(self,option,pose,steps,table,object)
             self.qMatrix = [];
             self.isCollision =false;
             qNew = self.IKine(pose);
@@ -150,10 +150,11 @@ classdef DensoVS060<handle
                  self.qMatrix = GenerateRMRC(self,pose,steps);
             end
             
-            if(nargin>4)       
+            if(nargin==5)       
 %               check if the trajectory collide with the table
               self.qMatrix = Check_Collision(self,qNew,table);
-
+            end
+            if(nargin>5)
 %               check if the object collide with the trajectory
               self.qMatrix = Check_Collision(self,qNew,object);
 
@@ -180,7 +181,7 @@ classdef DensoVS060<handle
                    result= IsCollision(self,self.qMatrix(i,:),object.f,object.vUpdate,object.faceNormals);
                    %               Check if there is any collision with all joins
                    r = EllipCheck(self,object,self.qMatrix(i,:));
-                   if (result == 1 | r.result >= 1) 
+                   if (result >= 1 | r.result >= 1) 
                         disp('Intersect');
                         self.isCollision = true;
                         checkedTillWaypoint = 1;

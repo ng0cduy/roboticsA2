@@ -40,7 +40,6 @@ classdef goods <handle
             self.MoveObject(pos);
             self.Find_faceNormal();
             self.getGoodsSize();
-            self.calculateP();
             
             % set color temporary
             if contains(name,'red') 
@@ -97,15 +96,10 @@ classdef goods <handle
         end
         
         function calculateP(self)
-            x_=self.vUpdate(:,1,1);
-            y_=self.vUpdate(:,2,1);
-            z_=self.vUpdate(:,3,1);
-            P_ = [max(x_), max(y_),max(z_);...
-                      max(x_),min(y_),max(z_);...
-                      min(x_),max(y_),max(z_);...
-                      min(x_),min(y_),max(z_)];
-                  self.P=P_';
-        end
+            x=self.vUpdate(:,1,1);
+            y=self.vUpdate(1,:,1);
+            z=self.vUpdate(
+            self.P = [max(self.vUpdate), max(self.
                 
     end
     
