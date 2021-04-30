@@ -10,22 +10,17 @@ blue= goods('blue.ply',transl(0.4,0,0.05)*troty(pi));
 red= goods('red.ply',transl(-0.4,0,0.05)*troty(pi));
 table=goods('table1.ply',transl(0,0,-0.3));
 % %% Test rmrc
-% clc
-% qMatrix = a.GenerateRMRC(transl(-0.4,0,0)*troty(pi),50);
-% %%
-% % for i =1:size(qMatrix,1)
-% %     a.model.animate(qMatrix(i,:));
-% %     drawnow();
-% %     pause(0.05);
-% % end
 % %%
 a.Reset;
 a.Animate('jtraj',transl(-0.4,0.2,0.02)*troty(pi),50,red,table);
 a.Animate('rmrc',transl(-0.4,-0.2,0.05)*troty(pi),50,red,table);
+
+a.Reset;
+camview = EEcam(a);
 %% camera testing
 %% 1.1 Definitions
 hold on
-img = imread('red.png');
+% img = imread('red.png');
 % Create image target (points in the image plane) 
 % pStar = [662 362 362 662; 362 362 662 662];
 % 
