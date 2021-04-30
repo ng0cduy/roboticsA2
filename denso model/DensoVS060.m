@@ -156,12 +156,7 @@ classdef DensoVS060<handle
 
 %               check if the object collide with the trajectory
               self.qMatrix = Check_Collision(self,qNew,object);
-%               Check if there is any collision with all joins
-              [row,col] = size(self.qMatrix);
-              for i=1:1:row
-                    EllipCheck(self,object,self.qMatrix(i,:));
-                    pause(0.05);
-              end
+
 %             Move the arm prior to qMatrix
               self.Plot(self.qMatrix);
 %               Only move the arm without checking the collision
@@ -176,14 +171,16 @@ classdef DensoVS060<handle
             [row,col] = size(qMatrix);
             for i=1:1:row
                     self.model.animate(qMatrix(i,:));
-                    pause(0.05);
+                    pause(0.03);
             end
         end
         %% Check collision Function
         function qMatrix = Check_Collision(self,q,object)
             for i = 1:1:self.steps
                    result= IsCollision(self,self.qMatrix(i,:),object.f,object.vUpdate,object.faceNormals);
-                   if result == 1
+                   %               Check if there is any collision with all joins
+                   r = EllipCheck(self,object,self.qMatrix(i,:));
+                   if (result == 1 | r.result >= 1) 
                         disp('Intersect');
                         self.isCollision = true;
                         checkedTillWaypoint = 1;
