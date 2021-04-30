@@ -35,24 +35,9 @@ classdef EEcam<handle
 %              else
 %                  self.color = 'blue';
 %              end
-            img_data = imread('color.png');
-            [r,g,b] = imsplit(img_data);
-            r_mean = mean(r,'all');
-            b_mean = mean(b,'all');
-            g_mean = mean(g,'all');
-            if r_mean >=200 && b_mean <= 75 && g_mean <=75
-                self.color = 'red';
-            elseif r_mean <=75 && b_mean <= 75 && g_mean >=200
-                self.color = 'green';
-            elseif r_mean <= 75 && b_mean >=200 && g_mean <=75
-                 self.color = 'blue';
-            elseif r_mean <=50 && b_mean <= 50 && g_mean <=50
-                self.color = 'black';
-            elseif r_mean <= 150 && r_mean >= 120 && g_mean <= 150 && g_mean >= 120 && b_mean <= 150 && b_mean >= 120
-                self.color = 'gray';
-            else 
-                self.color = 'None'
-            end     
+              color_data = imread('color.png');
+              
+                
          end
          
              
