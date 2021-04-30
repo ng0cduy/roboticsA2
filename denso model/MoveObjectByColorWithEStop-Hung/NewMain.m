@@ -23,9 +23,13 @@ function NewMain(robot,goods,guiObj)
             pause(0.1);
         end
         while (machineState == 0)
-            pause(1)
+            pause(0.5);
             if guiObj.getEstopState == 0
-                machineState =1;
+                guiObj.resumeSign
+                if guiObj.resumeSign == 1
+                    machineState = 1;
+                    guiObj.resumeSign = 0;
+                end
             end
         end 
     if steps < i %finish the task
@@ -58,9 +62,13 @@ while(working)
             pause(0.1);
         end
         while (machineState == 0)
-            pause(1)
+            pause(0.5)
             if guiObj.getEstopState == 0
-                machineState =1;
+                guiObj.resumeSign
+                if guiObj.resumeSign == 1
+                    machineState = 1;
+                    guiObj.resumeSign = 0; 
+                end
             end
         end 
     if steps < i %finish the task

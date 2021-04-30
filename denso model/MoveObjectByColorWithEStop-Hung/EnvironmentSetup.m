@@ -1,4 +1,5 @@
 function [robot,red] = EnvironmentSetup
+    clf;
     robot = DensoVS060(false,transl(0,0,0),'denso');
     % a.model.teach;
     hold on;
