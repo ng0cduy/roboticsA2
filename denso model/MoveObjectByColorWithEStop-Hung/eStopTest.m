@@ -3,7 +3,7 @@
 clc
 clear all
 close all
-a = TestApp
+gui = TestApp;
 for i = 1:1:1000
     if a.getEstopState ==0
         disp('off')
