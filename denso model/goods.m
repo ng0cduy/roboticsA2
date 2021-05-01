@@ -37,7 +37,7 @@ classdef goods <handle
             self.nameModel=name;
             self.vUpdate = self.v + pos(1:3,4)'; 
             self.plotModel();
-            self.MoveObject(pos);
+            self.Move(pos);
             self.Find_faceNormal();
             self.getGoodsSize();
             self.calculateP();

@@ -13,9 +13,13 @@ classdef LightCurtain<handle
          collision=false;
     end
     methods(Access = public)
-        function self = LightCurtain(mode)
+        function self = LightCurtain(mode,obstacle)
             self.mode = mode;
             self.Plot_LC;
+            if nargin == 2
+                self.detect_Obstacle(obstacle); 
+                
+            end
             
         end
 %         Plot the light curtain
@@ -50,11 +54,15 @@ classdef LightCurtain<handle
         
         function detect_Obstacle(self,obstacle)
             for i=1:size(self.pose(:,1),1)
-                if(transpose(obstacle.pos_(1:2,4)) == self.pose(i,1:2))
+                if(transpose(obstacle.pos_(1:2,4)) <= self.pose(i,1:2)+0.01 |...
+                            transpose(obstacle.pos_(1:2,4)) > self.pose(i,1:2)-0.05 )
                     self.collision = true;
-                    disp('collision detected');
                 end
+                
             end  
+            if(self.collision ==true)
+                    disp('collision detected');
+            end
         end
     end
 end
