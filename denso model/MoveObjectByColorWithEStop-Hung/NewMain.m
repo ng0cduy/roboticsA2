@@ -1,4 +1,17 @@
 function NewMain(robot,goods,guiObj)
+%     robot.Reset()
+     poseNew = robot.FKine(robot.qz);
+     if robot.model.getpos() ~= robot.qz
+         qNew = robot.IKine(poseNew);
+         qMatrix = jtraj(robot.model.getpos, qNew,50);
+         for i=1:50
+             robot.model.animate(qMatrix(i,:));
+             pause(0.1);
+         end
+         
+     else
+         self.model.animate(robot.qz);
+     end
     %% coming to objects
     %% define parameters
     steps = 50;
