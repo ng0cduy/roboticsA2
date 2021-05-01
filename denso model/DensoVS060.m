@@ -264,7 +264,7 @@ classdef DensoVS060<handle
                 else
                     self.verts = [self.verts;endP];
                 end
-%                 pause(0.05);
+                pause(0.001);
             end
                 triangleNormal = cross((self.verts(1,:)-self.verts(2,:)),(self.verts(2,:)-self.verts(3,:)));
                 triangleNormal = triangleNormal / norm(triangleNormal);
@@ -349,7 +349,7 @@ classdef DensoVS060<handle
 %                 end
                 end
             w = plot3(scanData(:,1),scanData(:,2),scanData(:,3),'r.');
-            pause(0.05);
+            pause(0.01);
             try delete(w); end; 
 %             try delete(m); end;
         end  
