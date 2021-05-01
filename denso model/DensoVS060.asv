@@ -176,7 +176,7 @@ classdef DensoVS060<handle
         function Plot(self,qMatrix)
             [row,col] = size(qMatrix);
             for i=1:1:row
-                    LightCurtain(self,self.qMatrix(i,:));
+%                     LightCurtain(self,self.qMatrix(i,:));
                     self.model.animate(qMatrix(i,:));
                     pause(0.03);
             end
@@ -240,31 +240,26 @@ classdef DensoVS060<handle
         function LightCurtain(robot,qMatrix)
             pNormal = [-0.3090, 0.9511, 0];            % Create questions
             pPoint = [0,0.2,0];                          % Create questions
-%             [row,col] = size(qMatrix);
+            [row,col] = size(qMatrix);
 %             line_h = [];
             for i=1:1:3
-                if i == 1
-                    tr=robot.FKine(robot.model.getpos);
-                    robot.model.animate(robot.model.getpos);
-                elseif i ==2
-                    tr=robot.FKine(robot.model.getpos)*trotx(deg2rad(20));
-                    robot.model.animate(robot.model.getpos);
-                else
-                    tr=robot.FKine(robot.model.getpos)*trotx(deg2rad(-20));
+                if i = 1
+                tr=robot.FKine(robot.model.getpos);
+                robot.model.animate(robot.model.getpos);
                 end
                 startP = tr(1:3,4)';
                 endP = tr(1:3,4)' + 3 * tr(1:3,3)';                             % Create questions
                 intersectP = LinePlaneIntersection(pNormal,pPoint,startP,endP);  % Create questions
                 dist = dist2pts(startP,intersectP)  ;
                 endP = tr(1:3,4)' + dist * tr(1:3,3)';
-%                 self.line_h = plot3([startP(1),endP(1)],[startP(2),endP(2)],[startP(3),endP(3)],'r');
-%                 m=plot3(endP(1),endP(2),endP(3),'r*');
+                self.line_h = plot3([startP(1),endP(1)],[startP(2),endP(2)],[startP(3),endP(3)],'r');
+                plot3(endP(1),endP(2),endP(3),'r*');
                 if i==1
                     self.verts = endP;
                 else
                     self.verts = [self.verts;endP];
                 end
-%                 pause(0.05);
+                pause(0.05);
             end
                 triangleNormal = cross((self.verts(1,:)-self.verts(2,:)),(self.verts(2,:)-self.verts(3,:)));
                 triangleNormal = triangleNormal / norm(triangleNormal);
@@ -289,12 +284,12 @@ classdef DensoVS060<handle
                 trianglePoint = sum(self.verts)/3;
 
                 % Plot the point/normal of the triangle
-%                 plot3(trianglePoint(1),trianglePoint(2),trianglePoint(3),'g*');
-%                 plot3([trianglePoint(1),trianglePoint(1)+triangleNormal(1)] ...
-%                      ,[trianglePoint(2),trianglePoint(2)+triangleNormal(2)] ...
-%                      ,[trianglePoint(3),trianglePoint(3)+triangleNormal(3)],'b');
-%                 drawnow();
-%                 pause(1);
+                plot3(trianglePoint(1),trianglePoint(2),trianglePoint(3),'g*');
+                plot3([trianglePoint(1),trianglePoint(1)+triangleNormal(1)] ...
+                     ,[trianglePoint(2),trianglePoint(2)+triangleNormal(2)] ...
+                     ,[trianglePoint(3),trianglePoint(3)+triangleNormal(3)],'b');
+                drawnow();
+                pause(1);
 
                 % Transform the points on the default plane, to matches the actual triangle
                 points = [X(:),Y(:),Z(:)] * tr(1:3,1:3) + repmat(trianglePoint,prod(sizeMat),1);
@@ -304,8 +299,8 @@ classdef DensoVS060<handle
 
                 % Make points where Z<0 to be = zero
                 Z(Z<0)= 0;
-%                 surf(X,Y,Z);
-%                 pause(1);
+                surf(X,Y,Z);
+                pause(1);
 
                 maxRange = 0.6; % meters
 
@@ -348,10 +343,7 @@ classdef DensoVS060<handle
                     end
 %                 end
                 end
-            w = plot3(scanData(:,1),scanData(:,2),scanData(:,3),'r.');
-            pause(0.05);
-            try delete(w); end; 
-%             try delete(m); end;
+            plot3(scanData(:,1),scanData(:,2),scanData(:,3),'r.');
         end  
            
 
