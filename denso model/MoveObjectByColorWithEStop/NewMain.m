@@ -10,7 +10,7 @@ function NewMain(robot,goods,guiObj)
          end
          
      else
-         self.model.animate(robot.qz);
+         robot.model.animate(robot.qz);
      end
     %% coming to objects
     %% define parameters
