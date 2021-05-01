@@ -73,7 +73,7 @@ classdef goods <handle
             self.mesh_h.Vertices = self.updatePose(:,1:3);
             self.pos_ = new_pose;
         end
-        function MoveObject(self,pose)
+        function Move(self,pose)
             self.UpdatePose(pose);
             self.pos_ = pose;
         end

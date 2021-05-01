@@ -52,6 +52,7 @@ classdef LightCurtain<handle
             for i=1:size(self.pose(:,1),1)
                 if(transpose(obstacle.pos_(1:2,4)) == self.pose(i,1:2))
                     self.collision = true;
+                    disp('collision detected');
                 end
             end  
         end
