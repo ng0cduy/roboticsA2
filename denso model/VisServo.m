@@ -8,6 +8,7 @@ classdef VisServo<handle
         fps;
         lambda = 0.6;
         ksteps = 0;
+        pose;
         
     end
     methods (Access=public)
@@ -27,7 +28,7 @@ classdef VisServo<handle
             light;
             hold on;
             depth = mean (P(1,:));
-            cam.clf()
+%             cam.clf()
             cam.plot(self.pStar, '*'); % create the camera view
             cam.hold(true);
             cam.plot(P);
@@ -87,6 +88,7 @@ classdef VisServo<handle
                     %Get camera location
                     Tc = r.model.fkine(q);
                     cam.T = Tc;
+                    self.pose = Tc;
 
                     drawnow
 
