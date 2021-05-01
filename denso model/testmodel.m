@@ -2,9 +2,10 @@
 %%
 clc;
 clear all;
-close all;
+% close all;
 a = DensoVS060(false,transl(0,0,0),'denso');
 hold on;
+lt =LightCurtain();
 % brick= goods('red.ply',transl(0.4,0,0.1)*troty(pi));
 % a.model.teach;
 % hold on;
@@ -15,8 +16,8 @@ hold on;
 % % %%
 % a.Reset;
 % a.Animate('jtraj',transl(0.4,0.2,0.02)*troty(pi),50,table,blue);
-keyboard;
-a.Animate('rmrc',transl(0.4,-0.2,0.05)*troty(pi),50);
+% keyboard;
+% a.Animate('rmrc',transl(0.4,-0.2,0.05)*troty(pi),50);
 % 
 % a.Reset;
 % camview = EEcam(a);

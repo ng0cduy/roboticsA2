@@ -1,42 +1,42 @@
-% classdef LightCurtain<handle
-%     properties(Constant)
-%         qz=zeros(1,6);
-%     end
-%     properties(Access =public)
-%          verts;
-%     end
-%     methods(Access = public)
-%         function self = LightCurtain()
-%         end
-%     end
-% end
+classdef LightCurtain<handle
+    properties(Constant)
+        qz=zeros(1,6);
+    end
+    properties(Access =public)
+         verts;
+         mode = false;
+    end
+    methods(Access = public)
+        function self = LightCurtain(mode)
+            if mode == true
+                self.mode = mode;
+                for i = 1:0.05:0
+                    for y = 1:1:4
+                        hold on;
+                        if y==1
+                            tr = transl(i,1,1);
+                        elseif y == 2
+                            tr = transl(1,i,1);
+                        elseif y==3
+                            tr = transl(i,5,1);
+                        else
+                            tr = transl(5,i,1);
+                        end
+                        startP = tr(1:3,4)';
 
-createQuestion = true; % For creating the lab exercise question
-if createQuestion
-    pNormal = [-0.3090, 0.9511, 0];            % Create questions
-    pPoint = [0,0.2,0];                          % Create questions
-end
-for i = 1:0.2:5
-        for y = 1:1:4
-            hold on;
-            if y==1
-                tr = transl(i,1,1);
-            elseif y == 2
-                tr = transl(1,i,1);
-            elseif y==3
-                tr = transl(
-            startP = tr(1:3,4)';
-        %     if createQuestion
-        %         endP = tr(1:3,4)' + 3 * tr(1:3,3)';                             % Create questions
-        %         intersectP = LinePlaneIntersection(pNormal,pPoint,startP,endP);  % Create questions
-        %         dist = dist2pts(startP,intersectP)                               % Create questions
-        %     else    
-                dist = 2;
-        %     end
-            endP = tr(1:3,4)' + dist * tr(1:3,3)';
-            line1_h = plot3([startP(1),endP(1)],[startP(2),endP(2)],[startP(3),endP(3)],'r');
-            plot3(endP(1),endP(2),endP(3),'r*');
-            axis equal;
-            verts = endP;
+                        dist = 2;
+
+                        endP = tr(1:3,4)' + dist * tr(1:3,3)';
+                        line1_h = plot3([startP(1),endP(1)],[startP(2),endP(2)],[startP(3),endP(3)],'r');
+                        plot3(endP(1),endP(2),endP(3),'r');
+                        axis equal;
+    %                     verts = endP;
+                    end
+                end
+            else
+                return;
+            end
         end
+    end
 end
+
