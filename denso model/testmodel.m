@@ -1,11 +1,11 @@
 
 %%
 clc;
-clear all;
+% clear all;
 % close all;
 a = DensoVS060(false,transl(0,0,0),'denso');
 hold on;
-lt =LightCurtain();
+lt =LightCurtain(true);
 % brick= goods('red.ply',transl(0.4,0,0.1)*troty(pi));
 % a.model.teach;
 % hold on;
