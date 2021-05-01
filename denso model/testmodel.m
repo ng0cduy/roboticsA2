@@ -3,9 +3,10 @@
 clf;
 clc
 clear all;
+close all;
 a = DensoVS060(false,transl(0,0,0),'denso');
 hold on;
-brick= goods('brick.ply',transl(0.5,0,0.05)*troty(pi));
+brick= goods('red.ply',transl(0.4,0,0.1)*troty(pi));
 % a.model.teach;
 % hold on;
 % blue= goods('blue.ply',transl(0.4,0,0.05)*troty(pi));
@@ -18,10 +19,11 @@ brick= goods('brick.ply',transl(0.5,0,0.05)*troty(pi));
 % a.Animate('rmrc',transl(0.4,-0.2,0.05)*troty(pi),50,table,blue);
 % 
 % a.Reset;
-% camview = EEcam(a);
+camview = EEcam(a);
+pause(1);
+view(0,90)
 % keyboard;
 %% camera testing
 b=VisServo(a,brick);
 
-% camview = EEcam(r);
 

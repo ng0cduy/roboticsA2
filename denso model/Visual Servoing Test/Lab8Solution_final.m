@@ -156,16 +156,16 @@ ksteps = 0;
  keyboard;
  
 %% 1.5 Plot results
-% figure()            
-% plot_p(history,pStar,cam)
-% figure()
-% plot_camera(history)
-% figure()
-% plot_vel(history)
-% figure()
-% plot_robjointpos(history)
-% figure()
-% plot_robjointvel(history)
+figure()            
+plot_p(history,pStar,cam)
+figure()
+plot_camera(history)
+figure()
+plot_vel(history)
+figure()
+plot_robjointpos(history)
+figure()
+plot_robjointvel(history)
 
 end
 

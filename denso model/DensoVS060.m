@@ -25,6 +25,7 @@ classdef DensoVS060<handle
             self.name = name;
             self.getDensoVS060();
             self.SetBase(base);
+            self.FKine(self.qz);
         end
         %% Create Denso Links
         function getDensoVS060(self)       
