@@ -8,24 +8,17 @@ clf
 
 %% 1.1 Definitions
 
-
+brick= goods('brick.ply',transl(0.6,0,0.05)*troty(pi));
 % Create image target (points in the image plane) 
 pStar = [662 362 362 662; 362 362 662 662];
 
-%Create 3D points
-P=[0.8,0.8,0.5,0.5;
--0.2,0.1,0.1,-0.2;
- -.5,-.5,-0.5,-0.5];
-
+P=brick.P;
 
 % Make a UR10
 r = DensoVS060(false,transl(0.2,0,0),'denso');             
 
 %Initial pose
-% q0 = [ 0  ; -1.4451  ; -1.0681  ; -2.1991  ;  1.5708    ;     0];
 q0=[0;0;0;0;0;0];
-% q0 = [pi/2; -pi/3; -pi/3; -pi/6; 0; 0];
-% Add the camera
 cam = CentralCamera('focal', 0.08, 'pixel', 10e-5, ...
 'resolution', [1024 1024], 'centre', [512 512],'name', 'UR10camera');
 
@@ -51,7 +44,6 @@ cam.T = Tc0;
 
 % Display points in 3D and the camera
 cam.plot_camera('Tcam',Tc0, 'label','scale',0.05);
-% plot_sphere(P, 0.05, 'b')
 lighting gouraud
 light
 
@@ -66,14 +58,9 @@ depth = mean (P(1,:));
 cam.clf()
 cam.plot(pStar, '*'); % create the camera view
 cam.hold(true);
-% cam.plot(P, 'Tcam', Tc0, 'o'); % create the camera view
-% pause(2)
-% cam.hold(true);
-% cam.plot(P);    % show initial view
+cam.plot(P);
 %% 
 plot_sphere(P, 0.05, 'b');
-plot_sphere(P, 0.05, 'r');
-c = cam.plot(P); % create the camera view
 
 %Initialise display arrays
 vel_p = [];

@@ -1,10 +1,12 @@
 
 %%
-% clf;
-% clc
-% clear all;
-% a = DensoVS060(false,transl(0,0,0),'denso');
-% % % a.model.teach;
+clf;
+clc
+clear all;
+a = DensoVS060(false,transl(0,0,0),'denso');
+hold on;
+brick= goods('brick.ply',transl(0.6,0,0.05)*troty(pi));
+% a.model.teach;
 % hold on;
 % blue= goods('blue.ply',transl(0.4,0,0.05)*troty(pi));
 % red= goods('red.ply',transl(-0.4,0,0.05)*troty(pi));
@@ -19,8 +21,7 @@
 % camview = EEcam(a);
 % keyboard;
 %% camera testing
-
+a=VisServo(a,brick);
 
 % camview = EEcam(r);
-keyboard;
 
