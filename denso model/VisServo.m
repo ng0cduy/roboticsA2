@@ -22,11 +22,12 @@ classdef VisServo<handle
             cam = self.cam_;
             self.fps=60;
             P=object.P;
-            q0=[0;0;0;0;0;0];
-            
+            q0=r.model.getpos()';
+            r.Reset;
                             
             Tc0= r.model.fkine(q0);
-            r.model.animate(q0');
+%             Move the robot to the righ position
+            r.Animate('jtraj',Tc0,30);
             drawnow();
             cam.plot_camera('Tcam',Tc0, 'label','scale',0.05);
             lighting gouraud
