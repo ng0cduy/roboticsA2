@@ -175,7 +175,7 @@ classdef DensoVS060<handle
         function Plot(self,qMatrix)
             [row,col] = size(qMatrix);
             for i=1:1:row
-                    LightCurtain(self,self.qMatrix(i,:));
+                    Lidar(self,self.qMatrix(i,:));
                     self.model.animate(qMatrix(i,:));
                     pause(0.03);
             end
@@ -231,7 +231,7 @@ classdef DensoVS060<handle
 
 
         %% 
-        function LightCurtain(robot,qMatrix)
+        function Lidar(robot,qMatrix)
             pNormal = [-0.3090, 0.9511, 0];            % Create questions
             pPoint = [0,0.2,0];                          % Create questions
 %             [row,col] = size(qMatrix);
@@ -297,7 +297,7 @@ classdef DensoVS060<handle
                 Z = reshape(points(:,3),sizeMat(1),sizeMat(2));
 
                 % Make points where Z<0 to be = zero
-                Z(Z<0)= 0;
+%                 Z(Z<0)= 0;
 %                 surf(X,Y,Z);
 %                 pause(1);
 
@@ -343,7 +343,7 @@ classdef DensoVS060<handle
 %                 end
                 end
             w = plot3(scanData(:,1),scanData(:,2),scanData(:,3),'r.');
-            pause(0.01);
+            pause(0.02);
             try delete(w); end; 
 %             try delete(m); end;
         end  
