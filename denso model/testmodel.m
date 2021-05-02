@@ -2,11 +2,11 @@
 %%
 clc;
 % clear all;
-% close all;
+close all;
 a = DensoVS060(false,transl(0,0,0),'denso');
 hold on;
-brick= goods('red.ply',transl(2,2,0.1)*troty(pi));
-lt =LightCurtain(true);
+brick= goods('red.ply',transl(0.3,0,0.1)*troty(pi));
+% lt =LightCurtain(true);
 
 % a.model.teach;
 % hold on;
@@ -26,6 +26,6 @@ lt =LightCurtain(true);
 % view(0,90)
 % keyboard;
 %% camera testing
-% b=VisServo(a,brick);
+b=VisServo(a,brick);
 
 
