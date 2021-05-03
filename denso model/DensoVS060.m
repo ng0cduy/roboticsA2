@@ -154,6 +154,7 @@ classdef DensoVS060<handle
                 m(i) = sqrt(det(J*J'));
                 if m(i) < epsilon
                         lambda = (1-(m(i)/epsilon))*5E-2;
+                        disp(['Reach to singularities at q[' num2str(i),']','Adjusting lambda']);
                 else
                         lambda = 0;
                 end
@@ -263,7 +264,7 @@ classdef DensoVS060<handle
 
 
         %% 
-        function Lidar(robot,qMatrix)
+        function Lidar(self,robot,qMatrix)
             pNormal = [-0.3090, 0.9511, 0];            % Create questions
             pPoint = [0,0.2,0];                          % Create questions
 %             [row,col] = size(qMatrix);
