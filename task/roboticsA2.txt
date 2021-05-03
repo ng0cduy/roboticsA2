@@ -1,0 +1,47 @@
+Environment
+
+light curtain
+
+estop
+
+Denso*2
+
+goods*3 (spawn randomly color, fixed pose)
+
+table 
+
+conveyor
+
+fire extinguisher
+
+danger sign
+
+banner
+
+floor
+
+destination with color
+-------------------------------------------------------------------------------------------------
+GUI:
+
+teach
+
+estop
+
+demo
+
+spawn environment
+
+spawn obstacle
+
+light curtain
+--------------------------------------------------------------------------------------------------
+Deadline 
+Short Promotion Video (group): Week 11 – 21:00 Friday 14 May
+
+Final System Demonstration (group): Week 12 Lab Class – 18:00 Monday 17 May
+
+Final Video (group): Week 12 – 21:00 Friday 21 May
+
+Final Code Viva (individual): Sometime after week 12 demonstration. Bookings essential (via Airtable)
+
