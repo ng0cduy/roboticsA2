@@ -38,7 +38,7 @@ classdef VisServo<handle
 %             Move the robot to the righ position
             r.Animate('jtraj',Tc0,30);
             drawnow();
-            cam.plot_camera('Tcam',Tc0, 'label','scale',0.05);
+%             cam.plot_camera('Tcam',Tc0, 'label','scale',0.05);
             lighting gouraud
             light;
             hold on;
