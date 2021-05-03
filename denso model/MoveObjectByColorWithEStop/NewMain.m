@@ -1,12 +1,13 @@
 function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
-%     robot.Reset()
+%     pickUpRobot.Reset()
      poseNew = pickUpRobot.FKine(pickUpRobot.qz);
-     if pickUpRobot.model.getpos() ~= pickUpRobot.qz
+     if sum(pickUpRobot.model.getpos() ~= pickUpRobot.qz) ~= 0
          qNew = pickUpRobot.IKine(poseNew);
          qMatrix = jtraj(pickUpRobot.model.getpos, qNew,50);
          for i=1:50
              pickUpRobot.model.animate(qMatrix(i,:));
-             pause(0.1);
+%              pause(0.1);
+             drawnow()
          end
          
      else
