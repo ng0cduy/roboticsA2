@@ -111,7 +111,7 @@ classdef DensoVS060<handle
         %% Reset the robot
         function Reset(self)
                poseNew = self.FKine(self.qz);
-               if self.model.getpos() ~= self.qz
+               if sum(self.model.getpos() ~= self.qz) ~= 0
                    self.Animate('jtraj',poseNew,50);
                else
                    self.model.animate(self.qz);

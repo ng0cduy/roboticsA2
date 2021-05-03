@@ -1,25 +1,27 @@
-function NewMain(robot,goods,guiObj)
-%     robot.Reset()
-     poseNew = robot.FKine(robot.qz);
-     if robot.model.getpos() ~= robot.qz
-         qNew = robot.IKine(poseNew);
-         qMatrix = jtraj(robot.model.getpos, qNew,50);
+function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
+%     pickUpRobot.Reset()
+     poseNew = pickUpRobot.FKine(pickUpRobot.qz);
+     if sum(pickUpRobot.model.getpos() ~= pickUpRobot.qz) ~= 0
+         qNew = pickUpRobot.IKine(poseNew);
+         qMatrix = jtraj(pickUpRobot.model.getpos, qNew,50);
          for i=1:50
-             robot.model.animate(qMatrix(i,:));
-             pause(0.1);
+             pickUpRobot.model.animate(qMatrix(i,:));
+%              pause(0.1);
+             drawnow()
          end
          
      else
-         robot.model.animate(robot.qz);
+         pickUpRobot.model.animate(pickUpRobot.qz);
      end
     %% coming to objects
     %% define parameters
+    goods = goodsArray{3}; %temporary
     steps = 50;
     pose = goods.pos_;
     
     % change these to RMRC
-    qNew = robot.IKine(pose);
-    qMatrix = jtraj(robot.model.getpos, qNew,steps);
+    qNew = dropOffRobot.IKine(pose);
+    qMatrix = jtraj(dropOffRobot.model.getpos, qNew,steps);
     %% animation
     i = 1;
     working = true;
@@ -27,7 +29,7 @@ function NewMain(robot,goods,guiObj)
     %%
  while(working)   
         if ((guiObj.getEstopState == 0) && (machineState == 1))
-            Animation(robot,qMatrix(i,:));
+            Animation(dropOffRobot,qMatrix(i,:));
             pause(0.1);
             i = i+1;
         end
@@ -56,8 +58,8 @@ function NewMain(robot,goods,guiObj)
     order = 1;      % the first item of this kind.
     pose = [eye(3), (GetGoodsDes(goods,goods.color,order))';ones(1,4)] * troty(pi); 
     % change these to RMRC
-    qNew = robot.IKine(pose);
-    qMatrix = jtraj(robot.model.getpos, qNew,steps);
+    qNew = dropOffRobot.IKine(pose);
+    qMatrix = jtraj(dropOffRobot.model.getpos, qNew,steps);
 
     %% animation
     i = 1;
@@ -66,7 +68,7 @@ function NewMain(robot,goods,guiObj)
     %%
 while(working)   
         if ((guiObj.getEstopState == 0) && (machineState == 1))
-            Animation(robot,qMatrix(i,:),goods);
+            Animation(dropOffRobot,qMatrix(i,:),goods);
             pause(0.1);
             i = i+1;
         end

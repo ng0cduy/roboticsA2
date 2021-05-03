@@ -10,7 +10,7 @@ function Animation(robotObj, q, goodsObj)
     elseif nargin == 3   % with goods            
          robotObj.model.animate(q);
          ee_pose = robotObj.FKine(robotObj.model.getpos);
-         goodsObj.MoveObject(ee_pose*troty(pi));
+         goodsObj.Move(ee_pose*troty(pi));
 
     end
 end
