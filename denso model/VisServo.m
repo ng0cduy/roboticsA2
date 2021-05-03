@@ -122,7 +122,7 @@ classdef VisServo<handle
 
                     self.history = [self.history hist];
 
-                     pause(1/self.fps);
+%                      pause(1/self.fps);
 
                     %update current joint position
                     q0 = q;

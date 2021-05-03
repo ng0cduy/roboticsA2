@@ -208,9 +208,9 @@ classdef DensoVS060<handle
         function Plot(self,qMatrix)
             [row,col] = size(qMatrix);
             for i=1:1:row
-%                     Lidar(self,self.qMatrix(i,:));
+                    self.Lidar(self,self.qMatrix(i,:));
                     self.model.animate(qMatrix(i,:));
-                    pause(0.03);
+%                     pause(0.003);
             end
         end
         %% Check collision Function
@@ -376,7 +376,7 @@ classdef DensoVS060<handle
 %                 end
                 end
             w = plot3(scanData(:,1),scanData(:,2),scanData(:,3),'r.');
-            pause(0.02);
+            pause(0.002);
             try delete(w); end; 
 %             try delete(m); end;
         end  
