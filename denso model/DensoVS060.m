@@ -267,6 +267,7 @@ classdef DensoVS060<handle
         function Lidar(self,robot,qMatrix)
             pNormal = [-0.3090, 0.9511, 0];            % Create questions
             pPoint = [0,0.2,0];                          % Create questions
+            tr =[];
 %             [row,col] = size(qMatrix);
 %             line_h = [];
             for i=1:1:3
@@ -376,7 +377,7 @@ classdef DensoVS060<handle
 %                 end
                 end
             w = plot3(scanData(:,1),scanData(:,2),scanData(:,3),'r.');
-            pause(0.002);
+            pause(0.005);
             try delete(w); end; 
 %             try delete(m); end;
         end  
