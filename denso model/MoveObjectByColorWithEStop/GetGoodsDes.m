@@ -20,12 +20,12 @@
         
             % Set goods destinations coordinate matrix from the lowest to
             % the highest, categorized by color 
-            % we intend to move 9 goods in total, 3 of each
+            % 3 is the maximum number of one type of goods that we can move
             dropMatrix = zeros(3,3,3);
             
             dropMatrix(1,:,1) = [0.3, -0.3, z/2]; % first red 
             dropMatrix(1,:,2) = [0.3 + x, -0.3, z/2]; % first blue 
-            dropMatrix(1,:,3) = [0.3 + 2*x, -0.3, z/2]; % first red 
+            dropMatrix(1,:,3) = [0.3 + 2*x, -0.3, z/2]; % first green 
     
             for i = 2: 3
                 dropMatrix(i,:,1) = [dropMatrix(1,1:2,1), dropMatrix(i-1,3,1)+z];
