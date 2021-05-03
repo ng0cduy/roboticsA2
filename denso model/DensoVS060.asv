@@ -17,7 +17,6 @@ classdef DensoVS060<handle
         workspace = [-3.5 3.5 -3.5 3.5 -0.5 2.5]; 
         verts;
         line_h;
-        Estop_state;
         
     end
     methods (Access = public) %% Class for DensoVS060 robot simulation
@@ -114,10 +113,8 @@ classdef DensoVS060<handle
                poseNew = self.FKine(self.qz);
                if sum(self.model.getpos() ~= self.qz) ~= 0
                    self.Animate('jtraj',poseNew,50);
-                   drawnow();
                else
                    self.model.animate(self.qz);
-                   drawnow();
                end
         end
         %% RMRC: q generating using RMRC, checking for singularity
@@ -211,10 +208,9 @@ classdef DensoVS060<handle
         function Plot(self,qMatrix)
             [row,col] = size(qMatrix);
             for i=1:1:row
-%                     self.Lidar(self,self.qMatrix(i,:));
+                    self.Lidar(self,self.qMatrix(i,:));
                     self.model.animate(qMatrix(i,:));
-%                     drawnow();
-                    pause(0.003);
+%                     pause(0.003);
             end
         end
         %% Check collision Function

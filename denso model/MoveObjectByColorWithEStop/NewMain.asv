@@ -56,7 +56,7 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
     %% delivering objects
     %% define parameters
     order = 1;      % the first item of this kind.
-    pose = transl(0,0.2,0.1)*troty(pi); 
+    pose = [eye(3), (GetGoodsDes(goods,goods.color,order))';ones(1,4)] * troty(pi); 
     % change these to RMRC
     qNew = pickUpRobot.IKine(pose);
     qMatrix = jtraj(pickUpRobot.model.getpos, qNew,steps);
@@ -71,7 +71,6 @@ while(working)
             Animation(pickUpRobot,qMatrix(i,:),goods);
 %             pause(0.1);
             i = i+1;
-%             pickUpRobot.Animate('rmrc',pose,50);
         end
         if guiObj.getEstopState == 1
             machineState = 0;

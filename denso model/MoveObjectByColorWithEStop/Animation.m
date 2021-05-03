@@ -11,6 +11,7 @@ function Animation(robotObj, q, goodsObj)
          robotObj.model.animate(q);
          ee_pose = robotObj.FKine(robotObj.model.getpos);
          goodsObj.Move(ee_pose*troty(pi));
+         drawnow();
 
     end
 end
