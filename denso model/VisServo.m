@@ -48,7 +48,7 @@ classdef VisServo<handle
             cam.plot(P);
 %             plot_sphere(P, 0.05, 'b');
 %             keyboard;
-            pause(0.5);
+%             pause(0.5);
             while true
                 self.ksteps = self.ksteps + 1;
                 disp(['k=',num2str(self.ksteps)]);
