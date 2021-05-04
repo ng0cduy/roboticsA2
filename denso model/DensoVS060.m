@@ -226,8 +226,10 @@ classdef DensoVS060<handle
         function Plot(self,qMatrix,object)
             [row,col] = size(qMatrix);
             for i=1:1:row
+
                     self.checkEStop();
 %                     self.Lidar(self,self.qMatrix(i,:));
+
                     self.model.animate(qMatrix(i,:));
 %                     drawnow();
                     pause(0.005);                    

@@ -1,18 +1,5 @@
 function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
      pickUpRobot.Reset()
-%      poseNew = pickUpRobot.FKine(pickUpRobot.qz);
-%      if sum(pickUpRobot.model.getpos() ~= pickUpRobot.qz) ~= 0
-%          qNew = pickUpRobot.IKine(poseNew);
-%          qMatrix = jtraj(pickUpRobot.model.getpos, qNew,50);
-%          for i=1:50
-%              pickUpRobot.model.animate(qMatrix(i,:));
-% %              pause(0.1);
-%              drawnow()
-%          end
-%          
-%      else
-%          pickUpRobot.model.animate(pickUpRobot.qz);
-%      end
     %% coming to objects
     %% define parameters
     goods = goodsArray{3}; %temporary
@@ -51,7 +38,7 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
 %             working = false;
 %     end
 %  end 
-    qMatrix = pickUpRobot.qMatrix_gen('jtraj',pose,50);
+    qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,50);
     pickUpRobot.Plot(qMatrix);
             
 
@@ -93,7 +80,7 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
 %             working = false;
 %     end
 %  end 
- qMatrix=pickUpRobot.qMatrix_gen('jtraj',pose,50);
+ qMatrix=pickUpRobot.qMatrix_gen('rmrc',pose,50);
  pickUpRobot.Plot(qMatrix,goods);
 
 end
