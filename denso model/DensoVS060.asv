@@ -207,19 +207,16 @@ classdef DensoVS060<handle
             end
         end
         %% Check eStopState 
-        function checkEStop(self)
-            while self.eStopState == 1 || self.eStopState == 2
-                pause(0.1)
-                if self.eStopState ==0
-                    break;
-                end
-            end 
-        end
+%         function checkEStop(self)
+%             if self.eStopState ==1
+%                 while 
+%             end
+%         end 
+        
         %% Collision Detection
         function Plot(self,qMatrix)
             [row,col] = size(qMatrix);
             for i=1:1:row
-                    self.checkEStop();
                     self.Lidar(self,self.qMatrix(i,:));
                     self.model.animate(qMatrix(i,:));
 %                     pause(0.003);
