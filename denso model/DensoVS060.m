@@ -17,12 +17,12 @@ classdef DensoVS060<handle
         workspace = [-3.5 3.5 -3.5 3.5 -0.5 2.5]; 
         verts;
         line_h;
-<<<<<<< HEAD
+
         Estop_state;
-=======
+
         eStopState = 0;
         resumeState = 0;
->>>>>>> 03cd762173cadf94854db5e4e105344b3cde086a
+
         
     end
     methods (Access = public) %% Class for DensoVS060 robot simulation
@@ -118,7 +118,8 @@ classdef DensoVS060<handle
         function Reset(self)
                poseNew = self.FKine(self.qz);
                if sum(self.model.getpos() ~= self.qz) ~= 0
-                   self.Animate('jtraj',poseNew,50);
+                   self.qMatrix_gen('jtraj',poseNew,50);
+                   self.Plot(self.qMatrix);
                    drawnow();
                else
                    self.model.animate(self.qz);
@@ -184,7 +185,7 @@ classdef DensoVS060<handle
         end
         
         %% Trajectory using Quintic Polynomial 
-        function Animate(self,option,pose,steps,table,object)
+        function qMatrix = qMatrix_gen(self,option,pose,steps,table,obstacle)
             self.qMatrix = [];
             self.isCollision =false;
             qNew = self.IKine(pose);
@@ -194,23 +195,23 @@ classdef DensoVS060<handle
                  self.qMatrix = GenerateRMRC(self,pose,steps);
             end
             
-            
             if(nargin==5)       
 %               check if the trajectory collide with the table
               self.qMatrix = Check_Collision(self,qNew,table);
             end
             if(nargin>5)
 %               check if the object collide with the trajectory
-              self.qMatrix = Check_Collision(self,qNew,object);
+              self.qMatrix = Check_Collision(self,qNew,table);
+              self.qMatrix = Check_Collision(self,qNew,obstacle);
 
 %             Move the arm prior to qMatrix
-              self.Plot(self.qMatrix);
 %               Only move the arm without checking the collision
             else
                 self.qMatrix = jtraj(self.model.getpos, qNew,steps);
-%                 self.qMatrix = Check_Collision(self,qNew,table);
-                self.Plot(self.qMatrix);
             end
+%             self.Plot(self.qMatrix);
+            qMatrix=self.qMatrix;
+            
         end
         %% Check eStopState 
         function checkEStop(self)
@@ -222,18 +223,20 @@ classdef DensoVS060<handle
             end 
         end
         %% Collision Detection
-        function Plot(self,qMatrix)
+        function Plot(self,qMatrix,object)
             [row,col] = size(qMatrix);
             for i=1:1:row
-<<<<<<< HEAD
-%                     self.Lidar(self,self.qMatrix(i,:));
-=======
                     self.checkEStop();
-                    self.Lidar(self,self.qMatrix(i,:));
->>>>>>> 03cd762173cadf94854db5e4e105344b3cde086a
+%                     self.Lidar(self,self.qMatrix(i,:));
                     self.model.animate(qMatrix(i,:));
 %                     drawnow();
-                    pause(0.003);
+                    pause(0.005);                    
+                    if(nargin==3)
+                        self.FKine(self.qMatrix(i,:));
+                        object.pos_ = self.endEffector*troty(pi)*transl(0,0,-0.07);
+                        object.Move(object.pos_);
+                        pause(0.005);  
+                    end
             end
         end
         %% Check collision Function
