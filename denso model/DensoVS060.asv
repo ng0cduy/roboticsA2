@@ -14,12 +14,20 @@ classdef DensoVS060<handle
         name;
         initialPose=zeros(1,6);
         pose;
+<<<<<<< HEAD
         workspace = [-3.5 3.5 -3.5 3.5 -0.5 2.5]; 
         verts;
         line_h;
         Estop_state;
         working = true;
         machineState = 1;  %working, 0 means not working.
+=======
+        workspace = [-3.5 3.5 -3.5 3.5 -0.5 2]; 
+        verts;
+        line_h;
+        eStopState = 0;
+        resumeState = 0;
+>>>>>>> 03cd762173cadf94854db5e4e105344b3cde086a
         
     end
     methods (Access = public) %% Class for DensoVS060 robot simulation
@@ -116,10 +124,15 @@ classdef DensoVS060<handle
                poseNew = self.FKine(self.qz);
                if sum(self.model.getpos() ~= self.qz) ~= 0
                    self.Animate('jtraj',poseNew,50);
+<<<<<<< HEAD
                    drawnow();
                else
                    self.model.animate(self.qz);
                    drawnow();
+=======
+               else
+                   self.model.animate(self.qz);
+>>>>>>> 03cd762173cadf94854db5e4e105344b3cde086a
                end
         end
         %% RMRC: q generating using RMRC, checking for singularity
@@ -209,6 +222,7 @@ classdef DensoVS060<handle
                 self.Plot(self.qMatrix);
             end
         end
+<<<<<<< HEAD
         %% Collision Detection
         function Plot(self,qMatrix)
             [row,col] = size(qMatrix);
@@ -236,6 +250,22 @@ classdef DensoVS060<handle
                         end
                    end 
 %                 end
+=======
+        %% Check eStopState 
+%         function checkEStop(self)
+%             if self.eStopState ==1
+%                 while 
+%             end
+%         end 
+        
+        %% Collision Detection
+        function Plot(self,qMatrix)
+            [row,col] = size(qMatrix);
+            for i=1:1:row
+                    self.Lidar(self,self.qMatrix(i,:));
+                    self.model.animate(qMatrix(i,:));
+%                     pause(0.003);
+>>>>>>> 03cd762173cadf94854db5e4e105344b3cde086a
             end
         end
         %% Check collision Function

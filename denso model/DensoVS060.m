@@ -17,7 +17,12 @@ classdef DensoVS060<handle
         workspace = [-3.5 3.5 -3.5 3.5 -0.5 2.5]; 
         verts;
         line_h;
+<<<<<<< HEAD
         Estop_state;
+=======
+        eStopState = 0;
+        resumeState = 0;
+>>>>>>> 03cd762173cadf94854db5e4e105344b3cde086a
         
     end
     methods (Access = public) %% Class for DensoVS060 robot simulation
@@ -207,11 +212,25 @@ classdef DensoVS060<handle
                 self.Plot(self.qMatrix);
             end
         end
+        %% Check eStopState 
+        function checkEStop(self)
+            while self.eStopState == 1 || self.eStopState == 2
+                pause(0.1)
+                if self.eStopState ==0
+                    break;
+                end
+            end 
+        end
         %% Collision Detection
         function Plot(self,qMatrix)
             [row,col] = size(qMatrix);
             for i=1:1:row
+<<<<<<< HEAD
 %                     self.Lidar(self,self.qMatrix(i,:));
+=======
+                    self.checkEStop();
+                    self.Lidar(self,self.qMatrix(i,:));
+>>>>>>> 03cd762173cadf94854db5e4e105344b3cde086a
                     self.model.animate(qMatrix(i,:));
 %                     drawnow();
                     pause(0.003);
