@@ -1,15 +1,15 @@
 function [robot1,robot2,boxes] = EnvironmentSetup
     clf;
-    robot1 = DensoVS060(false,transl(0.8,0.45,0)*trotz(-pi/2),'denso_1');
-    robot2 = DensoVS060(false,transl(-0.5,-0.5,0)*trotz(pi/2),'denso_2');
+    robot2 = DensoVS060(false,transl(0.8,0.32,0)*trotz(-pi/2),'denso_1');
+    robot1 = DensoVS060(false,transl(-0.5,-0.5,0)*trotz(pi/2),'denso_2');
     hold on;
     conveyor = goods('conveyor.ply',transl(0,0,0.2));
     table = goods('table.ply',transl(0.3,0,-0.26));
     % a.model.teach;
-    estop = goods('estop.ply',transl(1.8,1.4,0.18));
-%     human = goods('human.ply',transl(2,2,0.64));
-    brickwall=goods('brick_wall.ply',transl(0.4,3.5,1.3));
-    fire_ext=goods('ext.ply',transl(-2,2.5,0.2)*trotz(pi));
+%     estop = goods('estop.ply',transl(1.8,1.4,0.18));
+% %     human = goods('human.ply',transl(2,2,0.64));
+%     brickwall=goods('brick_wall.ply',transl(0.4,3.5,1.3));
+%     fire_ext=goods('ext.ply',transl(-2,2.5,0.2)*trotz(pi));
     
     ground_qx=[-5,-5;5,5];
     ground_qy=[-5,5;-5,5];

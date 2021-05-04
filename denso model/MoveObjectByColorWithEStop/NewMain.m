@@ -14,7 +14,7 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
 
     %% delivering objects
     %% define parameters
-    conveyor_pos = transl(0.8,-0.1,0.4)*troty(pi); 
+    conveyor_pos = transl(-0.5,-0.08,0.4)*troty(pi); 
   
     %% animation
 
@@ -22,11 +22,11 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
      pickUpRobot.Plot(qMatrix,goods{3});
 
  
-     for i=0.8:-0.3:-0.5
-         goods{3}.Move(transl(i,-0.1,0.3));
-%          pause(0.05);
+     for i=-0.5:0.05:0.8
+         goods{3}.Move(transl(i,-0.08,0.32));
+         pause(0.05);
      end
-     
+        
      b=VisServo(dropOffRobot,goods{3});
      
 %      camview = EEcam(dropOffRobot);

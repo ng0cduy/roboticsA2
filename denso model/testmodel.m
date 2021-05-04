@@ -3,29 +3,9 @@
 clc;
 clear all;
 close all;
-a = DensoVS060(false,transl(0.4,0.45,0),'denso');
+a = DensoVS060(false,transl(0.8,0.32,0)*trotz(-pi/2),'denso_1');
 hold on;
-brick= goods('red.ply',transl(0.3,0,0.1)*troty(pi));
-% c = goods('conveyor.ply',transl(0,0,0.2));
-% lt =LightCurtain(true);
-
-% a.model.teach;
-% hold on;
-% blue= goods('blue.ply',transl(0.4,0,0.05)*troty(pi));
-% red= goods('red.ply',transl(-0.4,0,0.05)*troty(pi));
-% table=goods('table1.ply',transl(0,0,-0.3));
-% % %% Test rmrc
-% % %%
-% a.Reset;
-% a.Animate('jtraj',transl(0.4,0.2,0.02)*troty(pi),50,table,blue);
-% keyboard;
-% a.Animate('rmrc',transl(0.4,-0.2,0.05)*troty(pi),50);
-% 
-% a.Reset;
-% camview = EEcam(a);
-% pause(1);
-% view(0,90)
-% keyboard;
+brick= goods('red.ply',transl(0.8,-0.1,0.2));
 %% camera testing
 b=VisServo(a,brick);
 

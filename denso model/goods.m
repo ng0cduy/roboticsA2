@@ -76,6 +76,8 @@ classdef goods <handle
         function Move(self,pose)
             self.UpdatePose(pose);
             self.pos_ = pose;
+            self.vUpdate = self.v + pose(1:3,4)'; 
+            self.calculateP();
         end
         function Find_faceNormal(self)
                 self.faceNormals = zeros(size(self.f,1),3);
@@ -100,10 +102,10 @@ classdef goods <handle
             x_=self.vUpdate(:,1,1);
             y_=self.vUpdate(:,2,1);
             z_=self.vUpdate(:,3,1);
-            P_ = [max(x_)-0.1, max(y_)-0.1,max(z_);...
-                      min(x_)+0.1,max(y_)-0.1,max(z_);...
-                      min(x_)+0.1,min(y_)+0.1,max(z_);
-                      max(x_)-0.1,min(y_)+0.1,max(z_);...
+            P_ = [max(x_)-0.12, max(y_)-0.12,max(z_);...
+                      min(x_)+0.12,max(y_)-0.12,max(z_);...
+                      min(x_)+0.12,min(y_)+0.12,max(z_);
+                      max(x_)-0.12,min(y_)+0.12,max(z_);...
                       ];
                   self.P=P_';
         end

@@ -3,7 +3,7 @@ classdef VisServo<handle
         qz=zeros(1,6);
     end
     properties(Access=public)
-        pStar = [662 362 362 662; 362 362 662 662];
+        pStar = [762 262 262 762; 262 262 762 762];
 %         q0=[0;0;0;0;0;0];
         fps;
         lambda = 0.6;
@@ -34,99 +34,105 @@ classdef VisServo<handle
             q0=r.model.getpos()';
 %             r.Reset;
                             
-%             Tc0= r.model.fkine(q0);
-%             Move the robot to the righ position
-            r.Reset();
-            drawnow();
+            Tc0= r.model.fkine(q0);
+            r.model.animate(q0');
+            drawnow;
 %             cam.plot_camera('Tcam',Tc0, 'label','scale',0.05);
-            lighting gouraud
-            light;
+%             lighting gouraud
+%             light;
             hold on;
             depth = mean (P(1,:));
 %             cam.clf()
             cam.plot(self.pStar, '*'); % create the camera view
             cam.hold(true);
             cam.plot(P);
-            
-            while (self.ksteps <= 200)
-                    self.ksteps = self.ksteps + 1;
+%             plot_sphere(P, 0.05, 'b');
+%             keyboard;
+            pause(0.5);
+            while true
+                self.ksteps = self.ksteps + 1;
+                disp(['k=',num2str(self.ksteps)]);
+        
+                % compute the view of the camera
+                uv = cam.plot(P);
 
-                    % compute the view of the camera
-                    uv = cam.plot(P);
+                % compute image plane error as a column
+                e = self.pStar-uv;   % feature error
+                e = e(:);
+                Zest = [];
 
-                    % compute image plane error as a column
-                    e = self.pStar-uv;   % feature error
-                    e = e(:);
-                    Zest = [];
+                % compute the Jacobian
+                if isempty(depth)
+                    % exact depth from simulation (not possible in practice)
+                    pt = homtrans(inv(Tcam), P);
+                    J = cam.visjac_p(uv, pt(3,:) );
+                elseif ~isempty(Zest)
+                    J = cam.visjac_p(uv, Zest);
+                else
+                    J = cam.visjac_p(uv, depth );
+                end
 
-                    % compute the Jacobian
-                    if isempty(depth)
-                        % exact depth from simulation (not possible in practice)
-                        pt = homtrans(inv(Tcam), P);
-                        J = cam.visjac_p(uv, pt(3,:) );
-                    elseif ~isempty(Zest)
-                        J = cam.visjac_p(uv, Zest);
-                    else
-                        J = cam.visjac_p(uv, depth );
-                    end
+                % compute the velocity of camera in camera frame
+                try
+                    v = self.lambda * pinv(J) * e;
+                catch
+                    status = -1;
+                    return
+                end
+%                 fprintf('v: %.3f %.3f %.3f %.3f %.3f %.3f\n', v);
 
-                    % compute the velocity of camera in camera frame
-                    try
-                        v = self.lambda * pinv(J) * e;
-                    catch
-%                         status = -1;
-                        return
-                    end
-                    fprintf('v: %.3f %.3f %.3f %.3f %.3f %.3f\n', v);
-
-                    %compute robot's Jacobian and inverse
-                    J2 = r.model.jacobn(q0);
-                    Jinv = pinv(J2);
-                    % get joint velocities
-                    qp = Jinv*v;
+                %compute robot's Jacobian and inverse
+                J2 = r.model.jacobn(q0);
+                Jinv = pinv(J2);
+                % get joint velocities
+                qp = Jinv*v;
 
 
-                     %Maximum angular velocity cannot exceed 180 degrees/s
-                     ind=find(qp>pi);
-                     if ~isempty(ind)
-                         qp(ind)=pi;
-                     end
-                     ind=find(qp<-pi);
-                     if ~isempty(ind)
-                         qp(ind)=-pi;
-                     end
+                 %Maximum angular velocity cannot exceed 180 degrees/s
+                 ind=find(qp>pi);
+                 if ~isempty(ind)
+                     qp(ind)=pi;
+                 end
+                 ind=find(qp<-pi);
+                 if ~isempty(ind)
+                     qp(ind)=-pi;
+                 end
 
-                    %Update joints 
-                    q = q0 + (1/self.fps)*qp;
-                    r.model.animate(q');
+                %Update joints 
+                q = q0 + (1/self.fps)*qp;
+                r.model.animate(q');
 
-                    %Get camera location
-                    Tc = r.FKine(q);
-                    cam.T = Tc;
-                    self.pose = Tc;
+                %Get camera location
+                Tc = r.model.fkine(q);
+                cam.T = Tc;
 
-                    drawnow
+                drawnow
 
-                    % update the history variables
-                    hist.uv = uv(:);
-                    vel = v;
-                    hist.vel = vel;
-                    hist.e = e;
-                    hist.en = norm(e);
-                    hist.jcond = cond(J);
-                    hist.Tcam = Tc;
-                    hist.vel_p = vel;
-                    hist.uv_p = uv;
-                    hist.qp = qp;
-                    hist.q = q;
+                % update the history variables
+                hist.uv = uv(:);
+                vel = v;
+                hist.vel = vel;
+                hist.e = e;
+                hist.en = norm(e);
+                hist.jcond = cond(J);
+                hist.Tcam = Tc;
+                hist.vel_p = vel;
+                hist.uv_p = uv;
+                hist.qp = qp;
+                hist.q = q;
 
-                    self.history = [self.history hist];
+                self.history = [self.history hist];
 
-%                      pause(1/self.fps);
+%                  pause(1/self.fps)
 
-                    %update current joint position
-                    q0 = q;
-             end %loop finishes
+                if ~isempty(200) && (self.ksteps > 200)
+                    break;
+                end
+
+                %update current joint position
+                q0 = q;
+            end %loop finishes
+            self.ksteps=0;
         end
         %% 
         
@@ -168,8 +174,8 @@ end
                 return
             end
             figure();
-            clf
-            hold on
+%             clf
+            hold on;
             % image plane trajectory
             uv = [history.uv]';
             % result is a vector with row per time step, each row is u1, v1, u2, v2 ...
@@ -189,7 +195,7 @@ end
             grid
             xlabel('u (pixels)');
             ylabel('v (pixels)');
-            hold off
+            hold off;
         end
 
        function plot_vel(history)
@@ -205,9 +211,9 @@ end
             clf
             vel = [history.vel]';
             plot(vel(:,1:3), '-')
-            hold on
+            hold on;
             plot(vel(:,4:6), '--')
-            hold off
+            hold off;
             ylabel('Cartesian velocity')
             grid
             xlabel('Time')
@@ -252,7 +258,7 @@ end
             clf
             vel = [history.qp]';
             plot(vel(:,1:6), '-')
-            hold on
+            hold on;
             ylabel('Joint velocity')
             grid
             xlabel('Time')
@@ -268,7 +274,7 @@ end
             clf
             pos = [history.q]';
             plot(pos(:,1:6), '-')
-            hold on
+            hold on;
             ylabel('Joint angle')
             grid
             xlabel('Time')

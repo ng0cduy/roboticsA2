@@ -1,6 +1,6 @@
 function boxes = SetGoodsPick
-    goodsX = 1.2;
-    goodsY = 0.3;
+    goodsX = -1;
+    goodsY = -0.2;
     goodsBaseZ = 0;
     goodsBaseZ = goodsBaseZ+0.06; % for the goods's pose position at the center of the goods
                                  % z of goods = 0.2;
