@@ -50,6 +50,7 @@ classdef VisServo<handle
 %             keyboard;
 %             pause(0.5);
             while true
+                r.checkEStop();
                 self.ksteps = self.ksteps + 1;
 %                 disp(['k=',num2str(self.ksteps)]);
         

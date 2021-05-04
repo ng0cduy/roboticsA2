@@ -32,13 +32,13 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
      %% 
 
 % 
-%      pose = good{2}.pos_*transl(0,0,-0.06);
+%      pose = good{3}.pos_*transl(0,0,-0.06);
 %      qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,70);
 %      pickUpRobot.Plot(qMatrix);
 %      qMatrix=pickUpRobot.qMatrix_gen('rmrc',conveyor_pos,70);
-%      pickUpRobot.Plot(qMatrix,good{2});
+%      pickUpRobot.Plot(qMatrix,good{3});
 %      
-%      Move_conveyor(good{2});
+%      Move_conveyor(good{3});
 
 end
 
