@@ -1,5 +1,5 @@
 function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
-     pickUpRobot.Reset()
+%      pickUpRobot.Reset()
 %      poseNew = pickUpRobot.FKine(pickUpRobot.qz);
 %      if sum(pickUpRobot.model.getpos() ~= pickUpRobot.qz) ~= 0
 %          qNew = pickUpRobot.IKine(poseNew);
@@ -27,36 +27,36 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
     working = true;
     machineState = 1;  %working, 0 means not working.
     %%
- while(working)   
-        if ((guiObj.getEstopState == 0) && (machineState == 1))
-            Animation(pickUpRobot,qMatrix(i,:));
-%             pause(0.1);
-            i = i+1;
-        end
-        if guiObj.getEstopState == 1
-            machineState = 0;
-%             pause(0.001);
-        end
-        while (machineState == 0)
-%             pause(0.001);
-            if guiObj.getEstopState == 0
-                guiObj.resumeSign
-                if guiObj.resumeSign == 1
-                    machineState = 1;
-                    guiObj.resumeSign = 0;
-                end
-            end
-        end 
-    if steps < i %finish the task
-            working = false;
-    end
- end 
-            
+%  while(working)   
+%         if ((guiObj.getEstopState == 0) && (machineState == 1))
+%             Animation(pickUpRobot,qMatrix(i,:));
+% %             pause(0.1);
+%             i = i+1;
+%         end
+%         if guiObj.getEstopState == 1
+%             machineState = 0;
+% %             pause(0.001);
+%         end
+%         while (machineState == 0)
+% %             pause(0.001);
+%             if guiObj.getEstopState == 0
+%                 guiObj.resumeSign
+%                 if guiObj.resumeSign == 1
+%                     machineState = 1;
+%                     guiObj.resumeSign = 0;
+%                 end
+%             end
+%         end 
+%     if steps < i %finish the task
+%             working = false;
+%     end
+%  end 
+    pickUpRobot.Animate('rmrc',pose,50,guiObj);        
 
     %% delivering objects
     %% define parameters
     order = 1;      % the first item of this kind.
-    pose = [eye(3), (GetGoodsDes(goods,goods.color,order))';ones(1,4)] * troty(pi); 
+    pose = transl(0,0.2,0.1)*troty(pi); 
     % change these to RMRC
     qNew = pickUpRobot.IKine(pose);
     qMatrix = jtraj(pickUpRobot.model.getpos, qNew,steps);
@@ -68,9 +68,10 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
     %%
 while(working)   
         if ((guiObj.getEstopState == 0) && (machineState == 1))
-            Animation(pickUpRobot,qMatrix(i,:),goods);
+%             Animation(pickUpRobot,qMatrix(i,:),goods);
 %             pause(0.1);
             i = i+1;
+            pickUpRobot.Animate('rmrc',pose,50,guiObj);
         end
         if guiObj.getEstopState == 1
             machineState = 0;
