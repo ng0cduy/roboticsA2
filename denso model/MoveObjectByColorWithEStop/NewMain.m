@@ -1,87 +1,46 @@
 function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
-     pickUpRobot.Reset()
+     pickUpRobot.Reset();
+     dropOffRobot.Reset();
     %% coming to objects
     %% define parameters
-    goods = goodsArray{3}; %temporary
-    steps = 50;
-    pose = goods.pos_*transl(0,0,-0.06);
-    
-    % change these to RMRC
-%     qNew = pickUpRobot.IKine(pose);
-%     qMatrix = jtraj(pickUpRobot.model.getpos, qNew,steps);
-%     %% animation
-%     i = 1;
-%     working = true;
-%     machineState = 1;  %working, 0 means not working.
-    %%
-%  while(working)   
-%         if ((guiObj.getEstopState == 0) && (machineState == 1))
-%             Animation(pickUpRobot,qMatrix(i,:));
-% %             pause(0.1);
-%             i = i+1;
-%         end
-%         if guiObj.getEstopState == 1
-%             machineState = 0;
-% %             pause(0.001);
-%         end
-%         while (machineState == 0)
-% %             pause(0.001);
-%             if guiObj.getEstopState == 0
-%                 guiObj.resumeSign
-%                 if guiObj.resumeSign == 1
-%                     machineState = 1;
-%                     guiObj.resumeSign = 0;
-%                 end
-%             end
-%         end 
-%     if steps < i %finish the task
-%             working = false;
-%     end
-%  end 
-    qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,50);
+    for i=1:3
+        goods{i} = goodsArray{i}; %temporary
+    end
+    pose = goods{3}.pos_*transl(0,0,-0.06);
+
+    qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,70);
     pickUpRobot.Plot(qMatrix);
             
 
     %% delivering objects
     %% define parameters
-    order = 1;      % the first item of this kind.
-    pose = transl(0.8,-0.05,0.4)*troty(pi); 
-    % change these to RMRC
-    qNew = pickUpRobot.IKine(pose);
-    qMatrix = jtraj(pickUpRobot.model.getpos, qNew,steps);
-
+    conveyor_pos = transl(0.8,-0.1,0.4)*troty(pi); 
+  
     %% animation
-    i = 1;
-    working = true;
-    machineState = 1;  %working, 0 means not working.
-    %%
-% while(working)   
-%         if ((guiObj.getEstopState == 0) && (machineState == 1))
-%             Animation(pickUpRobot,qMatrix(i,:),goods);
-% %             pause(0.1);
-%             i = i+1;
-% %             pickUpRobot.Animate('rmrc',pose,50);
-%         end
-%         if guiObj.getEstopState == 1
-%             machineState = 0;
-% %             pause(0.1);
-%         end
-%         while (machineState == 0)
-% %             pause(0.5)
-%             if guiObj.getEstopState == 0
-%                 guiObj.resumeSign
-%                 if guiObj.resumeSign == 1
-%                     machineState = 1;
-%                     guiObj.resumeSign = 0; 
-%                 end
-%             end
-%         end 
-%     if steps < i %finish the task
-%             working = false;
-%     end
-%  end 
- qMatrix=pickUpRobot.qMatrix_gen('rmrc',pose,50);
- pickUpRobot.Plot(qMatrix,goods);
+
+     qMatrix=pickUpRobot.qMatrix_gen('rmrc',conveyor_pos,70);
+     pickUpRobot.Plot(qMatrix,goods{3});
+
+ 
+     for i=0.8:-0.3:-0.5
+         goods{3}.Move(transl(i,-0.1,0.3));
+%          pause(0.05);
+     end
+     
+     b=VisServo(dropOffRobot,goods{3});
+     
+%      camview = EEcam(dropOffRobot);
+% 
+%      pose = goods{2}.pos_*transl(0,0,-0.06);
+%      qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,70);
+%      pickUpRobot.Plot(qMatrix);
+%      qMatrix=pickUpRobot.qMatrix_gen('rmrc',conveyor_pos,70);
+%      pickUpRobot.Plot(qMatrix,goods{2});
+%      
+%      for i=0.8:-0.01:-0.5
+%          goods{2}.Move(transl(i,-0.1,0.3));
+%          pause(0.05);
+%      end
 
 end
 

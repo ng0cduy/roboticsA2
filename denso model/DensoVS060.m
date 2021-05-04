@@ -120,7 +120,7 @@ classdef DensoVS060<handle
                if sum(self.model.getpos() ~= self.qz) ~= 0
                    self.qMatrix_gen('jtraj',poseNew,50);
                    self.Plot(self.qMatrix);
-                   drawnow();
+%                    drawnow();
                else
                    self.model.animate(self.qz);
                    drawnow();

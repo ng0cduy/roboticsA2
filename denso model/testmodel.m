@@ -3,7 +3,7 @@
 clc;
 clear all;
 close all;
-a = DensoVS060(false,transl(0.8,0.45,0),'denso');
+a = DensoVS060(false,transl(0.4,0.45,0),'denso');
 hold on;
 brick= goods('red.ply',transl(0.3,0,0.1)*troty(pi));
 % c = goods('conveyor.ply',transl(0,0,0.2));
@@ -27,6 +27,6 @@ brick= goods('red.ply',transl(0.3,0,0.1)*troty(pi));
 % view(0,90)
 % keyboard;
 %% camera testing
-% b=VisServo(a,brick);
+b=VisServo(a,brick);
 
 

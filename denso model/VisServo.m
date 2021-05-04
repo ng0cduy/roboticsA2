@@ -23,7 +23,7 @@ classdef VisServo<handle
     methods (Access=public)
         function self=VisServo(r,object)
             self.Run_VisualServo(r,object);
-            self.ObjectPose_Estimation(object);
+%             self.ObjectPose_Estimation(object);
             
         end
         
@@ -34,9 +34,9 @@ classdef VisServo<handle
             q0=r.model.getpos()';
 %             r.Reset;
                             
-            Tc0= r.model.fkine(q0);
+%             Tc0= r.model.fkine(q0);
 %             Move the robot to the righ position
-            r.Animate('jtraj',Tc0,30);
+            r.Reset();
             drawnow();
 %             cam.plot_camera('Tcam',Tc0, 'label','scale',0.05);
             lighting gouraud
@@ -101,7 +101,7 @@ classdef VisServo<handle
                     r.model.animate(q');
 
                     %Get camera location
-                    Tc = r.model.fkine(q);
+                    Tc = r.FKine(q);
                     cam.T = Tc;
                     self.pose = Tc;
 
