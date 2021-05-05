@@ -31,7 +31,7 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
      good{3}.color = camview.color;       % Set color of goods by camview
                                             % At the moment, use name
      pause(1);
-     qMatrix=dropOffRobot.qMatrix_gen('jtraj',b.object_pose,80);
+     qMatrix=dropOffRobot.qMatrix_gen('trap',b.object_pose,80);
      dropOffRobot.Plot(qMatrix);
      
      % Identify the order of the goods kind we will deliver 
@@ -52,7 +52,7 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
      
      % deliver the goods
      goodsTr = GetGoodsDes(good{3},goodsOrder); 
-     qMatrix=dropOffRobot.qMatrix_gen('jtraj',goodsTr,80);
+     qMatrix=dropOffRobot.qMatrix_gen('jtraj',goodsTr,80,conveyor);
      dropOffRobot.Plot(qMatrix,good{3});
      
      dropOffRobot.Reset();

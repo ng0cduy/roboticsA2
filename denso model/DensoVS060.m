@@ -185,7 +185,7 @@ classdef DensoVS060<handle
         end
         
         %% Trajectory using Quintic Polynomial 
-        function qMatrix = qMatrix_gen(self,option,pose,steps,table,obstacle)
+        function qMatrix = qMatrix_gen(self,option,pose,steps,obstacle)
             self.qMatrix = [];
             self.isCollision =false;
             qNew = self.IKine(pose);
@@ -204,11 +204,6 @@ classdef DensoVS060<handle
             
             if(nargin==5)       
 %               check if the trajectory collide with the table
-              self.qMatrix = Check_Collision(self,qNew,table);
-            end
-            if(nargin>5)
-%               check if the object collide with the trajectory
-              self.qMatrix = Check_Collision(self,qNew,table);
               self.qMatrix = Check_Collision(self,qNew,obstacle);
 
 %             Move the arm prior to qMatrix
