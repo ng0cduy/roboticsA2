@@ -163,7 +163,7 @@ classdef DensoVS060<handle
                 m(i) = sqrt(det(J*J'));
                 if m(i) < epsilon
                         lambda = (1-(m(i)/epsilon))*5E-2;
-                        disp(['Reach to singularities at q[' num2str(i),']','Adjusting lambda']);
+%                         disp(['Reach to singularities at q[' num2str(i),']','Adjusting lambda']);
                 else
                         lambda = 0;
                 end
@@ -192,7 +192,14 @@ classdef DensoVS060<handle
             if strcmpi(option,'jtraj') == 1
                 self.qMatrix = jtraj(self.model.getpos, qNew,steps);
             elseif strcmpi(option,'rmrc') == 1
-                 self.qMatrix = GenerateRMRC(self,pose,steps);
+                self.qMatrix = GenerateRMRC(self,pose,steps);
+            elseif strcmpi(option,'trap') ==1
+                s = lspb(0,1,steps);
+                qMatrix = nan(steps,6);
+                for i = 1:steps
+                    qMatrix(i,:) = 1-s(i)*self.model.getpos + s(i)*qNew;
+                end
+                self.qMatrix = qMatrix;
             end
             
             if(nargin==5)       
@@ -216,7 +223,7 @@ classdef DensoVS060<handle
         %% Check eStopState 
         function checkEStop(self)
             while self.eStopState == 1 || self.eStopState == 2
-                pause(0.1)
+                pause(0.05)
                 if self.eStopState ==0
                     break;
                 end

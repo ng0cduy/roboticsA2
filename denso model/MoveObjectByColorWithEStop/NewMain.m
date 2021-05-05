@@ -1,4 +1,5 @@
 function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
+     
      pickUpRobot.Reset();
      dropOffRobot.Reset();
     %% coming to objects
@@ -8,17 +9,17 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
     end
     pose = goods{3}.pos_*transl(0,0,-0.06);
 
-    qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,70);
+    qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,200);
     pickUpRobot.Plot(qMatrix);
-            
+    
 
-    %% delivering objects
+    % delivering objects
     %% define parameters
     conveyor_pos = transl(-0.5,-0.08,0.4)*troty(pi); 
   
     %% animation
 
-     qMatrix=pickUpRobot.qMatrix_gen('rmrc',conveyor_pos,70);
+     qMatrix=pickUpRobot.qMatrix_gen('rmrc',conveyor_pos,2000);
      pickUpRobot.Plot(qMatrix,goods{3});
 
  
