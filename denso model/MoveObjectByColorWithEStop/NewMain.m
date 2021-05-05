@@ -5,11 +5,11 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
     %% coming to objects
     %% define parameters
     for i=1:3
-        goods{i} = goodsArray{i}; %temporary
+        good{i} = goodsArray{i}; %temporary
     end
-    pose = goods{3}.pos_*transl(0,0,-0.06);
+    pose = good{3}.pos_*transl(0,0,-0.06);
 
-    qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,200);
+    qMatrix = pickUpRobot.qMatrix_gen('jtraj',pose,80);
     pickUpRobot.Plot(qMatrix);
     
 
@@ -19,29 +19,26 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
   
     %% animation
 
-     qMatrix=pickUpRobot.qMatrix_gen('rmrc',conveyor_pos,2000);
-     pickUpRobot.Plot(qMatrix,goods{3});
-
- 
-     for i=-0.5:0.05:0.8
-         goods{3}.Move(transl(i,-0.08,0.32));
-         pause(0.05);
-     end
-        
-     b=VisServo(dropOffRobot,goods{3});
-     
+     qMatrix=pickUpRobot.qMatrix_gen('rmrc',conveyor_pos,80);
+     pickUpRobot.Plot(qMatrix,good{3});
+     pickUpRobot.Reset();
+     Move_conveyor(good{3});      
+     b=VisServo(dropOffRobot,good{3});
      camview = EEcam(dropOffRobot);
-
-     pose = goods{2}.pos_*transl(0,0,-0.06);
-     qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,70);
-     pickUpRobot.Plot(qMatrix);
-     qMatrix=pickUpRobot.qMatrix_gen('rmrc',conveyor_pos,70);
-     pickUpRobot.Plot(qMatrix,goods{2});
      
-     for i=-0.5:0.05:0.8
-         goods{2}.Move(transl(i,-0.08,0.32));
-         pause(0.05);
-     end
+     pause(1);
+     qMatrix=dropOffRobot.qMatrix_gen('jtraj',b.object_pose*troty(pi),80);
+     dropOffRobot.Plot(qMatrix);
+     %% 
+
+% 
+%      pose = good{2}.pos_*transl(0,0,-0.06);
+%      qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,70);
+%      pickUpRobot.Plot(qMatrix);
+%      qMatrix=pickUpRobot.qMatrix_gen('rmrc',conveyor_pos,70);
+%      pickUpRobot.Plot(qMatrix,good{2});
+%      
+%      Move_conveyor(good{2});
 
 end
 

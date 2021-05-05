@@ -23,7 +23,7 @@ classdef VisServo<handle
     methods (Access=public)
         function self=VisServo(r,object)
             self.Run_VisualServo(r,object);
-%             self.ObjectPose_Estimation(object);
+            self.ObjectPose_Estimation(object);
             
         end
         
@@ -51,7 +51,7 @@ classdef VisServo<handle
 %             pause(0.5);
             while true
                 self.ksteps = self.ksteps + 1;
-                disp(['k=',num2str(self.ksteps)]);
+%                 disp(['k=',num2str(self.ksteps)]);
         
                 % compute the view of the camera
                 uv = cam.plot(P);
@@ -105,6 +105,8 @@ classdef VisServo<handle
                 %Get camera location
                 Tc = r.model.fkine(q);
                 cam.T = Tc;
+                self.pose = cam.T;
+%                 disp(num2str(cam.T));
 
                 drawnow
 
@@ -149,9 +151,10 @@ classdef VisServo<handle
             plot_robjointvel(self.history)
         end
         %% %% Estimate the pose of the object
-        function ObjectPose_Estimation(self,object)
+        function ObjectPose_Estimation(self,object)                
                 self.object_pose(1:2,4) = self.pose(1:2,4);
-                self.object_pose(3,4) = object.z;
+                self.object_pose(3,4) = object.z+0.28;
+%                 disp(num2str(self.object_pose));
         end
         
     end
