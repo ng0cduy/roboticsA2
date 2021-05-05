@@ -17,6 +17,7 @@ classdef goods <handle
     x;
     y;
     z;
+    eStopState = 0;
     end
     methods (Access = public)
         function self = goods(name,pos)
@@ -69,6 +70,7 @@ classdef goods <handle
             self.mesh_h = trisurf(self.f,self.modelVert(:,1),self.modelVert(:,2),self.v(:,3),'FaceVertexCData',vertexColours,'EdgeColor','none','EdgeLighting','flat');   
         end
         function UpdatePose(self,new_pose)
+            self.checkEStop();
             self.updatePose = [new_pose * [self.modelVert,ones(self.modelVertexCount,1)]']';
             self.mesh_h.Vertices = self.updatePose(:,1:3);
             self.pos_ = new_pose;
@@ -108,6 +110,16 @@ classdef goods <handle
                       max(x_)-0.12,min(y_)+0.12,max(z_);...
                       ];
                   self.P=P_';
+        end
+        
+        %% Check eStopState 
+        function checkEStop(self)
+            while self.eStopState == 1 || self.eStopState == 2
+                pause(0.05)
+                if self.eStopState ==0
+                    break;
+                end
+            end 
         end
                 
     end
