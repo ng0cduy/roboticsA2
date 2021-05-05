@@ -3,7 +3,7 @@ classdef VisServo<handle
         qz=zeros(1,6);
     end
     properties(Access=public)
-        pStar = [762 462 462 762; 462 462 762 762];
+        pStar = [762 262 262 762; 262 262 762 762];
 %         q0=[0;0;0;0;0;0];
         fps;
         lambda = 0.6;

@@ -103,7 +103,7 @@ classdef goods <handle
         function calculateP(self)
             x_=self.vUpdate(:,1,1);
             y_=self.vUpdate(:,2,1);
-            z_=self.vUpdate(:,3,1)*(2/3);
+            z_=self.vUpdate(:,3,1)*(4/5);
             P_ = [max(x_)-0.12, max(y_)-0.12,max(z_);...
                       min(x_)+0.12,max(y_)-0.12,max(z_);...
                       min(x_)+0.12,min(y_)+0.12,max(z_);
