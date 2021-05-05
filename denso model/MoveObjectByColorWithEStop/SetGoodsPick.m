@@ -3,7 +3,7 @@ function boxes = SetGoodsPick
     goodsY = -0.6;
     goodsBaseZ = 0;
     goodsBaseZ = goodsBaseZ+0.06; % for the goods's pose position at the center of the goods
-                                 % z of goods = 0.2;
+                                 % z of goods = 0.12;
     
     boxes = cell(3,1);
     for i = 1:3

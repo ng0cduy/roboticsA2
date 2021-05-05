@@ -23,9 +23,9 @@
             % 3 is the maximum number of one type of goods that we can move
             dropMatrix = zeros(3,3,3);
             
-            dropMatrix(1,:,1) = [1.2, 0.6, z/2]; % first red 
-            dropMatrix(1,:,2) = [1.2, 0.6-y, z/2]; % first blue 
-            dropMatrix(1,:,3) = [1.2, 0.6-2*y, z/2]; % first green 
+            dropMatrix(1,:,1) = [1.2, 0.6, z]; % first red 
+            dropMatrix(1,:,2) = [1.2, 0.6-y, z]; % first blue 
+            dropMatrix(1,:,3) = [1.2, 0.6-2*y, z]; % first green 
     
             for i = 2: 3
                 dropMatrix(i,:,1) = [dropMatrix(1,1:2,1), dropMatrix(i-1,3,1)+z];
