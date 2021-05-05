@@ -239,7 +239,7 @@ classdef DensoVS060<handle
                         self.FKine(self.qMatrix(i,:));
                         object.pos_ = self.endEffector*troty(pi)*transl(0,0,-0.07);
                         object.Move(object.pos_);
-                        pause(0.005);  
+                        pause(0.05);  
                     end
             end
         end
@@ -255,7 +255,7 @@ classdef DensoVS060<handle
                         self.isCollision = true;
                         checkedTillWaypoint = 1;
                    else 
-                       disp('not intersect');
+%                        disp('not intersect');
                    end 
             end
 %               obstacle avoid
@@ -270,7 +270,7 @@ classdef DensoVS060<handle
                             self.isCollision = false;
                             checkedTillWaypoint = i+1;
                             % Now try and join to the final goal (q2)
-                            qMatrixJoin = InterpolateWaypointRadians([self.qMatrix(end,:); q],deg2rad(5));
+                            qMatrixJoin = InterpolateWaypointRadians([self.qMatrix(end,:); q],deg2rad(20));
                             if ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
                                 self.qMatrix = [self.qMatrix;qMatrixJoin];
                                 % Reached goal without collision, so break out
@@ -280,7 +280,7 @@ classdef DensoVS060<handle
                             % Randomly pick a pose that is not in collision
                             a=eye(4);
                             a(1:2,4) = self.endEffector(1:2,4);
-                            qRand = self.IKine(a*transl(.05,-.05,object.z+0.2)*troty(pi));
+                            qRand = self.IKine(a*transl(0,-.04,object.z+0.15)*troty(pi));
 %                             while ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
 %                                 qRand = self.IKine(a*transl(-.05,0.05,object.z+0.15)*troty(pi));
 %                             end

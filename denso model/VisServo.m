@@ -128,7 +128,7 @@ classdef VisServo<handle
 
 %                  pause(1/self.fps)
 
-                if ~isempty(200) && (self.ksteps > 200)
+                if ~isempty(100) && (self.ksteps > 100)
                     break;
                 end
 
@@ -153,7 +153,7 @@ classdef VisServo<handle
         end
         %% %% Estimate the pose of the object
         function ObjectPose_Estimation(self,object)                
-                self.object_pose = self.pose;
+                self.object_pose(1:3,4) = self.pose(1:3,4);
 %                 self.object_pose(3,4) = object.z+0.28;
 %                 disp(num2str(self.object_pose));
         end
