@@ -1,4 +1,4 @@
-function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
+function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
      
      pickUpRobot.Reset();
      dropOffRobot.Reset();

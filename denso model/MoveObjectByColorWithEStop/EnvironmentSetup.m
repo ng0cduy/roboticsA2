@@ -1,4 +1,4 @@
-function [robot1,robot2,boxes] = EnvironmentSetup
+function [robot1,robot2,boxes,conveyor] = EnvironmentSetup
     clf;
     set(0,'DefaultFigureWindowStyle', 'docked');
     robot2 = DensoVS060(false,transl(0.8,0.35,0)*trotz(-pi/2),'denso_1');

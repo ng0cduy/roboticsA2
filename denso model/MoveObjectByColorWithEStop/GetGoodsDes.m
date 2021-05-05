@@ -11,7 +11,7 @@
                 type = 3;
             else
                 type = -1;
-                msg = 'this one''s color is not for recognition';
+                msg = 'Cannot recognise the color or this one''s color is not for recognition';
                 error(msg);
             end
             
