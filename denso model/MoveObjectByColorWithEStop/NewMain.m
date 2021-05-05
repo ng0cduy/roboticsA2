@@ -28,10 +28,10 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiObj)
      Move_conveyor(good{3});      
      b=VisServo(dropOffRobot,good{3});
      camview = EEcam(dropOffRobot);
-%      good{3}.color = camview.color;       % Set color of goods by camview
+     good{3}.color = camview.color;       % Set color of goods by camview
                                             % At the moment, use name
      pause(1);
-     qMatrix=dropOffRobot.qMatrix_gen('jtraj',b.object_pose*troty(pi),80);
+     qMatrix=dropOffRobot.qMatrix_gen('jtraj',b.object_pose,80);
      dropOffRobot.Plot(qMatrix);
      
      % Identify the order of the goods kind we will deliver 

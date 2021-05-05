@@ -3,7 +3,7 @@ classdef VisServo<handle
         qz=zeros(1,6);
     end
     properties(Access=public)
-        pStar = [762 262 262 762; 262 262 762 762];
+        pStar = [762 462 462 762; 462 462 762 762];
 %         q0=[0;0;0;0;0;0];
         fps;
         lambda = 0.6;
@@ -153,8 +153,8 @@ classdef VisServo<handle
         end
         %% %% Estimate the pose of the object
         function ObjectPose_Estimation(self,object)                
-                self.object_pose(1:2,4) = self.pose(1:2,4);
-                self.object_pose(3,4) = object.z+0.28;
+                self.object_pose = self.pose;
+%                 self.object_pose(3,4) = object.z+0.28;
 %                 disp(num2str(self.object_pose));
         end
         
