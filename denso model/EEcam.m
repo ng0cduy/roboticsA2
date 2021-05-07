@@ -54,7 +54,7 @@ classdef EEcam<handle
             elseif rPixel ==0 && gPixel ==0
                 self.color = 'blue';
             elseif bPixel == 0 && rPixel ==0
-                self.color == 'green';
+                self.color = 'green';
             end
 %             r_mean = mean(r,'all');
 %             b_mean = mean(b,'all');
