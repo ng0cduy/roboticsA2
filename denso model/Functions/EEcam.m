@@ -39,7 +39,7 @@ classdef EEcam<handle
             greenThresholdLow = 170;
             greenThresholdHigh = 255;
             blueThresholdLow = 175;
-            blueThresholdHigh = 190;
+            blueThresholdHigh = 255;
             redMask = (redBand >= redThresholdLow) & (redBand <= redThresholdHigh);
             greenMask = (greenBand >= greenThresholdLow) & (greenBand <= greenThresholdHigh);
             blueMask = (blueBand >= blueThresholdLow) & (blueBand <= blueThresholdHigh);

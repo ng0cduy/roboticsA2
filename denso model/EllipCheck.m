@@ -6,6 +6,7 @@ classdef EllipCheck<handle
         centerPoint = [0,0,0];
         radii = [0.1,0.1,0.2];
         result;
+        collide = false;
     end
     methods (Access = public)
          function self = EllipCheck(robot,cube,qMatrix)
@@ -36,6 +37,11 @@ classdef EllipCheck<handle
                     sum = sum +size(pointsInside,1);
                 end
                 self.result = sum;
+                if self.result ==0
+                    self.collide = false;
+                else 
+                    self.collide = true;
+                end 
          end
     end
 end
