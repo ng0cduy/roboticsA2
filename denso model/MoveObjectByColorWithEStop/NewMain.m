@@ -1,14 +1,14 @@
 function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
+     clc;
      conveyor = goods('conveyor.ply',transl(-0.1,0,0.2));
-     ob=goods('UFO.ply',transl(0.6,-0.05,0.45));
+     ob=Obstacle(transl(1.15,-0.2,0.35));
      pickUpRobot.Reset();
      dropOffRobot.Reset();
     %% coming to objects
     %% define parameters
-    for i=1:3
-        good{i} = goodsArray{i}; %temporary
-    end
-    pose = good{3}.pos_*transl(0,0,-0.06);
+    for i=3:-1:1
+    good{i} = goodsArray{i}; %temporary
+    pose = good{i}.pos_*transl(0,0,-0.06);
 
     qMatrix = pickUpRobot.qMatrix_gen('jtraj',pose,40);
     pickUpRobot.Plot(qMatrix);
@@ -23,21 +23,28 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
   
     %% animation
 
-     qMatrix=pickUpRobot.qMatrix_gen('trap',conveyor_pos,40);
-     pickUpRobot.Plot(qMatrix,good{3});
+     qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,40);
+     pickUpRobot.Plot(qMatrix,good{i});
      pickUpRobot.Reset();
-     Move_conveyor(good{3});      
-     b=VisServo(dropOffRobot,good{3});
-%      camview = EEcam(dropOffRobot);
-%      view;
-%      good{3}.color = camview.color;       % Set color of goods by camview
-                                            % At the moment, use name
-%      pause(1);
-     qMatrix=dropOffRobot.qMatrix_gen('trap',b.object_pose*troty(pi),80);
+     
+    
+     
+     Move_conveyor(good{i});   
+     camview{i} = EEcam(dropOffRobot);
+     disp(camview{i}.color);
+     view(30,0);
+     pause(1);
+     b=VisServo(dropOffRobot,good{i});
+     
+     good{i}.color = camview{i}.color;       % Set color of goods by camview
+%                                             At the moment, use name
+%      disp(good{i}.color);
+     pause(1);
+     qMatrix=dropOffRobot.qMatrix_gen('jtraj',b.object_pose*troty(pi),80);
      dropOffRobot.Plot(qMatrix);
      
      % Identify the order of the goods kind we will deliver 
-     switch good{3}.color
+     switch good{i}.color
          case 'red'
              redOrder = redOrder + 1;
              goodsOrder = redOrder;
@@ -53,22 +60,24 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
      end
      
      % deliver the goods
-     goodsTr = GetGoodsDes(good{3},goodsOrder); 
-     pose=transl(0.5,0.55,0.1)*troty(pi);
-     qMatrix=dropOffRobot.qMatrix_gen('jtraj',pose,200,ob,conveyor);
-     dropOffRobot.Plot(qMatrix,good{3});
+     goodsTr = GetGoodsDes(good{i},goodsOrder); 
+     qGoal = dropOffRobot.IKine(goodsTr);
+%      pose=transl(0.5,0.55,0.1)*troty(pi);
+     qMatrix=dropOffRobot.Check_Collision(qGoal,good{i},ob);
+     dropOffRobot.Plot(qMatrix,good{i});
      
      dropOffRobot.Reset();
+    end
          
      %% 
 
 % 
-%      pose = good{3}.pos_*transl(0,0,-0.06);
+%      pose = good{i}.pos_*transl(0,0,-0.06);
 %      qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,70);
 %      pickUpRobot.Plot(qMatrix);
 %      qMatrix=pickUpRobot.qMatrix_gen('rmrc',conveyor_pos,70);
-%      pickUpRobot.Plot(qMatrix,good{3});
+%      pickUpRobot.Plot(qMatrix,good{i});
 %      
-%      Move_conveyor(good{3});
+%      Move_conveyor(good{i});
 
 end

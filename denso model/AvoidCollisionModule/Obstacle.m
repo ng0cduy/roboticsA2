@@ -18,10 +18,10 @@ classdef Obstacle <handle
     end
     methods (Access = public)
         function self = Obstacle(pos)                     
-            [self.f,self.v,self.data] = plyread("Obstacle.ply",'tri'); 
+            [self.f,self.v,self.data] = plyread("UFO.ply",'tri'); 
             self.vUpdate = self.v + pos(1:3,4)'; 
             self.PlotModel();
-            self.MoveObject(pos);
+            self.Move(pos);
             self.Find_faceNormal();
             self.GetSize();
             self.CalculateP();
@@ -48,7 +48,7 @@ classdef Obstacle <handle
             self.mesh_h.Vertices = self.updatePose(:,1:3);
             self.pos_ = new_pose;
         end
-        function MoveObject(self,pose)
+        function Move(self,pose)
             self.UpdatePose(pose);
             self.pos_ = pose;
         end

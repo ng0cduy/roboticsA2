@@ -12,7 +12,6 @@ classdef EEcam<handle
      methods (Access = public)
          function self = EEcam(robot)
              self.Run(robot);
-             pause(0.05);
              self.IsColor();
          end
          
@@ -28,12 +27,11 @@ classdef EEcam<handle
              self.EE =ee;
              campos(self.EE);
              camva(10);
-             saveas(gcf, 'gcolor.png');
+             saveas(gcf, 'color.png');
          end
          
          function IsColor(self)
-            img_data=0;
-            img_data = imread('gcolor.png');
+            img_data = imread('color.png');
             [redBand,greenBand,blueBand] = imsplit(img_data);
             redThresholdLow = 175;
             redThresholdHigh = 255;
@@ -47,11 +45,12 @@ classdef EEcam<handle
             rPixel = sum(find(redMask>0),'all');      
             gPixel = sum(find(greenMask>0),'all');
             bPixel = sum(find(blueMask>0),'all');
-            if bPixel == 0 & gPixel ==0
+            if bPixel == 0 && gPixel ==0
                 self.color = 'red';
-            elseif bPixel == 0 & rPixel ==0
+            
+            elseif bPixel == 0 && rPixel ==0
                 self.color = 'green';
-            else
+                elseif rPixel ==0 && gPixel ==0
                 self.color = 'blue';
             end  
          end

@@ -47,9 +47,9 @@ classdef EEcam<handle
             rPixel = sum(find(redMask>0),'all');      
             gPixel = sum(find(greenMask>0),'all');
             bPixel = sum(find(blueMask>0),'all');
-            if bPixel == 0 & gPixel ==0
+            if bPixel == 0 && gPixel ==0
                 self.color = 'red';
-            elseif bPixel == 0 & rPixel ==0
+            elseif bPixel == 0 && rPixel ==0
                 self.color = 'green';
             else
                 self.color = 'blue';
