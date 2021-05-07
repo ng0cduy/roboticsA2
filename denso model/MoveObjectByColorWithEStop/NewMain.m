@@ -54,8 +54,8 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
      
      % deliver the goods
      goodsTr = GetGoodsDes(good{3},goodsOrder); 
-     pose=transl(0.25,0.5,0.1)*troty(pi);
-     qMatrix=dropOffRobot.qMatrix_gen('jtraj',pose,80,ob,conveyor);
+     pose=transl(0.5,0.55,0.1)*troty(pi);
+     qMatrix=dropOffRobot.qMatrix_gen('jtraj',pose,200,ob,conveyor);
      dropOffRobot.Plot(qMatrix,good{3});
      
      dropOffRobot.Reset();
