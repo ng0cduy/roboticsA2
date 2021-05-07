@@ -12,6 +12,7 @@ classdef EEcam<handle
      methods (Access = public)
          function self = EEcam(robot)
              self.Run(robot);
+             pause(0.05);
              self.IsColor();
          end
          
@@ -27,7 +28,7 @@ classdef EEcam<handle
              self.EE =ee;
              campos(self.EE);
              camva(10);
-             saveas(gcf, 'color.png');
+             saveas(gcf, 'gcolor.png');
          end
          
          function IsColor(self)
@@ -47,10 +48,9 @@ classdef EEcam<handle
             bPixel = sum(find(blueMask>0),'all');
             if bPixel == 0 && gPixel ==0
                 self.color = 'red';
-            
             elseif bPixel == 0 && rPixel ==0
                 self.color = 'green';
-                elseif rPixel ==0 && gPixel ==0
+            else
                 self.color = 'blue';
             end  
          end

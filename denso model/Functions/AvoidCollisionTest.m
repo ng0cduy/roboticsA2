@@ -2,7 +2,7 @@ clf
 robot = DensoVS060New(false,transl(0.8,0.35,0)*trotz(-pi/2),'denso_1');
 hold on;
 ob = Obstacle(transl(1.05,-0.38,0.176));
-g = goods('blue.ply',transl(0.8,-0.08,0.32)*troty(pi));
+g = goods('green.ply',transl(0.8,-0.08,0.32)*troty(pi));
 camview = EEcam(robot);
 disp(camview.color);
 

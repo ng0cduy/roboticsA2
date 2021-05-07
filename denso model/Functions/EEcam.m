@@ -28,19 +28,18 @@ classdef EEcam<handle
              self.EE =ee;
              campos(self.EE);
              camva(10);
-             saveas(gcf, 'gcolor.png');
+             saveas(gcf, 'color.png');
          end
          
          function IsColor(self)
-            img_data=0;
-            img_data = imread('gcolor.png');
+            img_data = imread('color.png');
             [redBand,greenBand,blueBand] = imsplit(img_data);
             redThresholdLow = 175;
             redThresholdHigh = 255;
             greenThresholdLow = 170;
             greenThresholdHigh = 255;
-            blueThresholdLow = 170;
-            blueThresholdHigh = 180;
+            blueThresholdLow = 175;
+            blueThresholdHigh = 190;
             redMask = (redBand >= redThresholdLow) & (redBand <= redThresholdHigh);
             greenMask = (greenBand >= greenThresholdLow) & (greenBand <= greenThresholdHigh);
             blueMask = (blueBand >= blueThresholdLow) & (blueBand <= blueThresholdHigh);
@@ -51,7 +50,7 @@ classdef EEcam<handle
                 self.color = 'red';
             elseif bPixel == 0 && rPixel ==0
                 self.color = 'green';
-            else
+            elseif rPixel == 0 && gPixel ==0
                 self.color = 'blue';
             end  
          end

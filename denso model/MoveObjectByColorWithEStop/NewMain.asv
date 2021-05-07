@@ -22,8 +22,8 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
     greenOrder = 0;
   
     %% animation
-
-     qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,40);
+     qG = pickUpRobot.
+     qMatrix=pickUpRobot.Check_Collision('jtraj',conveyor_pos,40);
      pickUpRobot.Plot(qMatrix,good{i});
      pickUpRobot.Reset();
      
@@ -68,5 +68,6 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
      
      dropOffRobot.Reset();
     end
+         
 
 end

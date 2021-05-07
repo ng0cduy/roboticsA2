@@ -133,4 +133,3 @@ classdef Obstacle <handle
     end
     
 end
-        
