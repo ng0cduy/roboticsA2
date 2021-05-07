@@ -6,6 +6,7 @@ function [robot1,robot2,boxes,conveyor] = EnvironmentSetup
     hold on;
     conveyor = goods('conveyor.ply',transl(-0.1,0,0.2));
     table = goods('table.ply',transl(0.3,0,-0.26));
+
     % a.model.teach;
 %     estop = goods('estop.ply',transl(1.8,1.4,0.18));
 % %     human = goods('human.ply',transl(2,2,0.64));

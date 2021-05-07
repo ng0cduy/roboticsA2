@@ -112,6 +112,44 @@ classdef goods <handle
                   self.P=P_';
         end
         
+        function cubePoints = CreateMesh(self,option)
+            xMas = max(self.data.vertex.x);
+            yMas = max(self.data.vertex.y);
+            zMas = max(self.data.vertex.z);
+            
+            xMin = min(self.data.vertex.x);
+            yMin = min(self.data.vertex.y);
+            zMin = min(self.data.vertex.z);   
+            
+            [Y,Z] = meshgrid(yMin:0.06:yMas,zMin:0.06:zMas);
+            sizeMat = size(Y);
+            X = repmat(xMas,sizeMat(1),sizeMat(2));
+%             oneSideOfCube_h = surf(X,Y,Z);
+            cubeSidePoints = [X(:),Y(:),Z(:)];
+            
+            [X,Y] = meshgrid(xMin:0.1:xMas,yMin:0.1:yMas);
+            sizeMat = size(X);
+            Z = repmat(zMin,sizeMat(1),sizeMat(2));
+            cubeBottomPoints = [X(:),Y(:),Z(:)];
+            
+            cubeTopPoints = [cubeBottomPoints(:,1:2),cubeBottomPoints(:,3)+self.z];
+            
+            cubePoints = [ cubeSidePoints ...
+             ; cubeSidePoints * rotz(pi/2)...
+             ; cubeSidePoints * rotz(pi) ...
+             ; cubeSidePoints * rotz(3*pi/2) ...
+             ; cubeBottomPoints ...
+             ; cubeTopPoints]; 
+            
+            if strcmp(option,'AtOrigin')
+                return
+            end
+%             cubeAtOigin_h = plot3(cubePoints(:,1),cubePoints(:,2),cubePoints(:,3),'cyan.');
+            centre = self.pos_(1:3,4)';
+            cubePoints = cubePoints + repmat(centre,size(cubePoints,1),1); % move the cube to the required location
+%             cube_h = plot3(cubePoints(:,1),cubePoints(:,2),cubePoints(:,3),'cyan.');
+        end
+        
         %% Check eStopState 
         function checkEStop(self)
             while self.eStopState == 1 || self.eStopState == 2

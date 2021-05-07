@@ -82,6 +82,53 @@ classdef Obstacle <handle
                       ];
                   self.P=P_';
         end
+        
+        function cubePoints = CreateMesh(self,option)
+            xMas = max(self.data.vertex.x);
+            yMas = max(self.data.vertex.y);
+            zMas = max(self.data.vertex.z);
+            
+            xMin = min(self.data.vertex.x);
+            yMin = min(self.data.vertex.y);
+            zMin = min(self.data.vertex.z);   
+            
+            [Y,Z] = meshgrid(yMin:0.05:yMas,zMin:0.05:zMas);
+            sizeMat = size(Y);
+            X = repmat(xMin,sizeMat(1),sizeMat(2));
+%             oneSideOfCube_h = surf(X,Y,Z);
+            cubeSide1Points = [X(:),Y(:),Z(:)];
+            
+            cubeSide2Points = [cubeSide1Points(:,1)+self.x,cubeSide1Points(:,2:3)];
+            
+            [X,Y] = meshgrid(xMin:0.04:xMas,yMin:0.04:yMas);
+            sizeMat = size(X);
+            Z = repmat(zMin,sizeMat(1),sizeMat(2));
+            cubeBottomPoints = [X(:),Y(:),Z(:)];
+            
+            cubeTopPoints = [cubeBottomPoints(:,1:2),cubeBottomPoints(:,3)+self.z];
+            
+            [X,Z] = meshgrid(xMin:0.04:xMas,zMin:0.04:zMas);
+            sizeMat = size(X);
+            Y = repmat(yMin,sizeMat(1),sizeMat(2));
+            cubeSide3Points = [X(:),Y(:),Z(:)];
+            
+            cubeSide4Points = [cubeSide3Points(:,1),cubeSide3Points(:,2)+self.y,cubeSide3Points(:,3)];
+            
+            cubePoints = [ cubeSide1Points ...
+             ; cubeSide2Points  ...
+             ; cubeSide3Points ...
+             ; cubeSide4Points ...
+             ; cubeBottomPoints ...
+             ; cubeTopPoints]; 
+            
+            if strcmp(option,'AtOrigin')
+                return
+            end
+%             cubeAtOigin_h = plot3(cubePoints(:,1),cubePoints(:,2),cubePoints(:,3),'cyan.');
+            centre = self.pos_(1:3,4)';
+            cubePoints = cubePoints + repmat(centre,size(cubePoints,1),1); % move the cube to the required location
+            cube_h = plot3(cubePoints(:,1),cubePoints(:,2),cubePoints(:,3),'cyan.');
+        end
                 
     end
     
