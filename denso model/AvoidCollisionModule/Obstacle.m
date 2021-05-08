@@ -15,10 +15,12 @@ classdef Obstacle <handle
     x;
     y;
     z;
+    name;
     end
     methods (Access = public)
-        function self = Obstacle(pos)                     
-            [self.f,self.v,self.data] = plyread("UFO.ply",'tri'); 
+        function self = Obstacle(name,pos)         
+            self.name = name;
+            [self.f,self.v,self.data] = plyread(self.name,'tri'); 
             self.vUpdate = self.v + pos(1:3,4)'; 
             self.PlotModel();
             self.Move(pos);

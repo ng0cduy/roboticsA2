@@ -252,8 +252,8 @@ classdef DensoVS060<handle
                    
                    result= IsCollision(self,self.qMatrix(i,:),object.f,object.vUpdate,object.faceNormals);
                    %               Check if there is any collision with all joins
-                   r = EllipCheck(self,object,self.qMatrix(i,:));
-                   if (result >= 1 | r.result >= 1) 
+%                    r = EllipCheck(self,object,self.qMatrix(i,:));
+                   if (result >= 1) 
                         disp('Intersect');
                         self.isCollision = true;
                         checkedTillWaypoint = 1;
@@ -281,12 +281,15 @@ classdef DensoVS060<handle
                             end
                         else
                             % Randomly pick a pose that is not in collision
+                            qStart = self.model.getpos;
+                           firstStepTr = self.model.fkine(qStart)*transl(0,0,-0.1);
+                           qFirstStep = self.IKine(firstStepTr);
                             a=eye(4);
-                            a(1:2,4) = self.endEffector(1:2,4);
-                            qRand = self.IKine(a*transl(0.2,-.001,0.6));
-                            while ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
-                                qRand = self.IKine(a*transl(0.32,-.001,0.6));
-                            end
+                            a(1:3,4) = self.endEffector(1:3,4);
+                            qRand = self.IKine(a*transl(0.05,-.05,0.8)*trotz(-pi/2));
+%                             while ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
+%                                 qRand = self.IKine(a*transl(0.01,.001,0.6));
+%                             end
                             qWaypoints =[ qWaypoints(1:i,:); qRand; qWaypoints(i+1:end,:)];
                             break;
                         end
@@ -415,6 +418,59 @@ classdef DensoVS060<handle
 %             try delete(m); end;
         end  
            
+%% Check collision Function using ellipson
+         function qMatrix = Check_Collision1(self,qGoal,goods,obstacle)          
+               obsPoints = obstacle.CreateMesh(false);
+%                plot3(obsPoints(:,1),obsPoints(:,2),obsPoints(:,3),'cyan*');
+               
+               qStart = self.model.getpos;
+               firstStepTr = self.model.fkine(qStart)*transl(0,0,-0.1);
+               qFirstStep = self.IKine(firstStepTr);
+               qWaypoints = [qStart;qFirstStep];
+               stepTr = firstStepTr;
+               qStep = qFirstStep;
+               moving = true;
+               while(moving)
+                    q=[1,1,1,0,0,0];
+                  % move left when there isn't collision. If there is,go up 
+                    tempStepTr = stepTr*transl(-0.1,0,0);
+                    tempQStep = self.model.ikine(tempStepTr,qStep,q);
+                    if EllipCheckNew(self,obstacle,tempQStep,'obs',obsPoints)
+                        stepTr = stepTr*transl(0,0,-0.1);
+                        qStep = self.model.ikine(stepTr,qStep,q);
+                    else
+                        stepTr = tempStepTr;
+                        qStep = tempQStep; 
+                    end
+                    qWaypoints = [qWaypoints;qStep];
+                  % go up when collision with obstacle
+                    while EllipCheckNew(self,obstacle,qStep,'obs',obsPoints)
+                        stepTr = stepTr*transl(0,0,-0.05);
+                        qStep = self.model.ikine(stepTr,qStep,q);
+                    end
+                    
+                  % lean forward when collision with goods
+                    while EllipCheckNew(self,goods,qStep,'goods')
+                        stepTr = stepTr*transl(0,0.05,0);
+                        qStep = self.model.ikine(stepTr,qStep,q);
+                    end
+                    
+
+                    qMatrixEnd = InterpolateWaypointRadians([qStep; qGoal],deg2rad(10));
+                    if ~((EllipCheckNew(self,goods,qMatrixEnd,'goods')) || (EllipCheckNew(self,obstacle,qMatrixEnd,'obs',obsPoints)))
+                        % Reached goal without collision, so break out
+                        break;
+                    end
+                    qMatrixEnd = [];
+                    if (sum(qStep' < self.model.qlim(:,1)) ~= 0) || (sum(qStep' > self.model.qlim(:,2)) ~= 0)
+                        disp('cannot avoid the obstacle');
+                        break;
+                    end
+               end
+              qMatrixStart = InterpolateWaypointRadians(qWaypoints,deg2rad(10));
+              self.qMatrix = [qMatrixStart; qMatrixEnd];
+              qMatrix = self.qMatrix;
+        end
 
     end
 end

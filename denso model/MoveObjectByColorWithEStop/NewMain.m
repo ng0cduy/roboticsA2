@@ -1,7 +1,7 @@
-function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
+function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj)
      clc;
-     conveyor = goods('conveyor.ply',transl(-0.1,0,0.2));
-     ob=Obstacle(transl(1.15,-0.2,0.35));
+     conveyor =Obstacle('conveyor1.ply',transl(0,-0.05,0.2));
+     ob=Obstacle('UFO.ply',transl(1.15,-0.1,0.35));
      pickUpRobot.Reset();
      dropOffRobot.Reset();
     %% coming to objects
@@ -22,50 +22,50 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
     greenOrder = 0;
   
     %% animation
-
-     qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,40);
+%      qG = pickUpRobot.IKine(conveyor_pos);
+     qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,100,conveyor);
      pickUpRobot.Plot(qMatrix,good{i});
      pickUpRobot.Reset();
      
     
      
      Move_conveyor(good{i});   
-     camview{i} = EEcam(dropOffRobot);
-     disp(camview{i}.color);
-     view(30,0);
-     pause(1);
-     b=VisServo(dropOffRobot,good{i});
-     
-     good{i}.color = camview{i}.color;       % Set color of goods by camview
-%                                             At the moment, use name
-%      disp(good{i}.color);
-     pause(1);
-     qMatrix=dropOffRobot.qMatrix_gen('jtraj',b.object_pose*troty(pi),80);
-     dropOffRobot.Plot(qMatrix);
-     
-     % Identify the order of the goods kind we will deliver 
-     switch good{i}.color
-         case 'red'
-             redOrder = redOrder + 1;
-             goodsOrder = redOrder;
-         case 'blue'
-             blueOrder = blueOrder + 1;
-             goodsOrder = blueOrder;
-         case 'green'
-             greenOrder = greenOrder + 1;
-             goodsOrder = greenOrder; 
-         otherwise
-             disp('the color is not in the default set of color')
-             goodsOrder = -1;
-     end
-     
-     % deliver the goods
-     goodsTr = GetGoodsDes(good{i},goodsOrder); 
-     qGoal = dropOffRobot.IKine(goodsTr);
-%      pose=transl(0.5,0.55,0.1)*troty(pi);
-     qMatrix=dropOffRobot.Check_Collision(qGoal,good{i},ob);
-     dropOffRobot.Plot(qMatrix,good{i});
-     
+%      camview{i} = EEcam(dropOffRobot);
+%      disp(camview{i}.color);
+%      view(30,0);
+%      pause(1);
+%      b=VisServo(dropOffRobot,good{i});
+%      
+%      good{i}.color = camview{i}.color;       % Set color of goods by camview
+% %                                             At the moment, use name
+% %      disp(good{i}.color);
+%      pause(1);
+%      qMatrix=dropOffRobot.qMatrix_gen('jtraj',b.object_pose*troty(pi),80);
+%      dropOffRobot.Plot(qMatrix);
+%      
+%      % Identify the order of the goods kind we will deliver 
+%      switch good{i}.color
+%          case 'red'
+%              redOrder = redOrder + 1;
+%              goodsOrder = redOrder;
+%          case 'blue'
+%              blueOrder = blueOrder + 1;
+%              goodsOrder = blueOrder;
+%          case 'green'
+%              greenOrder = greenOrder + 1;
+%              goodsOrder = greenOrder; 
+%          otherwise
+%              disp('the color is not in the default set of color')
+%              goodsOrder = -1;
+%      end
+%      
+%      % deliver the goods
+%      goodsTr = GetGoodsDes(good{i},goodsOrder); 
+%      qGoal = dropOffRobot.IKine(goodsTr);
+% %      pose=transl(0.5,0.55,0.1)*troty(pi);
+%      qMatrix=dropOffRobot.Check_Collision1(qGoal,good{i},ob);
+%      dropOffRobot.Plot(qMatrix,good{i});
+%      
      dropOffRobot.Reset();
     end
 
