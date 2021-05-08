@@ -16,14 +16,14 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj)
 
     % delivering objects
     %% define parameters
-    conveyor_pos = transl(-0.5,-0.08,0.4)*troty(pi);
+    conveyor_pos = transl(-0.6,-0.08,0.4)*troty(pi);
     redOrder = 0;
     blueOrder = 0;
     greenOrder = 0;
   
     %% animation
 %      qG = pickUpRobot.IKine(conveyor_pos);
-     qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,100,conveyor);
+     qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,50,conveyor);
      pickUpRobot.Plot(qMatrix,good{i});
      pickUpRobot.Reset();
      

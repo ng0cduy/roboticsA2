@@ -31,4 +31,3 @@ function [robot1,robot2,boxes] = EnvironmentSetup
     boxes = SetGoodsPick;
     
 end
-

@@ -252,7 +252,7 @@ classdef DensoVS060<handle
             for i = 1:1:self.steps
                    
                    temp = self.model.fkine(self.qMatrix(i,:));
-                   pose_ = temp*transl(0,0,0.2);
+                   pose_ = temp*transl(-0.01,0,0.3);
                    qM(i,:)=self.IKine(pose_);
             end
 %             keyboard;
@@ -287,23 +287,28 @@ classdef DensoVS060<handle
                             qMatrixJoin = InterpolateWaypointRadians([qM(end,:); q],deg2rad(10));
                             if ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
                                 qM = [qM;qMatrixJoin];
+                                qMatrix = qM;
                                 % Reached goal without collision, so break out
                                 break;
                             end
                         else
                             % Randomly pick a pose that is not in collision
                             a=eye(4);
-                            a(1:3,4) = self.endEffector(1:3,4);
-                            qRand = self.IKine(a*transl(0.001,-0.001,0.8)*trotz(-pi/2));
-%                             while ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
-%                                 qRand = self.IKine(a*transl(0.01,.001,0.6));
-%                             end
+                            temp_=self.FKine(self.model.getpos);
+                            a(1:3,4) = temp_(1:3,4);
+                            qRand = self.IKine(a*transl(0,0,0.8)*trotz(-pi/2));
+                            while ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
+                                temp_=self.FKine(self.model.getpos);
+                                a(1:3,4) = temp_(1:3,4);
+                                qRand = self.IKine(a*transl(0,0,0.8)*trotz(-pi/2));
+                            end
                             qWaypoints =[ qWaypoints(1:i,:); qRand; qWaypoints(i+1:end,:)];
+                            qMatrix = qWaypoints;
                             break;
                         end
                     end
               end
-              qMatrix = qM;
+              
             end
         end
 
