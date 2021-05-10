@@ -245,15 +245,15 @@ classdef DensoVS060New<handle
                qWaypoints = [qStart;qFirstStep];
                stepTr = firstStepTr;
                qStep = qFirstStep;
-               moving = true;
-               while(moving)
-                    q=[1,1,1,0,0,0];
-                  % move left when there isn't collision. If there is,go up 
+               planning = true;
+               Mask=[1,1,1,0,0,0];
+               while(planning)
+                   % turn joint 1 5 deg when there isn't collision. If there is,go up 
+                    tempQStep = [qStep(1)+deg2rad(5), qStep(2:end)];
                     tempStepTr = stepTr*transl(-0.1,0,0);
-                    tempQStep = self.model.ikine(tempStepTr,qStep,q);
                     if EllipCheckNew(self,obstacle,tempQStep,'obs',obsPoints)
                         stepTr = stepTr*transl(0,0,-0.1);
-                        qStep = self.model.ikine(stepTr,qStep,q);
+                        qStep = self.model.ikine(stepTr,qStep,Mask);
                     else
                         stepTr = tempStepTr;
                         qStep = tempQStep; 
@@ -262,17 +262,17 @@ classdef DensoVS060New<handle
                   % go up when collision with obstacle
                     while EllipCheckNew(self,obstacle,qStep,'obs',obsPoints)
                         stepTr = stepTr*transl(0,0,-0.05);
-                        qStep = self.model.ikine(stepTr,qStep,q);
+                        qStep = self.model.ikine(stepTr,qStep,Mask);
                     end
                     
                   % lean forward when collision with goods
                     while EllipCheckNew(self,goods,qStep,'goods')
                         stepTr = stepTr*transl(0,0.05,0);
-                        qStep = self.model.ikine(stepTr,qStep,q);
+                        qStep = self.model.ikine(stepTr,qStep,Mask);
                     end
                     
 
-                    qMatrixEnd = InterpolateWaypointRadians([qStep; qGoal],deg2rad(10));
+                    qMatrixEnd = InterpolateWaypointRMRC(self,[qStep; qGoal],50);
                     if ~((EllipCheckNew(self,goods,qMatrixEnd,'goods')) || (EllipCheckNew(self,obstacle,qMatrixEnd,'obs',obsPoints)))
                         % Reached goal without collision, so break out
                         break;
@@ -280,11 +280,13 @@ classdef DensoVS060New<handle
                     qMatrixEnd = [];
                     if (sum(qStep' < self.model.qlim(:,1)) ~= 0) || (sum(qStep' > self.model.qlim(:,2)) ~= 0)
                         disp('cannot avoid the obstacle');
+%                         qMatrix = [];
+%                         return;
                         break;
                     end
                end
               qMatrixStart = InterpolateWaypointRadians(qWaypoints,deg2rad(10));
-              self.qMatrix = [qMatrixStart; qMatrixEnd];
+              self.qMatrix = [qMatrixStart; InterpolateWaypointRadians([qStep; qGoal],deg2rad(10))];
               qMatrix = self.qMatrix;
         end
 
