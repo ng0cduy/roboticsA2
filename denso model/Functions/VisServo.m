@@ -24,7 +24,7 @@ classdef VisServo<handle
     methods (Access=public)
         function self=VisServo(r,object)
             self.Run_VisualServo(r,object);
-            self.ObjectPose_Estimation(object);
+            self.ObjectPose_Estimation();
             
         end
         
@@ -153,7 +153,7 @@ classdef VisServo<handle
             plot_robjointvel(self.history)
         end
         %% %% Estimate the pose of the object
-        function ObjectPose_Estimation(self,object)                
+        function ObjectPose_Estimation(self)                
                 self.object_pose(1:3,4) = self.pose(1:3,4);
 %                 self.object_pose(3,4) = object.z+0.28;
 %                 disp(num2str(self.object_pose));
