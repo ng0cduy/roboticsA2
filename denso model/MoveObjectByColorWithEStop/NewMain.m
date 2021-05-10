@@ -1,7 +1,7 @@
 function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj)
      clc;
      conveyor =Obstacle('conveyor1.ply',transl(0,-0.05,0.2));
-     ob=Obstacle('UFO.ply',transl(1.15,-0.1,0.35));
+     ob=Obstacle('UFO.ply',transl(1.15,0,0.35));
      pickUpRobot.Reset();
      dropOffRobot.Reset();
     %% coming to objects
@@ -29,7 +29,7 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj)
      
     
      
-     Move_conveyor(good{i});   
+%      Move_conveyor(good{i});   
 %      camview{i} = EEcam(dropOffRobot);
 %      disp(camview{i}.color);
 %      view(30,0);
@@ -63,10 +63,10 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj)
 %      goodsTr = GetGoodsDes(good{i},goodsOrder); 
 %      qGoal = dropOffRobot.IKine(goodsTr);
 % %      pose=transl(0.5,0.55,0.1)*troty(pi);
-%      qMatrix=dropOffRobot.Check_Collision1(qGoal,good{i},ob);
+%      qMatrix=dropOffRobot.qMatrix_gen('jtraj',goodsTr,60,conveyor);
 %      dropOffRobot.Plot(qMatrix,good{i});
-%      
-     dropOffRobot.Reset();
+% %      
+%      dropOffRobot.Reset();
     end
 
 end

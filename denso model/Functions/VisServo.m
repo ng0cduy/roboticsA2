@@ -7,7 +7,7 @@ classdef VisServo<handle
 %         q0=[0;0;0;0;0;0];
         fps;
         lambda = 0.6;
-        ksteps = 0;
+        i = 0;
         pose;
         history = [];
         vel_p = [];
@@ -18,6 +18,7 @@ classdef VisServo<handle
         object_pose = eye(4);
         P_;
         q0_;
+        eStopState;
     end
     %% 
     methods (Access=public)
@@ -51,8 +52,8 @@ classdef VisServo<handle
 %             pause(0.5);
             while true
                 r.checkEStop();
-                self.ksteps = self.ksteps + 1;
-%                 disp(['k=',num2str(self.ksteps)]);
+                self.i = self.i + 1;
+%                 disp(['k=',num2str(self.i)]);
         
                 % compute the view of the camera
                 uv = cam.plot(P);
@@ -128,14 +129,14 @@ classdef VisServo<handle
 
 %                  pause(1/self.fps)
 
-                if ~isempty(100) && (self.ksteps > 100)
+                if ~isempty(200) && (self.i > 200)
                     break;
                 end
 
                 %update current joint position
                 q0 = q;
             end %loop finishes
-            self.ksteps=0;
+            self.i=0;
         end
         %% 
         
