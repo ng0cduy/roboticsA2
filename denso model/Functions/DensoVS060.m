@@ -273,12 +273,13 @@ classdef DensoVS060<handle
                 qMatrix=self.qMatrix;
             else
 %               obstacle avoid
-%               tempT = self.model.fkine(self.model.getpos);
-%               poseT = tempT*transl(0,0,-0.2);
+              tempT = self.model.fkine(self.model.getpos);
+              poseT = tempT*transl(0,0,-0.15);
 %               qNew = self.IKine(poseT)
 %               qT=self.GenerateRMRC(poseT,30);
-              qT=[1.5706   0.0069911     0.10991  2.9611e-05    -0.11687 -0.00023068];
+              qT=self.IKine(poseT);
 %               disp(num2str(qT));
+%               keyboard;
               qWaypoints = [self.model.getpos;qT;q];
               while (self.isCollision)
                     qM=[];
@@ -302,11 +303,11 @@ classdef DensoVS060<handle
 %                             a=eye(4);
                             temp_=self.FKine(qWaypoints(i,:));
                             a(1:3,4) = temp_(1:3,4);
-                            qRand = self.IKine(a*transl(0,-0.2,0.4));
+                            qRand = self.IKine(a*transl(-0.05,0,0.1));
                             while ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
                                 temp_=self.FKine(qWaypoints(i,:));
                                 a(1:3,4) = temp_(1:3,4);
-                                qRand = self.IKine(a*transl(0,-0.2,0.4));
+                                qRand = self.IKine(a*transl(-0.05,0,0.1));
                             end
                             qWaypoints =[qWaypoints(1:i,:); qRand; qWaypoints(i+1:end,:)];
 %                             qMatrix = [qT;qWaypoints];
