@@ -237,7 +237,7 @@ classdef DensoVS060<handle
 
                     self.model.animate(qMatrix(i,:));
 %                     drawnow();
-                    pause(0.01);                    
+                    pause(0.005);                    
                     if(nargin==3)
                         self.FKine(self.qMatrix(i,:));
                         object.pos_ = self.endEffector*troty(pi)*transl(0,0,-0.07);
@@ -277,21 +277,20 @@ classdef DensoVS060<handle
               poseT = tempT*transl(0,0,-0.15);
 %               qNew = self.IKine(poseT)
 %               qT=self.GenerateRMRC(poseT,30);
-              qT=self.IKine(poseT);
-%               disp(num2str(qT));
-%               keyboard;
+%               qT=self.IKine(poseT);
+              qT=[1.5706   0.0069911     0.10991  2.9611e-05    -0.11687 -0.00023068];
               qWaypoints = [self.model.getpos;qT;q];
               while (self.isCollision)
                     qM=[];
                     startWaypoint = checkedTillWaypoint;
                     for i = startWaypoint:1:size(qWaypoints,1)-1
-                        qMatrixJoin = InterpolateWaypointRadians(qWaypoints(i:i+1,:),deg2rad(5));
+                        qMatrixJoin = InterpolateWaypointRadians(qWaypoints(i:i+1,:),deg2rad(1));
                         if ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
                             qM = [qM; qMatrixJoin];
                             self.isCollision = false;
                             checkedTillWaypoint = i+1;
                             % Now try and join to the final goal (q2)
-                            qMatrixJoin = InterpolateWaypointRadians([qM(end,:); q],deg2rad(5));
+                            qMatrixJoin = InterpolateWaypointRadians([qM(end,:); q],deg2rad(1));
                             if ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
                                 qM = [qM;qMatrixJoin];
                                 qMatrix = qM;
@@ -300,7 +299,7 @@ classdef DensoVS060<handle
                             end
                         else
                             % Randomly pick a pose that is not in collision
-%                             a=eye(4);
+                            a=eye(4);
                             temp_=self.FKine(qWaypoints(i,:));
                             a(1:3,4) = temp_(1:3,4);
                             qRand = self.IKine(a*transl(-0.05,0,0.1));
@@ -450,15 +449,15 @@ classdef DensoVS060<handle
                qWaypoints = [qStart;qFirstStep];
                stepTr = firstStepTr;
                qStep = qFirstStep;
-               moving = true;
-               while(moving)
-                    q=[1,1,1,0,0,0];
-                  % move left when there isn't collision. If there is,go up 
+               planning = true;
+               Mask=[1,1,1,0,0,0];
+               while(planning)
+                   % turn joint 1 5 deg when there isn't collision. If there is,go up 
+                    tempQStep = [qStep(1)+deg2rad(5), qStep(2:end)];
                     tempStepTr = stepTr*transl(-0.1,0,0);
-                    tempQStep = self.model.ikine(tempStepTr,qStep,q);
                     if EllipCheckNew(self,obstacle,tempQStep,'obs',obsPoints)
                         stepTr = stepTr*transl(0,0,-0.1);
-                        qStep = self.model.ikine(stepTr,qStep,q);
+                        qStep = self.model.ikine(stepTr,qStep,Mask);
                     else
                         stepTr = tempStepTr;
                         qStep = tempQStep; 
@@ -467,17 +466,17 @@ classdef DensoVS060<handle
                   % go up when collision with obstacle
                     while EllipCheckNew(self,obstacle,qStep,'obs',obsPoints)
                         stepTr = stepTr*transl(0,0,-0.05);
-                        qStep = self.model.ikine(stepTr,qStep,q);
+                        qStep = self.model.ikine(stepTr,qStep,Mask);
                     end
                     
                   % lean forward when collision with goods
                     while EllipCheckNew(self,goods,qStep,'goods')
                         stepTr = stepTr*transl(0,0.05,0);
-                        qStep = self.model.ikine(stepTr,qStep,q);
+                        qStep = self.model.ikine(stepTr,qStep,Mask);
                     end
                     
 
-                    qMatrixEnd = InterpolateWaypointRadians([qStep; qGoal],deg2rad(10));
+                    qMatrixEnd = InterpolateWaypointRMRC(self,[qStep; qGoal],50);
                     if ~((EllipCheckNew(self,goods,qMatrixEnd,'goods')) || (EllipCheckNew(self,obstacle,qMatrixEnd,'obs',obsPoints)))
                         % Reached goal without collision, so break out
                         break;
@@ -485,14 +484,15 @@ classdef DensoVS060<handle
                     qMatrixEnd = [];
                     if (sum(qStep' < self.model.qlim(:,1)) ~= 0) || (sum(qStep' > self.model.qlim(:,2)) ~= 0)
                         disp('cannot avoid the obstacle');
+%                         qMatrix = [];
+%                         return;
                         break;
                     end
                end
               qMatrixStart = InterpolateWaypointRadians(qWaypoints,deg2rad(10));
-              self.qMatrix = [qMatrixStart; qMatrixEnd];
+              self.qMatrix = [qMatrixStart; InterpolateWaypointRadians([qStep; qGoal],deg2rad(10))];
               qMatrix = self.qMatrix;
         end
-
 
     end
 end
