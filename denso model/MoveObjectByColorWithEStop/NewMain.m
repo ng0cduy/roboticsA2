@@ -66,11 +66,15 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj)
      
      % deliver the goods
      goodsTr = GetGoodsDes(good{i},goodsOrder); 
-     qGoal = dropOffRobot.IKine(goodsTr);
-%      pose=transl(0.5,0.55,0.1)*troty(pi);
-     qMatrix=dropOffRobot.Check_Collision1(qGoal,good{i},ob);
-     dropOffRobot.Plot(qMatrix,good{i});
-%      
+     if strcmpi(good{i}.color,'green')
+        qMatrix=dropOffRobot.qMatrix_gen('jtraj',goodsTr,80);
+        dropOffRobot.Plot(qMatrix,good{i});
+     else
+         qGoal = dropOffRobot.IKine(goodsTr);
+    %      pose=transl(0.5,0.55,0.1)*troty(pi);
+         qMatrix=dropOffRobot.Check_Collision1(qGoal,good{i},ob);
+         dropOffRobot.Plot(qMatrix,good{i});
+     end
      dropOffRobot.Reset();
     end
 
