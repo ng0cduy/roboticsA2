@@ -280,14 +280,22 @@ classdef DensoVS060New<handle
                     qMatrixEnd = [];
                     if (sum(qStep' < self.model.qlim(:,1)) ~= 0) || (sum(qStep' > self.model.qlim(:,2)) ~= 0)
                         disp('cannot avoid the obstacle');
-%                         qMatrix = [];
-%                         return;
-                        break;
+                        qMatrix = [];
+                        return;
+%                         break;
                     end
                end
               qMatrixStart = InterpolateWaypointRadians(qWaypoints,deg2rad(10));
-              self.qMatrix = [qMatrixStart; InterpolateWaypointRadians([qStep; qGoal],deg2rad(10))];
-              qMatrix = self.qMatrix;
+              qMatrix = [qMatrixStart;qMatrixEnd];
+              actualTr = self.model.fkine(qMatrix(end,:));
+              desireTr = self.model.fkine(qGoal);
+              if (sum(actualTr ~= desireTr))
+                qMatrixExtra = jtraj(qMatrix(end,:),qGoal,10);
+              end
+              qMatrix = [qMatrix; qMatrixExtra];
+              self.qMatrix = qMatrix;
+              qStep
+              stepTr
         end
 
 
