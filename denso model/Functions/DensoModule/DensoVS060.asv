@@ -220,7 +220,7 @@ classdef DensoVS060<handle
         end
         %% Check eStopState 
         function checkEStop(self)
-            while self.eStopState == 1 || self.eStopState == 2
+            while self.eStopState == 1 || self.eStopState == 2 || self.lcState == 1
                 pause(0.05)
                 if self.eStopState ==0 
                     break;
@@ -230,12 +230,13 @@ classdef DensoVS060<handle
         %% Collision Detection
         function Plot(self,qMatrix,object)
             [row,col] = size(qMatrix);
-%             if self.lcState == true
-%                 ob=Obstacle('UFO.ply',transl(4,0,1));
-%             end
+            if self.lcState == true
+                ob=Obstacle('UFO.ply',transl(4,0,1));
+            end
             for i=1:1:row
                     self.checkEStop();
 %                     self.Lidar(self,self.qMatrix(i,:));
+
                     self.model.animate(qMatrix(i,:));
 %                     drawnow();
                     pause(0.005);                    
