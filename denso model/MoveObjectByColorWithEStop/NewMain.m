@@ -24,7 +24,7 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj)
     
     %% animation
 %      qG = pickUpRobot.IKine(conveyor_pos);
-     qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,50);
+     qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,50,conveyor);
      pickUpRobot.Plot(qMatrix,good{i});
      pickUpRobot.Reset();
      
@@ -34,7 +34,7 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj)
      camview{i} = EEcam(dropOffRobot);
      
      view(30,0);
-     pause(1);
+%      pause(1);
      b{i}=VisServo(dropOffRobot,good{i});
      
      good{i}.color = camview{i}.color;       % Set color of goods by camview
