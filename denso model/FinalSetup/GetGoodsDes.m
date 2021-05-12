@@ -16,7 +16,7 @@
             end
             
             % Dimension of a goods
-            [x,y,z] = obj.getGoodsSize;
+            [~,y,z] = obj.getGoodsSize;
         
             % Set goods destinations coordinate matrix from the lowest to
             % the highest, categorized by color 

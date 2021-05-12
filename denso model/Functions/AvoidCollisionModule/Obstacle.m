@@ -15,6 +15,7 @@ classdef Obstacle <handle
     x;
     y;
     z;
+    cubePoints;
     name;
     end
     methods (Access = public)
@@ -27,6 +28,8 @@ classdef Obstacle <handle
             self.Find_faceNormal();
             self.GetSize();
             self.CalculateP();
+            self.pos_ = pos;
+            self.UpdatePose(pos);
                        
         end
         function PlotModel(self)
@@ -49,6 +52,7 @@ classdef Obstacle <handle
             self.updatePose = [new_pose * [self.modelVert,ones(self.modelVertexCount,1)]']';
             self.mesh_h.Vertices = self.updatePose(:,1:3);
             self.pos_ = new_pose;
+%             pose = new_pose;
         end
         function Move(self,pose)
             self.UpdatePose(pose);
@@ -129,7 +133,9 @@ classdef Obstacle <handle
 %             cubeAtOigin_h = plot3(cubePoints(:,1),cubePoints(:,2),cubePoints(:,3),'cyan.');
             centre = self.pos_(1:3,4)';
             cubePoints = cubePoints + repmat(centre,size(cubePoints,1),1); % move the cube to the required location
+            self.cubePoints = cubePoints;
             cube_h = plot3(cubePoints(:,1),cubePoints(:,2),cubePoints(:,3),'cyan.');
+            
         end
                 
     end
