@@ -29,6 +29,7 @@ classdef Obstacle <handle
             self.GetSize();
             self.CalculateP();
             self.pos_ = pos;
+            self.UpdatePose(pos);
                        
         end
         function PlotModel(self)
@@ -51,6 +52,7 @@ classdef Obstacle <handle
             self.updatePose = [new_pose * [self.modelVert,ones(self.modelVertexCount,1)]']';
             self.mesh_h.Vertices = self.updatePose(:,1:3);
             self.pos_ = new_pose;
+%             pose = new_pose;
         end
         function Move(self,pose)
             self.UpdatePose(pose);

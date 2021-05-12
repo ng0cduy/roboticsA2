@@ -6,20 +6,21 @@ classdef EllipCheck<handle
         centerPoint = [0,0,0];
         radii = [0.1,0.1,0.2];
         result;
-        collide = false;
     end
     methods (Access = public)
          function self = EllipCheck(robot,cube,qMatrix)
                 self.result = 0;
                 sum=0;
                 cubePoints = cube.vUpdate;
-%                 cubePoints = cubePoints + repmat([2,0,-0.5],size(cubePoints,1),1);
-%                 tr = robot.model.fkine(qMatrix);
-%                 cubePointsAndOnes = [inv(tr) * [cubePoints,ones(size(cubePoints,1),1)]']';
-%                 updatedCubePoints = cubePointsAndOnes(:,1:3);
-%                 algebraicDist = GetAlgebraicDist(updatedCubePoints, self.centerPoint, self.radii);
-%                 pointsInside = find(algebraicDist < 1);
+                cubePoints = cubePoints + repmat([2,0,-0.5],size(cubePoints,1),1);
+                tr = robot.model.fkine(qMatrix);
+                cubePointsAndOnes = [inv(tr) * [cubePoints,ones(size(cubePoints,1),1)]']';
+                updatedCubePoints = cubePointsAndOnes(:,1:3);
+                algebraicDist = GetAlgebraicDist(updatedCubePoints, self.centerPoint, self.radii);
+                pointsInside = find(algebraicDist < 1);
 %                 display(['There are now ', num2str(size(pointsInside,1)),' points inside']);
+                % % 2.10
+                % q = [0,0,0,0,0,0]
                 tr = zeros(4,4,robot.model.n+1);
                 tr(:,:,1) = robot.model.base;
                 L = robot.model.links;
@@ -34,14 +35,9 @@ classdef EllipCheck<handle
                     algebraicDist = GetAlgebraicDist(updatedCubePoints, self.centerPoint, self.radii);
                     pointsInside = find(algebraicDist < 1);
 %                     display(['There are ', num2str(size(pointsInside,1)),' points inside the ',num2str(i),'th ellipsoid']);
-                    sum = sum +size(pointsInside,1);
+                    sum = sum +pointsInside;
                 end
                 self.result = sum;
-                if self.result ==0
-                    self.collide = false;
-                else 
-                    self.collide = true;
-                end 
          end
     end
 end

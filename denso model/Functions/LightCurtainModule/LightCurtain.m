@@ -61,17 +61,37 @@ classdef LightCurtain<handle
             end
         end
         
-        function detect_Obstacle(self,obstacle)
-            for i=1:size(self.pose(:,1),1)
-                if(transpose(obstacle.pos_(1:2,4)) <= self.pose(i,1:2)+0.01 |...
-                            transpose(obstacle.pos_(1:2,4)) > self.pose(i,1:2)-0.05 )
-                    self.collision = true;
-                end
-                
-            end  
+        function collisionDetect = detect_Obstacle(self,obstacle)
+              center =[0 0];
+              [x,y,~] = obstacle.GetSize();
+%               poseTemp = obstacle.UpdatePose();
+              x0 = obstacle.pos_(1,4);
+              y0 = obstacle.pos_(2,4);
+              points= [x0 ,y0+y/2; x0+x/2,y0; x0,y0-y/2; x0-x/2,y0];  
+              distFromCenter = [norm(center-points(1,:)),norm(center-points(2,:)),norm(center-points(3,:)),norm(center-points(4,:))];
+            if obstacle.pos_(3,4) > self.z + self.dist || obstacle.pos_(3,4) < self.z
+                self.collision = false;
+            else 
+%                 for i=1:size(self.pose(:,1),1) % each ray of the light curtain 
+%                     if(transpose(obstacle.pos_(1:2,4)) <= self.pose(i,1:2)+0.01 |...
+%                                 transpose(obstacle.pos_(1:2,4)) > self.pose(i,1:2)-0.05 )
+%                         self.collision = true;
+%                         return
+%                     end
+% 
+%                 end
+                    pointsInside = find(distFromCenter < self.a);
+                    pointsOutside = find(distFromCenter > self.a);
+                    if size(pointsInside,2) > 0 && size(pointsOutside,2) >0
+                        self.collision =true;                    
+                    else
+                        self.collision = false;
+                    end 
+            end 
             if(self.collision ==true)
                     disp('collision detected');
             end
+            collisionDetect = self.collision;
         end
     end
 end
