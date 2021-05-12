@@ -11,7 +11,7 @@ function boxes = SetGoodsPick
         hold on
         switch choice
             case 1
-                boxes{i} = goods('green.ply',transl(goodsX,goodsY,goodsBaseZ+0.12*(i-1))*troty(pi)); %z of goods = 0.12; 
+                boxes{i} = goods('green.ply',transl(goodsX,goodsY,goodsBaseZ+0.12*(i-1))*troty(pi)); %stacked on the previous goods 
             case {2,3} 
                 boxes{i} = goods('red.ply',transl(goodsX,goodsY,goodsBaseZ+0.12*(i-1))*troty(pi));
             otherwise
