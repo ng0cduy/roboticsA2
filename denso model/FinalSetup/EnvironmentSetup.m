@@ -1,4 +1,4 @@
-function [robot1,robot2,boxes] = EnvironmentSetup
+function [robot1,robot2,boxes,lightcurtain,conveyor] = EnvironmentSetup
     clf;
     set(0,'DefaultFigureWindowStyle', 'docked');
     robot2 = DensoVS060(false,transl(0.8,0.35,0)*trotz(-pi/2),'denso_1');
@@ -6,7 +6,8 @@ function [robot1,robot2,boxes] = EnvironmentSetup
     hold on;
 %     conveyor = goods('conveyor1.ply',transl(0,0,0.2));
     table = goods('table.ply',transl(0.3,0,-0.26));
-
+    lightcurtain = LightCurtain(true);
+    conveyor =Obstacle('conveyor1.ply',transl(0,-0.05,0.2));
     % a.model.teach;
     estop = goods('estop.ply',transl(1.8,1.4,0.18));
     human = goods('human.ply',transl(2,2,0.64));

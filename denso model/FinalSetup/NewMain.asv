@@ -3,6 +3,9 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
 %      conveyor =Obstacle('conveyor1.ply',transl(0,-0.05,0.2));
      ob=Obstacle('UFO.ply',transl(1.15,-0.1,0.35));
      pickUpRobot.Reset();
+     if guiobj.lightcurtain == 1
+         obLC = Obstacle('UFO.ply',transl(-5,,0.35));
+     end 
 %      dropOffRobot.Reset();
     redOrder = 0;
     blueOrder = 0;
@@ -24,7 +27,7 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
     
     %% animation
 %      qG = pickUpRobot.IKine(conveyor_pos);
-     qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,50,conveyor);
+     qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,50);
      pickUpRobot.Plot(qMatrix,good{i});
      pickUpRobot.Reset();
      
@@ -34,7 +37,7 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
      camview{i} = EEcam(dropOffRobot);
      
      view(30,0);
-%      pause(1);
+     pause(1);
      b{i}=VisServo(dropOffRobot,good{i});
      
      good{i}.color = camview{i}.color;       % Set color of goods by camview

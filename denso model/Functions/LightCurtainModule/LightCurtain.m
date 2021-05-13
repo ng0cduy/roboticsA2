@@ -61,7 +61,7 @@ classdef LightCurtain<handle
             end
         end
         
-        function collisionDetect = detect_Obstacle(self,obstacle)
+        function collisionDetect = DetectObstacle(self,obstacle)
               center =[0 0];
               [x,y,~] = obstacle.GetSize();
 %               poseTemp = obstacle.UpdatePose();

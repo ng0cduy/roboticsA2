@@ -1,0 +1,31 @@
+function LCTesting(lightcurtain,denso)
+    denso.Reset();
+    ob=Obstacle('UFO.ply',transl(4,0,1)*troty(-30,'deg'));
+    obCurrentPos = ob.pos_;
+    jointStates = denso.model.getpos();
+    pose = denso.FKine(jointStates);
+    pose1 = pose;
+    touchFlag =0;
+%     lcFlag = false;
+%     detectTimes = 0;
+    pose1(3,4) = pose(3,4)-0.3;
+    qMatrix = denso.GenerateRMRC(pose1,100);
+    qLength =length(qMatrix);
+    for i = 1:1:qLength
+        touchFlag = lightcurtain.DetectObstacle(ob);
+        while touchFlag == 1
+            pause(0.05);
+            obCurrentPos(1,4) = obCurrentPos(1,4) + 0.04;
+            obCurrentPos = obCurrentPos * 
+        end 
+%         while lcFlag == true && detectTimes == 1
+%             pause(0.05);
+% %             obCurrentPos(1,4) = obCurrentPos(1,4) + 0.04
+%         end
+        obCurrentPos(1,4) = obCurrentPos(1,4) - 0.04;
+        ob.Move(obCurrentPos);
+        denso.model.animate(qMatrix(i,:));
+        drawnow();
+    end 
+%     denso.Plot(qMatrix);
+end 
