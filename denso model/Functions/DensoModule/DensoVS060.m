@@ -184,7 +184,7 @@ classdef DensoVS060<handle
             angleError(:,i) = deltaTheta;
         end
         
-        %% Trajectory using Quintic Polynomial 
+        %% Trajectory generator
         function qMatrix = qMatrix_gen(self,option,pose,steps,obstacle1,obstacle2)
             self.qMatrix = [];
             self.isCollision =false;
