@@ -279,8 +279,8 @@ classdef DensoVS060<handle
               poseT = tempT*transl(0,0,-0.15);
 %               qNew = self.IKine(poseT)
 %               qT=self.GenerateRMRC(poseT,30);
-%               qT=self.IKine(poseT);
-              qT=[1.5706   0.0069911     0.10991  2.9611e-05    -0.11687 -0.00023068];
+              qT=self.IKine(poseT);
+%               qT=[1.5706   0.0069911     0.10991  2.9611e-05    -0.11687 -0.00023068];
               qWaypoints = [self.model.getpos;qT;q];
               while (self.isCollision)
                     qM=[];
