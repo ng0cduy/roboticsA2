@@ -14,7 +14,7 @@ classdef DensoVS060<handle
         name;
         initialPose=zeros(1,6);
         pose;
-        workspace = [-3.5 3.5 -5 3.5 -0.5 2.5]; 
+        workspace = [-3.5 3.5 -5 3.5 -0.5 2]; 
         verts;
         line_h;
         
@@ -240,6 +240,7 @@ classdef DensoVS060<handle
 %                     drawnow();
                     pause(0.005);                    
                     if(nargin==3)
+                        self.checkEStop();
                         self.FKine(self.qMatrix(i,:));
                         object.pos_ = self.endEffector*troty(pi)*transl(0,0,-0.07);
                         object.Move(object.pos_);
