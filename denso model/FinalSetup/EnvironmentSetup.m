@@ -8,10 +8,10 @@ function [robot1,robot2,boxes] = EnvironmentSetup
     table = goods('table.ply',transl(0.3,0,-0.26));
 
     % a.model.teach;
-%     estop = goods('estop.ply',transl(1.8,1.4,0.18));
-% %     human = goods('human.ply',transl(2,2,0.64));
-%     brickwall=goods('brick_wall.ply',transl(0.4,3.5,1.3));
-%     fire_ext=goods('ext.ply',transl(-2,2.5,0.2)*trotz(pi));
+    estop = goods('estop.ply',transl(1.8,1.4,0.18));
+    human = goods('human.ply',transl(2,2,0.64));
+    brickwall=goods('brick_wall.ply',transl(0.4,3.5,1.3));
+    fire_ext=goods('ext.ply',transl(-2,2.5,0.2)*trotz(pi));
     
     ground_qx=[-5,-5;5,5];
     ground_qy=[-5,5;-5,5];
