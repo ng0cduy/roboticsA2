@@ -25,7 +25,7 @@ function LCTesting(lightcurtain,denso)
             drawnow();
             touchFlag = lightcurtain.DetectObstacle(ob);
             if touchFlag ==0
-                disp('Robot');
+                disp('Robot can resume');
                 moveInFlag = false;
             end 
         end
