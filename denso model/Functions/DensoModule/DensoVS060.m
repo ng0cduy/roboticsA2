@@ -14,7 +14,7 @@ classdef DensoVS060<handle
         name;
         initialPose=zeros(1,6);
         pose;
-        workspace = [-3.5 3.5 -5 3.5 -0.5 2]; 
+        workspace = [-4.5 4.5 -4.5 4.5 -0.5 2]; 
         verts;
         line_h;
         
@@ -286,13 +286,13 @@ classdef DensoVS060<handle
                     qM=[];
                     startWaypoint = checkedTillWaypoint;
                     for i = startWaypoint:1:size(qWaypoints,1)-1
-                        qMatrixJoin = InterpolateWaypointRadians(qWaypoints(i:i+1,:),deg2rad(1));
+                        qMatrixJoin = InterpolateWaypointRadians(qWaypoints(i:i+1,:),deg2rad(10));
                         if ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
                             qM = [qM; qMatrixJoin];
                             self.isCollision = false;
                             checkedTillWaypoint = i+1;
                             % Now try and join to the final goal (q2)
-                            qMatrixJoin = InterpolateWaypointRadians([qM(end,:); q],deg2rad(1));
+                            qMatrixJoin = InterpolateWaypointRadians([qM(end,:); q],deg2rad(10));
                             if ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
                                 qM = [qM;qMatrixJoin];
                                 qMatrix = qM;

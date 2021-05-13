@@ -56,6 +56,7 @@ classdef VisServo<handle
 %                 disp(['k=',num2str(self.i)]);
         
                 % compute the view of the camera
+                
                 uv = cam.plot(P);
 
                 % compute image plane error as a column
@@ -137,6 +138,7 @@ classdef VisServo<handle
                 q0 = q;
             end %loop finishes
             self.i=0;
+            
         end
         %% 
         

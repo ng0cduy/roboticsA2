@@ -2,8 +2,10 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
      clc;
 %      conveyor =Obstacle('conveyor1.ply',transl(0,-0.05,0.2));
      view(60,40);
+%      zoom(2.2);
      ob=Obstacle('UFO.ply',transl(1.15,-0.1,0.35));
      pickUpRobot.Reset();
+     dropOffRobot.Reset();
 %      dropOffRobot.Reset();
     redOrder = 0;
     blueOrder = 0;
@@ -11,7 +13,7 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
   
     %% coming to objects
     %% define parameters
-    for i=3:-1:1
+    for i=6:-1:1
     good{i} = goodsArray{i}; %temporary
     pose = good{i}.pos_*transl(0,0,-0.06);
 
@@ -25,7 +27,7 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
     
     %% animation
 %      qG = pickUpRobot.IKine(conveyor_pos);
-     qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,50);
+     qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,50,conveyor);
      pickUpRobot.Plot(qMatrix,good{i});
      pickUpRobot.Reset();
      
@@ -35,6 +37,7 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
      camview{i} = EEcam(dropOffRobot);
      
      view(60,40);
+     zoom(2.2);
 %      pause(1);
      b{i}=VisServo(dropOffRobot,good{i});
      
@@ -77,6 +80,7 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
          dropOffRobot.Plot(qMatrix,good{i});
 %      end
      dropOffRobot.Reset();
+     pickUpRobot.Reset();
     end
 
 end
