@@ -195,24 +195,25 @@ classdef DensoVS060<handle
                 self.qMatrix = GenerateRMRC(self,pose,steps);
             elseif strcmpi(option,'trap') ==1
                 s = lspb(0,1,steps);
-                qMatrix = nan(steps,6);
+                qMatrixx = nan(steps,6);
                 for i = 1:steps
-                    qMatrix(i,:) = 1-s(i)*self.model.getpos + s(i)*qNew;
+                    qMatrixx(i,:) = (1-s(i))*self.model.getpos + s(i)*qNew;
                 end
-                self.qMatrix = qMatrix;
+                self.qMatrix = qMatrixx;
             end
             
             if(nargin==5)       
 %               check if the trajectory collide with the table
               self.qMatrix = Check_Collision(self,qNew,obstacle1);
+              disp(5);
             elseif(nargin==6)
                 qM = Check_Collision(self,qNew,obstacle1);
                 self.qMatrix = Check_Collision(self,qM,obstacle2);
 
 %             Move the arm prior to qMatrix
 %               Only move the arm without checking the collision
-            else
-                self.qMatrix = jtraj(self.model.getpos, qNew,steps);
+%             else
+%                 self.qMatrix = jtraj(self.model.getpos, qNew,steps);
             end
 %             self.Plot(self.qMatrix);
             qMatrix=self.qMatrix;
