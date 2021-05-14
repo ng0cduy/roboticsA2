@@ -13,7 +13,7 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
   
     %% coming to objects
     %% define parameters
-    for i=6:-1:1
+    for i=3:-1:1
     %Robot to goods
     good{i} = goodsArray{i}; %temporary
     pose = good{i}.pos_*transl(0,0,-0.06);
@@ -21,7 +21,7 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
 %         pose(3,4) = pose(3,4) - 0.1;
         qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,100);
     else
-        qMatrix = pickUpRobot.qMatrix_gen('trap',pose,40);
+        qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,40);
     end
     pickUpRobot.Plot(qMatrix);
     

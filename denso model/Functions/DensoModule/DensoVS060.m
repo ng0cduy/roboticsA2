@@ -143,7 +143,7 @@ classdef DensoVS060<handle
             positionError = zeros(3,steps);
             angleError = zeros(3,steps);
             for i = 1:steps
-                x(:,i) = x1*(1-s(i)) + s(i)*x2;
+                x(:,i) = (1-s(i))*x1 + s(i)*x2;
             end
             qMatrixx = nan(steps,6);
             qMatrixx(1,:) = q1;
@@ -157,7 +157,7 @@ classdef DensoVS060<handle
                 linear_velocity = (1/deltaTime)*deltaX;
                 angular_velocity = [S(3,2);S(1,3);S(2,1)];
                 deltaTheta = tr2rpy(Rd*Ra');
-                xdot = (x(:,i+1) - x(:,i))/deltaTime;
+                xdot  = W*[linear_velocity;angular_velocity];
                 J = self.model.jacob0(qMatrixx(i,:));
                 m(i) = sqrt(det(J*J'));
                 if m(i) < epsilon
