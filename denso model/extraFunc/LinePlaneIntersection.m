@@ -1,3 +1,4 @@
+%% function taken from lab 5 exercises
 %% LinePlaneIntersection
 % Given a plane (normal and point) and two points that make up another line, get the intersection
 % Check == 0 if there is no intersection

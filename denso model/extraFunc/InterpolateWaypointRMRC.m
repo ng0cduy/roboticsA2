@@ -1,5 +1,5 @@
 %% InterpolateWaypointRadians
-% Given a set of waypoints, finely intepolate them
+% Given a set of waypoints, finely intepolate them using RMRC
 function qMatrix = InterpolateWaypointRMRC(robot,waypointRadians,steps)
         qMatrix = [];
         for i = 1: size(waypointRadians,1)-1
@@ -7,7 +7,7 @@ function qMatrix = InterpolateWaypointRMRC(robot,waypointRadians,steps)
         end
 end
 
-%% Generate RMRC
+%% Generate RMRC for a pair of q
  function qMatrix = GenRMRC(robot,q1,q2,steps)
             epsilon = 0.02;
             W = diag([1 1 1 0.2 0.2 0.2]);
@@ -43,7 +43,6 @@ end
                 m(i) = sqrt(det(J*J'));
                 if m(i) < epsilon
                         lambda = (1-(m(i)/epsilon))*5E-2;
-%                         disp(['Reach to singularities at q[' num2str(i),']','Adjusting lambda']);
                 else
                         lambda = 0;
                 end
@@ -56,7 +55,6 @@ end
                         qdot(i,j) = 0;
                     end
                 end 
-%                 qdot = J\xdot;
                 qMatrixx(i+1,:) = qMatrixx(i,:) + deltaTime* qdot(i,:);
             end
             qMatrix = qMatrixx;

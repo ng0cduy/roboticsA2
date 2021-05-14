@@ -1,3 +1,4 @@
+%% Function taken from lab 6 solution
 %% GetAlgebraicDist
 % determine the algebraic distance given a set of points and the center
 % point and radii of an elipsoid
