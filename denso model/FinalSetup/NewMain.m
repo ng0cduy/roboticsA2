@@ -2,6 +2,7 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
      clc;
 %      conveyor =Obstacle('conveyor1.ply',transl(0,-0.05,0.2));
      view(60,40);
+     pan on;
 %      zoom(2.2);
      ob=Obstacle('UFO.ply',transl(1.15,-0.1,0.35));
      pickUpRobot.Reset();
