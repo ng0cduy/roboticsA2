@@ -210,10 +210,6 @@ classdef DensoVS060<handle
                 qM = Check_Collision(self,qNew,obstacle1);
                 self.qMatrix = Check_Collision(self,qM,obstacle2);
 
-%             Move the arm prior to qMatrix
-%               Only move the arm without checking the collision
-%             else
-%                 self.qMatrix = jtraj(self.model.getpos, qNew,steps);
             end
 %             self.Plot(self.qMatrix);
             qMatrix=self.qMatrix;
