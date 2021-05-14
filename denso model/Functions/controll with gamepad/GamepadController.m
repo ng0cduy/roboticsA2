@@ -45,9 +45,9 @@ function GamepadController(denso,gui)
         denso.model.animate(q);  
         for joint = 1:1:6
             if q(joint) < denso.model.qlim(joint,1)
-                qdot(joint) = 0;
+                q(joint) = denso.model.qlim(joint,1);
             elseif q(joint) > denso.model.qlim(joint,2)
-                qdot(joint) =0;
+                q(joint) = denso.model.qlim(joint,2);
             end 
         end
         % wait until loop time elapsed
