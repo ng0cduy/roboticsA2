@@ -8,7 +8,7 @@ function GamepadController(denso,gui)
     dt = 0.15;
     n =0;
     denso.model.delay=0.001;
-    kLinear = 0.3;
+    kLinear = 0.2;
     kAngular = 0.8;
     %%
     tic;
