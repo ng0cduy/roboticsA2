@@ -19,7 +19,7 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
     pose = good{i}.pos_*transl(0,0,-0.06);
     if i >=4
 %         pose(3,4) = pose(3,4) - 0.1;
-        qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,40);
+        qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,100);
     else
         qMatrix = pickUpRobot.qMatrix_gen('trap',pose,40);
     end

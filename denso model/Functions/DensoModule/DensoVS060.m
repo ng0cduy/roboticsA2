@@ -128,10 +128,9 @@ classdef DensoVS060<handle
         end
         %% RMRC: q generating using RMRC, checking for singularity
         function qMatrix = GenerateRMRC(self,pose,steps)
-            epsilon = 0.02;
+            epsilon = 0.01;
             W = diag([1 1 1 0.2 0.2 0.2]);
             q1 = self.model.getpos;
-%             q2 = self.IKine(pose);
             T1 = self.FKine(q1);
             T2 = pose;
             x1 = [T1(1:3,4);tr2rpy(T1)'];
@@ -152,7 +151,7 @@ classdef DensoVS060<handle
                 T = self.FKine(qMatrixx(i,:));
                 deltaX = x(1:3,i+1) - T(1:3,4);
                 Ra = T(1:3,1:3);
-                Rd = rpy2r(x(4:6),i+1);
+                Rd = rpy2r((x(4:6,i+1))');
                 Rdot = (1/deltaTime) *(Rd -Ra);
                 S = Rdot*Ra';
                 linear_velocity = (1/deltaTime)*deltaX;
