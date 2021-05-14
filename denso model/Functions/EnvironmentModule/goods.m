@@ -20,20 +20,7 @@ classdef goods <handle
     eStopState = 0;
     end
     methods (Access = public)
-        function self = goods(name,pos)
-%             if strcmpi(name,'red') == 1
-%                 self.nameModel = 'red.ply';
-%             
-%             elseif strcmpi(name,'blue') == 1
-%                 self.nameModel = 'blue.ply';
-%               
-%             elseif strcmpi(name,'green') == 1
-%                 self.nameModel ='green.ply';
-%             
-%             elseif strcmpi(name,'table') == 1
-%                 self.nameModel ='table.ply';
-%             end
-                       
+        function self = goods(name,pos)   
             [self.f,self.v,self.data] = plyread(name,'tri'); 
             self.nameModel=name;
             self.vUpdate = self.v + pos(1:3,4)'; 

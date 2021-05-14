@@ -1,3 +1,4 @@
+%% class to move the goods on the conveyor
 classdef Move_conveyor<handle
     properties(Access=public)
     end
