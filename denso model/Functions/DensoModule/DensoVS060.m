@@ -14,7 +14,7 @@ classdef DensoVS060<handle
         name;
         initialPose=zeros(1,6);
         pose;
-        workspace = [-4.5 4.5 -4.5 4.5 -0.5 2]; 
+        workspace = [-4 4 -4 3 -0.5 2]; 
         verts;
         line_h;
         

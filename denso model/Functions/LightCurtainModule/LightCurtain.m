@@ -4,7 +4,7 @@ classdef LightCurtain<handle
     end
     properties(Access =public)
          verts;
-         a=3.5;
+         a=3;
          z=-0.5;
          dist=2;
          mode = false;
