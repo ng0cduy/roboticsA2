@@ -13,16 +13,16 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
   
     %% coming to objects
     %% define parameters
-    for i=3:-1:1
+    for i=6:-1:1
     %Robot to goods
-    good{i} = goodsArray{i}; %temporary
-    pose = good{i}.pos_*transl(0,0,-0.06);
-    if i >=4
+    good{i} = goodsArray{i} %temporary
+    pose = good{i}.pos_*transl(0,0,-0.08);
+%     if i >=4
 %         pose(3,4) = pose(3,4) - 0.1;
         qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,100);
-    else
-        qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,40);
-    end
+%     else
+%         qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,40);
+%     end
     pickUpRobot.Plot(qMatrix);
     
 
@@ -33,11 +33,11 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
     %% animation
     %GOODS to conveyor
 %      qG = pickUpRobot.IKine(conveyor_pos);
-     if (i >=4)
-        qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,50);
-     else
+%      if (i >=4)
+%         qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,50);
+%      else
         qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,50,conveyor);
-     end
+%      end
      pickUpRobot.Plot(qMatrix,good{i});
      pickUpRobot.Reset();
      
@@ -89,8 +89,6 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
          qMatrix=dropOffRobot.Check_Collision1(qGoal,good{i},ob);
          dropOffRobot.Plot(qMatrix,good{i});
 %      end
-     dropOffRobot.Reset();
-     pickUpRobot.Reset();
     end
 
 end
