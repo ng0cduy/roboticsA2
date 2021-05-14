@@ -1,5 +1,6 @@
+%% function taken from lab 5 solutions
 function [ transforms ] = GetLinkPoses( q, robot)
-
+%% Determine the links' transform matrix of a given robot
 links = robot.model.links;
 transforms = zeros(4, 4, length(links) + 1);
 transforms(:,:,1) = robot.model.base;

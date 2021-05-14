@@ -1,3 +1,4 @@
+%% functions taken from lab 5 solution
 %% InterpolateWaypointRadians
 % Given a set of waypoints, finely intepolate them
 function qMatrix = InterpolateWaypointRadians(waypointRadians,maxStepRadians)
@@ -11,8 +12,7 @@ function qMatrix = InterpolateWaypointRadians(waypointRadians,maxStepRadians)
         end
 end
 %% FineInterpolation
-% Use results from Q2.6 to keep calling jtraj until all step sizes are
-% smaller than a given max steps size
+% keep calling jtraj until all step sizes are smaller than a given max steps size
 function qMatrix = FineInterpolation(q1,q2,maxStepRadians)
         if nargin < 3
             maxStepRadians = deg2rad(1);

@@ -1,3 +1,4 @@
+%% function taken from lab 5 exercises
 function [vertex,face,faceNormals] = RectangularPrism(lower,upper,plotOptions,axis_h)
 if nargin<4
         axis_h=gca;

@@ -1,3 +1,4 @@
+%% functions taken from lab 5 solution
 function result = IsCollision(robot,qMatrix,faces,vertex,faceNormals,returnOnceFound)
 if nargin < 6
     returnOnceFound = true;
