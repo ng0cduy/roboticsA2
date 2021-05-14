@@ -31,7 +31,7 @@ function [robot1,robot2,boxes,lightcurtain,conveyor] = EnvironmentSetup
     logo2=ImgRead(logo_qx2,logo_qy2,logo_qz2,'UTS.jpg');
     
     poster_qx=[-4,-4;-4,-4];
-    poster_qy=[-4,-4;4,4];
+    poster_qy=[-4,-4;3,3];
     poster_qz=[-0.5,2;-0.5,2];
     poster=ImgRead(poster_qx,poster_qy,poster_qz,'Lab.jpg');
 %     red = goods('red.ply',transl(0.4,0,0)*troty(pi)); 

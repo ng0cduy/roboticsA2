@@ -25,7 +25,7 @@ classdef LightCurtain<handle
 %         Plot the light curtain
         function Plot_LC(self)
             if(self.mode == true)
-                for i = -self.a:0.05:self.a
+                for i = -self.a:0.12:self.a
 %                     for y = 1:4
 %                         hold on;
 %                         if y==1
@@ -49,8 +49,8 @@ classdef LightCurtain<handle
                         startP = self.tr(1:3,4)';
 
                         endP = self.tr(1:3,4)' + self.dist * self.tr(1:3,3)';
-                        line1_h = plot3([startP(1),endP(1)],[startP(2),endP(2)],[startP(3),endP(3)],'r');
-                        plot3(endP(1),endP(2),endP(3),'r');
+                        line1_h = plot3([startP(1),endP(1)],[startP(2),endP(2)],[startP(3),endP(3)],'r*');
+                        plot3(endP(1),endP(2),endP(3),'r*');
 %                         axis equal;
                         temp = self.tr(1:3,4)';
                         self.pose = [self.pose;temp];
