@@ -66,7 +66,6 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
          case 'red'
              redOrder = redOrder + 1;
              goodsOrder = redOrder;
-             
          case 'blue'
              blueOrder = blueOrder + 1;
              goodsOrder = blueOrder;
