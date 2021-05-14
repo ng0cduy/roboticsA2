@@ -250,7 +250,7 @@ classdef DensoVS060<handle
             qM=[];
             for i = 1:1:self.steps                   
                    temp = self.model.fkine(self.qMatrix(i,:));
-                   pose_ = temp*transl(0,0,0.12);
+                   pose_ = temp*transl(0,0,0.15);
                    if i == 1
                     qM(i,:)=self.model.ikcon(pose_);
                    else
@@ -274,8 +274,8 @@ classdef DensoVS060<handle
                 qMatrix=self.qMatrix;
             else
 %               obstacle avoid
-              tempT = self.model.fkine(self.model.getpos);
-              poseT = tempT*transl(0,0,-0.24);
+%               tempT = self.model.fkine(self.model.getpos);
+%               poseT = tempT*transl(0,0,-0.24);
 %               qNew = self.IKine(poseT)
 %               qT=self.GenerateRMRC(poseT,30);
 %               qT=self.model.ikcon(poseT);
@@ -283,7 +283,7 @@ classdef DensoVS060<handle
               qWaypoints = [self.model.getpos;q];
               for i = 1:1:size(qWaypoints,1)
                   temp = self.model.fkine(qWaypoints(i,:));
-                  pose_ = temp*transl(0,0,0.12);
+                  pose_ = temp*transl(0,0,0.15);
                   qW(i,:)=self.model.ikcon(pose_);
               end
               qM=[];
@@ -308,11 +308,11 @@ classdef DensoVS060<handle
                             a=eye(4);
                             temp_=self.FKine(qWaypoints(i,:));
 %                             a(1:3,4) = temp_(1:3,4);
-                            qRand = self.IKine(temp_*transl(0,0,-0.4));
+                            qRand = self.IKine(temp_*transl(0,0,-0.32));
                             while ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
                                 temp_=self.FKine(qW(i,:));
 %                                 a(1:3,4) = temp_(1:3,4);
-                                qRand = self.IKine(temp_*transl(0,0,-0.4));
+                                qRand = self.IKine(temp_*transl(0,0,-0.35));
                             end
                             qW =[qWaypoints(1:i,:); qRand; qWaypoints(i+1:end,:)];
 %                             qMatrix = [qT;qWaypoints];

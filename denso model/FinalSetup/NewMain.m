@@ -16,14 +16,11 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
     %% define parameters
     for i=6:-1:1
     %Robot to goods
-    good{i} = goodsArray{i} %temporary
+    good{i} = goodsArray{i}; %temporary
     pose = good{i}.pos_*transl(0,0,-0.08);
-%     if i >=4
-%         pose(3,4) = pose(3,4) - 0.1;
-        qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,100);
-%     else
-%         qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,40);
-%     end
+
+    qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,100);
+
     pickUpRobot.Plot(qMatrix);
     
 
@@ -33,63 +30,53 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
     
     %% animation
     %GOODS to conveyor
-%      qG = pickUpRobot.IKine(conveyor_pos);
-%      if (i >=4)
-%         qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,50);
-%      else
-        qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,50,conveyor);
-%      end
+
+     qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,30,conveyor);
      pickUpRobot.Plot(qMatrix,good{i});
      pickUpRobot.Reset();
-     
-    
-     
-     Move_conveyor(good{i});   
-     camview{i} = EEcam(dropOffRobot);
-     
-     view(60,40);
-     zoom(2.2);
-%      pause(1);
-     b{i}=VisServo(dropOffRobot,good{i});
-     
-     good{i}.color = camview{i}.color;       % Set color of goods by camview
-%                                             At the moment, use name
-     disp(num2str(b{i}.object_pose));
-     disp(good{i}.color);
-   
-%      pause(1);
-     qMatrix=dropOffRobot.qMatrix_gen('jtraj',b{i}.object_pose*troty(pi),80);
-     dropOffRobot.Plot(qMatrix);
-     
-     % Identify the order of the goods kind we will deliver 
-     switch good{i}.color
-         case 'red'
-             redOrder = redOrder + 1;
-             goodsOrder = redOrder;
-             
-         case 'blue'
-             blueOrder = blueOrder + 1;
-             goodsOrder = blueOrder;
-         case 'green'
-             greenOrder = greenOrder + 1;
-             goodsOrder = greenOrder; 
-         otherwise
-             disp('the color is not in the default set of color')
-             goodsOrder = -1;
-     end
-     disp(num2str(goodsOrder));
-     
-     % deliver the goods
-     goodsTr = GetGoodsDes(good{i},goodsOrder); 
-%      if strcmpi(good{i}.color,'green')
-%         qMatrix=dropOffRobot.qMatrix_gen('jtraj',goodsTr,80);
-%         dropOffRobot.Plot(qMatrix,good{i});
-%      else
-         qGoal = dropOffRobot.IKine(goodsTr);
-    %      pose=transl(0.5,0.55,0.1)*troty(pi);
-         qMatrix=dropOffRobot.Check_Collision1(qGoal,good{i},ob);
-         dropOffRobot.Plot(qMatrix,good{i});
+
+%      Move_conveyor(good{i});   
+%      camview{i} = EEcam(dropOffRobot);
+%      
+%      view(60,40);
+%      zoom(2.4);
+% %      pause(1);
+%      b{i}=VisServo(dropOffRobot,good{i});
+%      
+%      good{i}.color = camview{i}.color;       % Set color of goods by camview
+% %                                             At the moment, use name
+%      disp(num2str(b{i}.object_pose));
+%      disp(good{i}.color);
+%    
+% %      pause(1);
+%      qMatrix=dropOffRobot.qMatrix_gen('jtraj',b{i}.object_pose*troty(pi),80);
+%      dropOffRobot.Plot(qMatrix);
+%      
+%      % Identify the order of the goods kind we will deliver 
+%      switch good{i}.color
+%          case 'red'
+%              redOrder = redOrder + 1;
+%              goodsOrder = redOrder;
+%              
+%          case 'blue'
+%              blueOrder = blueOrder + 1;
+%              goodsOrder = blueOrder;
+%          case 'green'
+%              greenOrder = greenOrder + 1;
+%              goodsOrder = greenOrder; 
+%          otherwise
+%              disp('the color is not in the default set of color')
+%              goodsOrder = -1;
 %      end
+%      disp(num2str(goodsOrder));
+%      
+%      % deliver the goods
+%      goodsTr = GetGoodsDes(good{i},goodsOrder); 
+%      qGoal = dropOffRobot.IKine(goodsTr);
+%      qMatrix=dropOffRobot.Check_Collision1(qGoal,good{i},ob);
+%      dropOffRobot.Plot(qMatrix,good{i});
+%      dropOffRobot.Reset();
     end
+    
 
 end
