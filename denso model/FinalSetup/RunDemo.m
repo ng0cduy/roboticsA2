@@ -1,4 +1,4 @@
-function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtain)
+function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtain)
      clc;
 %      conveyor =Obstacle('conveyor1.ply',transl(0,-0.05,0.2));
      view(60,40);

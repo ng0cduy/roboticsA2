@@ -9,15 +9,14 @@ function [robot1,robot2,boxes,lightcurtain,conveyor] = EnvironmentSetup
     hold on;
     
     % set up environment
-%     conveyor = goods('conveyor1.ply',transl(0,0,0.2));
     table = goods('table.ply',transl(0.35,-0.1,-0.26));
     lightcurtain = LightCurtain(true);
     conveyor =Obstacle('conveyor1.ply',transl(0,-0.05,0.2));
-    % a.model.teach;
-%     estop = goods('estop.ply',transl(1.8,0.9,0.14));
-%     human = goods('human.ply',transl(2,2,0.64));
-%     brickwall=goods('brick_wall.ply',transl(0.4,3,1.3));
-%     fire_ext=goods('ext.ply',transl(-2,2.4,0.2)*trotz(pi));
+    
+    estop = goods('estop.ply',transl(1.8,0.9,0.14));
+    human = goods('human.ply',transl(2,2,0.64));
+    brickwall=goods('brick_wall.ply',transl(0.4,3,1.3));
+    fire_ext=goods('ext.ply',transl(-2,2.4,0.2)*trotz(pi));
     
     ground_qx=[-5,-5;5,5];
     ground_qy=[-5,5;-5,5];
