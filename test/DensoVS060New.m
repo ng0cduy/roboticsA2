@@ -128,10 +128,9 @@ classdef DensoVS060New<handle
         end
         %% RMRC: q generating using RMRC, checking for singularity
         function qMatrix = GenerateRMRC(self,pose,steps)
-            epsilon = 0.02;
+            epsilon = 0.01;
             W = diag([1 1 1 0.2 0.2 0.2]);
             q1 = self.model.getpos;
-%             q2 = self.IKine(pose);
             T1 = self.FKine(q1);
             T2 = pose;
             x1 = [T1(1:3,4);tr2rpy(T1)'];
@@ -144,7 +143,7 @@ classdef DensoVS060New<handle
             positionError = zeros(3,steps);
             angleError = zeros(3,steps);
             for i = 1:steps
-                x(:,i) = x1*(1-s(i)) + s(i)*x2;
+                x(:,i) = (1-s(i))*x1 + s(i)*x2;
             end
             qMatrixx = nan(steps,6);
             qMatrixx(1,:) = q1;
@@ -152,13 +151,13 @@ classdef DensoVS060New<handle
                 T = self.FKine(qMatrixx(i,:));
                 deltaX = x(1:3,i+1) - T(1:3,4);
                 Ra = T(1:3,1:3);
-                Rd = rpy2r(x(4:6),i+1);
+                Rd = rpy2r((x(4:6,i+1))');
                 Rdot = (1/deltaTime) *(Rd -Ra);
                 S = Rdot*Ra';
                 linear_velocity = (1/deltaTime)*deltaX;
                 angular_velocity = [S(3,2);S(1,3);S(2,1)];
                 deltaTheta = tr2rpy(Rd*Ra');
-                xdot = (x(:,i+1) - x(:,i))/deltaTime;
+                xdot  = W*[linear_velocity;angular_velocity];
                 J = self.model.jacob0(qMatrixx(i,:));
                 m(i) = sqrt(det(J*J'));
                 if m(i) < epsilon
@@ -218,28 +217,32 @@ classdef DensoVS060New<handle
         %% Collision Detection
         function Plot(self,qMatrix,object)
             [row,col] = size(qMatrix);
+%             if self.lcState == true
+%                 ob=Obstacle('UFO.ply',transl(4,0,1));
+%             end
             for i=1:1:row
-
                     self.checkEStop();
 %                     self.Lidar(self,self.qMatrix(i,:));
-
                     self.model.animate(qMatrix(i,:));
 %                     drawnow();
                     pause(0.005);                    
                     if(nargin==3)
+%                         self.checkEStop();
                         self.FKine(self.qMatrix(i,:));
-                        object.pos_ = self.endEffector*troty(pi)*transl(0,0,-0.07);
+                        object.pos_ = self.endEffector*troty(pi)*transl(0,0,-0.08);
                         object.Move(object.pos_);
-                        pause(0.05);  
+                        pause(0.03);  
                     end
             end
         end
         %% Check collision Function
-        function qMatrix = Check_Collision(self,qGoal,goods,obstacle)          
+        function qMatrix = Check_Collision(self,goalTr,goods,obstacle)          
                obsPoints = obstacle.CreateMesh(false);
 %                plot3(obsPoints(:,1),obsPoints(:,2),obsPoints(:,3),'cyan*');
                
                qStart = self.model.getpos;
+               qGoal = self.IKine(goalTr);
+               
                firstStepTr = self.model.fkine(qStart)*transl(0,0,-0.1);
                qFirstStep = self.IKine(firstStepTr);
                qWaypoints = [qStart;qFirstStep];
@@ -247,6 +250,25 @@ classdef DensoVS060New<handle
                qStep = qFirstStep;
                planning = true;
                Mask=[1,1,1,0,0,0];
+               
+               ObsTr = obstacle.pos_;
+               be4GoalZ = ObsTr(3,4) - 0.02;
+%                switch goods.color
+%                    case 'red'
+%                        be4GoalY = goalTr(2,4)+0.15;
+%                    case 'blue'
+%                        be4GoalY = goalTr(2,4);
+%                    otherwise
+%                        be4GoalY = goalTr(2,4)-0.15;
+%                end
+
+               be4GoalY = 0.35;
+               
+               be4GoalLastCol = [ goalTr(1,4); be4GoalY; be4GoalZ;  1 ];
+               be4GoalTr = [goalTr(:,1:3), be4GoalLastCol];
+%                qBe4Goal = self.model.ikine(be4GoalTr, qGoal, Mask);
+               qBe4Goal = self.IKine(be4GoalTr);
+               
                while(planning)
                    % turn joint 1 5 deg when there isn't collision. If there is,go up 
                     tempQStep = [qStep(1)+deg2rad(5), qStep(2:end)];
@@ -272,12 +294,12 @@ classdef DensoVS060New<handle
                     end
                     
 
-                    qMatrixEnd = InterpolateWaypointRMRC(self,[qStep; qGoal],50);
-                    if ~((EllipCheckNew(self,goods,qMatrixEnd,'goods')) || (EllipCheckNew(self,obstacle,qMatrixEnd,'obs',obsPoints)))
-                        % Reached goal without collision, so break out
+                    qMatrixBe4End = InterpolateWaypointRMRCNew(self,[qStep; qBe4Goal],50);
+                    if ~((EllipCheckNew(self,goods,qMatrixBe4End,'goods')) || (EllipCheckNew(self,obstacle,qMatrixBe4End,'obs',obsPoints)))
+                        % Reached be4goal waypoint without collision, so break out
                         break;
                     end
-                    qMatrixEnd = [];
+                    qMatrixBe4End = [];
                     if (sum(qStep' < self.model.qlim(:,1)) ~= 0) || (sum(qStep' > self.model.qlim(:,2)) ~= 0)
                         disp('cannot avoid the obstacle');
                         qMatrix = [];
@@ -286,16 +308,19 @@ classdef DensoVS060New<handle
                     end
                end
               qMatrixStart = InterpolateWaypointRadians(qWaypoints,deg2rad(10));
-              qMatrix = [qMatrixStart;qMatrixEnd];
-              actualTr = self.model.fkine(qMatrix(end,:));
-              desireTr = self.model.fkine(qGoal);
-              if (sum(actualTr ~= desireTr))
-                qMatrixExtra = jtraj(qMatrix(end,:),qGoal,10);
-              end
-              qMatrix = [qMatrix; qMatrixExtra];
+              qMatrix = [qMatrixStart;qMatrixBe4End];
+              qMatrix = [qMatrix; InterpolateWaypointRadians([qBe4Goal;qGoal],deg2rad(5))];
               self.qMatrix = qMatrix;
-              qStep
-              stepTr
+              
+%               actualTr = self.model.fkine(qMatrix(end,:));
+%               desireTr = self.model.fkine(qGoal);
+%               if (sum(actualTr ~= desireTr))
+%                 qMatrixExtra = jtraj(qMatrix(end,:),qGoal,10);
+%               end
+%               qMatrix = [qMatrix; qMatrixExtra];
+%               self.qMatrix = qMatrix;
+%               qStep
+%               stepTr
         end
 
 

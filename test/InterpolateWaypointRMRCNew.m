@@ -1,6 +1,6 @@
 %% InterpolateWaypointRadians
 % Given a set of waypoints, finely intepolate them using RMRC
-function qMatrix = InterpolateWaypointRMRC(robot,waypointRadians,steps)
+function qMatrix = InterpolateWaypointRMRCNew(robot,waypointRadians,steps)
         qMatrix = [];
         for i = 1: size(waypointRadians,1)-1
             qMatrix = [qMatrix ; GenRMRC(robot,waypointRadians(i,:),waypointRadians(i+1,:),steps)]; %#ok<AGROW>
@@ -61,3 +61,4 @@ end
             positionError(:,i) = x(1:3,i+1) - T(1:3,4);
             angleError(:,i) = deltaTheta;
         end
+
