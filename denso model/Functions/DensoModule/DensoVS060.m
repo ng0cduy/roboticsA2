@@ -436,7 +436,7 @@ classdef DensoVS060<handle
         end  
            
 %% Check collision Function using ellipson
-        function qMatrix = Check_Collision1(self,qGoal,goods,obstacle)          
+        function qMatrix = EllipsoidQGen(self,qGoal,goods,obstacle)          
                obsPoints = obstacle.CreateMesh(false);
 %                plot3(obsPoints(:,1),obsPoints(:,2),obsPoints(:,3),'cyan*');
                
