@@ -40,11 +40,17 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
      view(60,40);
      zoom(2.5);
 %      pause(1);
-     b{i}=VisServo(dropOffRobot,good{i}); %Use visual servo to estimate the pose of the goods
-     
      good{i}.color = camview{i}.color;       % Set color of goods by camview
-     disp(good{i}.color);
-   
+%      disp(good{i}.color);
+    guiobj.ColorEditField.Value = good{i}.color ;
+    if strcmpi(good{i}.color,'red') == 1
+        guiobj.ColorLamp.Color = 'r';
+    elseif strcmpi(good{i}.color,'blue') ==1
+        guiobj.ColorLamp.Color = 'b';
+    elseif strcmpi(good{i}.color,'green') ==1
+        guiobj.ColorLamp.Color = 'g';
+    end
+    b{i}=VisServo(dropOffRobot,good{i}); %Use visual servo to estimate the pose of the goods
 %      pause(1);
 %      adjust the endEffector
      qMatrix=dropOffRobot.qMatrix_gen('jtraj',b{i}.object_pose*troty(pi),80);
