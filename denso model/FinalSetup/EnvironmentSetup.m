@@ -1,10 +1,14 @@
+%% functions to set up the environment and return main components to GUI
 function [robot1,robot2,boxes,lightcurtain,conveyor] = EnvironmentSetup
     clf;
-%     set(0,'DefaultFigureWindowStyle');
+    
+    % set up robots
     robot1 = DensoVS060(false,transl(-0.5,-0.5,0)*trotz(pi/2),'denso_1');
     robot2 = DensoVS060(false,transl(0.8,0.35,0)*trotz(-pi/2),'denso_2');
    
     hold on;
+    
+    % set up environment
 %     conveyor = goods('conveyor1.ply',transl(0,0,0.2));
     table = goods('table.ply',transl(0.35,-0.1,-0.26));
     lightcurtain = LightCurtain(true);
