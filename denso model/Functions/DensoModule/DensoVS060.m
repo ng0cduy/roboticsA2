@@ -306,7 +306,7 @@ classdef DensoVS060<handle
                                 temp_=self.FKine(qW(i,:));
                                 qRand = self.IKine(temp_*transl(0,0,-0.4));
                             end
-                            qW =[qWaypoints(1:i,:); qRand; qWayPoints(i+1:end,:)];
+                            qW =[qWaypoints(1:i,:); qRand; qWaypoints(i+1:end,:)];
                             break;
                         end
                     end
