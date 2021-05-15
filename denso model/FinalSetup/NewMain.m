@@ -16,39 +16,37 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
     %% define parameters
     for i=6:-1:1
     %Robot to goods
-    good{i} = goodsArray{i}; %temporary
-    pose = good{i}.pos_*transl(0,0,-0.08);
+    good{i} = goodsArray{i}; %assign the goods from the array
+    pose = good{i}.pos_*transl(0,0,-0.08); %take the pose of the good
 
-    qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,100);
-
-    pickUpRobot.Plot(qMatrix);
+    qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,100); %generate the path from the
+                                                        %to the good
+    pickUpRobot.Plot(qMatrix); %plot the path
     
 
     % delivering objects
     %% define parameters
-    conveyor_pos = transl(-0.6,-0.08,0.4)*troty(pi);
+    conveyor_pos = transl(-0.6,-0.08,0.4)*troty(pi); %position of the conveyor
     
     %% animation
     %GOODS to conveyor
-
-     qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,30,conveyor);
-     pickUpRobot.Plot(qMatrix,good{i});
-     pickUpRobot.Reset();
+     qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,60,conveyor); %generate the path from the goods to the conveyor, check if there is any collision
+     pickUpRobot.Plot(qMatrix,good{i}); 
+     pickUpRobot.Reset(); 
 
      Move_conveyor(good{i});   
      camview{i} = EEcam(dropOffRobot);
      
      view(60,40);
-     zoom(2.4);
+     zoom(2.5);
 %      pause(1);
-     b{i}=VisServo(dropOffRobot,good{i});
+     b{i}=VisServo(dropOffRobot,good{i}); %Use visual servo to estimate the pose of the goods
      
      good{i}.color = camview{i}.color;       % Set color of goods by camview
-
-     disp(num2str(b{i}.object_pose));
      disp(good{i}.color);
    
 %      pause(1);
+%      adjust the endEffector
      qMatrix=dropOffRobot.qMatrix_gen('jtraj',b{i}.object_pose*troty(pi),80);
      dropOffRobot.Plot(qMatrix);
      

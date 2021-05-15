@@ -241,7 +241,7 @@ classdef DensoVS060<handle
                         self.FKine(self.qMatrix(i,:));
                         object.pos_ = self.endEffector*troty(pi)*transl(0,0,-0.08);
                         object.Move(object.pos_);
-                        pause(0.01);  
+                        pause(0.03);  
                     end
             end
         end
@@ -274,13 +274,8 @@ classdef DensoVS060<handle
                 qMatrix=self.qMatrix;
             else
 %               obstacle avoid
-              tempT = self.model.fkine(self.model.getpos);
-              poseT = tempT*transl(0,0,-0.24);
-%               qNew = self.IKine(poseT)
-%               qT=self.GenerateRMRC(poseT,30);
-%               qT=self.model.ikcon(poseT);
-%               qT=[1.5706   0.0069911     0.10991  2.9611e-05    -0.11687 -0.00023068];
               qWaypoints = [self.model.getpos;q];
+%               offset the endEffector to go bellow the good
               for i = 1:1:size(qWaypoints,1)
                   temp = self.model.fkine(qWaypoints(i,:));
                   pose_ = temp*transl(0,0,0.12);
@@ -305,17 +300,13 @@ classdef DensoVS060<handle
                             end
                         else
                             % Randomly pick a pose that is not in collision
-                            a=eye(4);
                             temp_=self.FKine(qWaypoints(i,:));
-%                             a(1:3,4) = temp_(1:3,4);
                             qRand = self.IKine(temp_*transl(0,0,-0.4));
                             while ~IsCollision(self,qMatrixJoin,object.f,object.vUpdate,object.faceNormals)
                                 temp_=self.FKine(qW(i,:));
-%                                 a(1:3,4) = temp_(1:3,4);
                                 qRand = self.IKine(temp_*transl(0,0,-0.4));
                             end
-                            qW =[qWaypoints(1:i,:); qRand; qWaypoints(i+1:end,:)];
-%                             qMatrix = [qT;qWaypoints];
+                            qW =[qWaypoints(1:i,:); qRand; qWayPoints(i+1:end,:)];
                             break;
                         end
                     end
