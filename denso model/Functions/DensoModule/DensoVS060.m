@@ -27,8 +27,7 @@ classdef DensoVS060<handle
     end
     methods (Access = public) %% Class for DensoVS060 robot simulation
         %% Define robot Function  
-        function self = DensoVS060(useGripper, base, name)
-            self.useGripper = useGripper;  
+        function self = DensoVS060(base, name)
             self.base = base;
             self.name = name;
             self.getDensoVS060();
@@ -224,7 +223,7 @@ classdef DensoVS060<handle
                 end
             end 
         end
-        %% Collision Detection
+        %% qMatrix plotting
         function Plot(self,qMatrix,object)
             [row,col] = size(qMatrix);
 %             if self.lcState == true
@@ -245,7 +244,7 @@ classdef DensoVS060<handle
                     end
             end
         end
-        %% Check collision Function
+        %% Check collision using LinePlane intersection
         function qMatrix = Check_Collision(self,q,object)
             qM=[];
             for i = 1:1:self.steps                   
@@ -262,17 +261,20 @@ classdef DensoVS060<handle
                    result= IsCollision(self,qM(i,:),object.f,object.vUpdate,object.faceNormals);
                    %               Check if there is any collision with all joins
                    if (result >= 1) 
-                        disp('Intersect');
+                        disp('Intersect detected');
                         self.isCollision = true;
                         checkedTillWaypoint = 1;
+                        break;
                    else 
-                       disp('not intersect');
+%                        disp('no Intersection found');
                        
                    end 
             end
             if self.isCollision == false
+                 disp('no Intersection found');
                 qMatrix=self.qMatrix;
             else
+              disp('Finding new path, please wait');
 %               obstacle avoid
               qWaypoints = [self.model.getpos;q];
 %               offset the endEffector to go bellow the good
@@ -316,7 +318,7 @@ classdef DensoVS060<handle
         end
 
 
-        %% 
+        %% Create a lidar scan at the endEffector
         function Lidar(self,robot,qMatrix)
             pNormal = [-0.3090, 0.9511, 0];            % Create questions
             pPoint = [0,0.2,0];                          % Create questions

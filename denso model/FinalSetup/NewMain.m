@@ -5,9 +5,8 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
      pan on;
 %      zoom(2.2);
      ob=Obstacle('UFO.ply',transl(1.15,-0.1,0.35));
+%      Reset the robot to intial place
      pickUpRobot.Reset();
-     dropOffRobot.Reset();
-%      dropOffRobot.Reset();
     redOrder = 0;
     blueOrder = 0;
     greenOrder = 0;

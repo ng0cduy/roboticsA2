@@ -86,7 +86,7 @@ classdef goods <handle
             y=self.y;
             z=self.z;
         end
-        
+        %% Create 4 points on the object for visual servoing    
         function calculateP(self)
             x_=self.vUpdate(:,1,1);
             y_=self.vUpdate(:,2,1);
@@ -96,15 +96,11 @@ classdef goods <handle
                       min(x_)+0.095,min(y_)+0.095,max(z_);
                       max(x_)-0.095,min(y_)+0.095,max(z_);...
                       ];
-%             P_ =     [max(x_), max(y_),max(z_);...
-%                       min(x_),max(y_),max(z_);...
-%                       min(x_),min(y_),max(z_);
-%                       max(x_),min(y_),max(z_);...
-%                       ];
+
 
                   self.P=P_';
         end
-        
+        %% Create a mesh on the object     
         function cubePoints = CreateMesh(self,option)
             xMas = max(self.data.vertex.x);
             yMas = max(self.data.vertex.y);
