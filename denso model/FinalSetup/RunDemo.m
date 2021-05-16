@@ -3,7 +3,7 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
     view(60,40);
     pan on;
     zoom(2.5);
-    ob=Obstacle('UFO.ply',transl(1.15,-0.1,0.35));
+    ob=Obstacle('UFO.ply',transl(1.15,-0.1,0.45));
 %      Reset the robot to intial place
     pickUpRobot.Reset();
     redOrder = 0;
