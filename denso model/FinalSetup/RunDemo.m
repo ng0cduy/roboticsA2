@@ -2,8 +2,10 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
     clc;
     view(60,40);
     pan on;
+    hold on;
     zoom(2.2);
     ob=Obstacle('UFO.ply',transl(1.15,-0.05,0.45));
+    
 %      Reset the robot to intial place
     pickUpRobot.Reset();
     redOrder = 0;
@@ -37,6 +39,7 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
     %% animation
     %GOODS to conveyor
      clc;
+     disp('Checking for collision before picking up');
      qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,60,conveyor); %generate the path from the goods to the conveyor, check if there is any collision
      pickUpRobot.Plot(qMatrix,good{i}); 
      pickUpRobot.Reset(); 
@@ -91,7 +94,7 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
      % reset to its initial pose
      qMatrix=dropOffRobot.ElipsoidResetQgen(ob);
      dropOffRobot.Plot(qMatrix);
-     dropOffRobot.Reset();
+%      dropOffRobot.Reset();
     end
     disp('End of the Simulation');
 end
