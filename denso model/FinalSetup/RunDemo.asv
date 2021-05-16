@@ -9,12 +9,11 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
     redOrder = 0;
     blueOrder = 0;
     greenOrder = 0;
-%     q0=[0,0,0,0,0,0]';
-    Tc0= transl(0,0,2)*troty(pi);
-    Ecam = CentralCamera('focal', 0.08, 'pixel', 10e-5, ...
+    q0=[0,0,0,0,0';
+    cam_ = CentralCamera('focal', 0.08, 'pixel', 10e-5, ...
                                 'resolution', [1024 1024],...
-                                'centre', [512 512],'name', 'Environment Cam');
-    Ecam.plot_camera('Tcam',Tc0, 'label','scale',0.2);
+                                'centre', [512 512],'name', 'DensoCam');
+    cam.plot_camera('Tcam',Tc0, 'label','scale',0.05);
   
     %% coming to objects
     %% define parameters
@@ -39,7 +38,7 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
      pickUpRobot.Plot(qMatrix,good{i}); 
      pickUpRobot.Reset(); 
 
-     Move_conveyor(pickUpRobot,good{i});   
+     Move_conveyor(good{i});   
      camview{i} = EEcam(dropOffRobot);
      
      view(60,40);

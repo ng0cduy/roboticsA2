@@ -296,6 +296,13 @@ classdef DensoVS060<handle
                                 % Reached goal without collision, so break out
                                 break;
                             end
+%                             break out if the qwaypoints is out of join
+%                             limits
+                        elseif (sum(qWaypoints(i,:)' < self.model.qlim(:,1)) ~= 0) || (sum(qWaypoints(i,:)' > self.model.qlim(:,2)) ~= 0)
+                            disp('cannot avoid obstacle');
+                            qMatrix = [];
+                            self.eStopState = 2; 
+                            return;
                         else
                             % Randomly pick a pose that is not in collision
                             temp_=self.FKine(qWaypoints(i,:));
