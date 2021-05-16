@@ -4,19 +4,18 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
     pan on;
     hold on;
     zoom(2.2);
-    ob=Obstacle('UFO.ply',transl(1.15,-0.05,0.45));
+    ob=Obstacle('UFO.ply',transl(3,-0.05,0.45));
+    for i = 3:-0.01:1.15
+        ob.Move(transl(i,-0.05,0.45));
+        pause(0.005);
+        drawnow;
+    end
     
 %      Reset the robot to intial place
     pickUpRobot.Reset();
     redOrder = 0;
     blueOrder = 0;
     greenOrder = 0;
-    
-    Tc0= transl(0,0,2)*troty(pi);
-    Ecam = CentralCamera('focal', 0.08, 'pixel', 10e-5, ...
-                                'resolution', [1024 1024],...
-                                'centre', [512 512],'name', 'Environment Cam');
-    Ecam.plot_camera('Tcam',Tc0, 'label','scale',0.2);
     
     disp('Simulation Start');
   
@@ -81,7 +80,6 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
          otherwise
              disp('the color is not in the default set of color')
              goodsOrder = -1;
-     
      end
      
      % deliver the goods
