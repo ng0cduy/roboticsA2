@@ -28,6 +28,7 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
     
     %% animation
     %GOODS to conveyor
+     clc;
      qMatrix=pickUpRobot.qMatrix_gen('jtraj',conveyor_pos,60,conveyor); %generate the path from the goods to the conveyor, check if there is any collision
      pickUpRobot.Plot(qMatrix,good{i}); 
      pickUpRobot.Reset(); 
@@ -43,10 +44,10 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
     guiobj.ColorEditField.Value = good{i}.color ;
     if strcmpi(good{i}.color,'red') == 1
         guiobj.ColorLamp.Color = 'r';
+    elseif strcmpi(good{i}.color,'green') ==1
+        guiobj.ColorLamp.Color = 'r';
     elseif strcmpi(good{i}.color,'blue') ==1
         guiobj.ColorLamp.Color = 'b';
-    elseif strcmpi(good{i}.color,'green') ==1
-        guiobj.ColorLamp.Color = 'g';
     end
     b{i}=VisServo(dropOffRobot,good{i}); %Use visual servo to estimate the pose of the goods
 %      pause(1);
@@ -73,7 +74,9 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
      end
      
      % deliver the goods
+     clc;
      goodsTr = GetGoodsDes(good{i},goodsOrder); 
+     disp('Checking collision before drop off, please wait');
      qMatrix=dropOffRobot.EllipsoidQGen(goodsTr,good{i},ob);
      dropOffRobot.Plot(qMatrix,good{i});
      dropOffRobot.Reset();
