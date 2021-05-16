@@ -14,25 +14,25 @@ function LCTesting(lightcurtain,denso)
     qLength =length(qMatrix);
     for i = 1:1:qLength
         touchFlag = lightcurtain.DetectObstacle(ob);
-        while touchFlag == 1
+        while touchFlag == 1 % collision detected
             touchTimes = touchTimes +1;
             if touchTimes == 1
                 pause(4);
             end
-            obCurrentPos(1,4) = obCurrentPos(1,4) + 0.01
+            obCurrentPos(1,4) = obCurrentPos(1,4) + 0.01 % move out
             obCurrentPos(1:3,1:3) = roty(30,'deg');
             ob.Move(obCurrentPos);
             drawnow();
             touchFlag = lightcurtain.DetectObstacle(ob);
-            if touchFlag ==0
+            if touchFlag ==0 % no more collision detected
                 disp('Robot can resume');
                 moveInFlag = false;
             end 
         end
-        if moveInFlag == true
-            obCurrentPos(1,4) = obCurrentPos(1,4) - 0.02;
-        else
-            obCurrentPos(1,4) = obCurrentPos(1,4) + 0.02;
+        if moveInFlag == true % move into the workspace
+            obCurrentPos(1,4) = obCurrentPos(1,4) - 0.04;
+        else  % get out of the workspace
+            obCurrentPos(1,4) = obCurrentPos(1,4) + 0.04;
         end
         ob.Move(obCurrentPos);
         denso.model.animate(qMatrix(i,:));
