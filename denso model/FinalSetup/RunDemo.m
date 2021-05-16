@@ -48,7 +48,7 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
      camview{i} = EEcam(dropOffRobot);
      
      view(60,40);
-     zoom(2.5);
+     zoom(2.2);
 %      pause(1);
      good{i}.color = camview{i}.color;       % Set color of goods by camview
 %      disp(good{i}.color);
@@ -94,7 +94,7 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
      % reset to its initial pose
      qMatrix=dropOffRobot.ElipsoidResetQgen(ob);
      dropOffRobot.Plot(qMatrix);
-%      dropOffRobot.Reset();
+     dropOffRobot.Reset();
     end
     disp('End of the Simulation');
 end
