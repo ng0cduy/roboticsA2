@@ -334,15 +334,18 @@ classdef DensoVS060New<handle
 %             Mask=[1,1,1,0,0,0];
             
             while(planning)
-                   % turn joint 1 5 deg when there isn't collision. If there is,go up 
-                    tempQStep = [qStep(1)-deg2rad(20), qStep(2:end)];
+                   % turn joint 1 to its intial state when there isn't collision. If there is,go up 
+                    tempQStep = [0, qStep(2:end)];
                     tempStepTr = self.model.fkine(tempQStep);
-                    if EllipCheckNew(self,obstacle,tempQStep,'return',obsPoints)
-                        stepTr = stepTr*transl(0,0,-0.1);
-                        qStep = self.model.ikcon(stepTr,qStep);
-                    else
+                    if ~EllipCheckNew(self,obstacle,tempQStep,'return',obsPoints)
                         stepTr = tempStepTr;
                         qStep = tempQStep; 
+                    else
+                        while EllipCheckNew(self,obstacle,tempQStep,'return',obsPoints)
+                            stepTr = stepTr*transl(0,0,-0.1);
+                            qStep = self.model.ikcon(stepTr,qStep);
+                            tempQStep = [qStep(1)-deg2rad(20), qStep(2:end)];
+                        end
                     end
                     qWaypoints = [qWaypoints;qStep];                  
 

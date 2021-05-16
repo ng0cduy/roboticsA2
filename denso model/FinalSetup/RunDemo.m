@@ -5,9 +5,9 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
     hold on;
     zoom(2.2);
     ob=Obstacle('UFO.ply',transl(3,-0.05,0.45));
-    for i = 3:-0.01:1.15
+    for i = 3:-0.05:1.15
         ob.Move(transl(i,-0.05,0.45));
-        pause(0.005);
+        pause(0.05);
         drawnow;
     end
     
