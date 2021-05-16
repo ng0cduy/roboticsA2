@@ -235,95 +235,132 @@ classdef DensoVS060New<handle
                     end
             end
         end
-        %% Check collision Function
-        function qMatrix = LinePlane_Collision(self,goalTr,goods,obstacle)          
-               obsPoints = obstacle.CreateMesh(false);
-%                plot3(obsPoints(:,1),obsPoints(:,2),obsPoints(:,3),'cyan*');
-               
-               qStart = self.model.getpos;
-               qGoal = self.IKine(goalTr);
-               
-               firstStepTr = self.model.fkine(qStart)*transl(0,0,-0.1);
-               qFirstStep = self.IKine(firstStepTr);
-               qWaypoints = [qStart;qFirstStep];
-               stepTr = firstStepTr;
-               qStep = qFirstStep;
-               planning = true;
-               Mask=[1,1,1,0,0,0];
-               
-               ObsTr = obstacle.pos_;
-               be4GoalZ = ObsTr(3,4) - 0.02;
-%                switch goods.color
-%                    case 'red'
-%                        be4GoalY = goalTr(2,4)+0.15;
-%                    case 'blue'
-%                        be4GoalY = goalTr(2,4);
-%                    otherwise
-%                        be4GoalY = goalTr(2,4)-0.15;
-%                end
+%% Function to generate qMatrix, avoid collision using ellipsoid method
+% For the goods to avoid collision and get to a safe waypoint, before going
+% to its designated destination.
+        function qMatrix = EllipsoidQGen(self,goalTr,goods,obstacle)          
+           % Create mesh points for function checking collision
+           obsPoints = obstacle.CreateMesh(false);
 
-               be4GoalY = 0.35;
-               
-               be4GoalLastCol = [ goalTr(1,4); be4GoalY; be4GoalZ;  1 ];
-               be4GoalTr = [goalTr(:,1:3), be4GoalLastCol];
-%                qBe4Goal = self.model.ikine(be4GoalTr, qGoal, Mask);
-               qBe4Goal = self.IKine(be4GoalTr);
-               
-               while(planning)
+           % Define parameters
+           qStart = self.model.getpos;
+           qGoal = self.IKine(goalTr);
+           planning = true;
+           Mask=[1,1,1,0,0,0];
+
+           % first step is going up 0.1 m
+           firstStepTr = self.model.fkine(qStart)*transl(0,0,-0.1);
+           qFirstStep = self.IKine(firstStepTr);
+           qWaypoints = [qStart;qFirstStep];
+           stepTr = firstStepTr;
+           qStep = qFirstStep;
+
+           % Create a safe waypoint be4GoalTr that under the height of the obstacle 
+           ObsTr = obstacle.pos_;
+           be4GoalZ = ObsTr(3,4) - 0.02;
+           be4GoalY = 0.35;
+
+           be4GoalLastCol = [ goalTr(1,4); be4GoalY; be4GoalZ;  1 ];
+           be4GoalTr = [goalTr(:,1:3), be4GoalLastCol];
+           qBe4Goal = self.IKine(be4GoalTr);
+
+           while(planning)
+               % turn joint 1 5 deg to approach destination when there isn't collision.
+               % If there is, go up 
+                tempQStep = [qStep(1)+deg2rad(5), qStep(2:end)];
+                tempStepTr = self.model.fkine(tempQStep);
+                if EllipCheckNew(self,obstacle,tempQStep,'obs',obsPoints)
+                    stepTr = stepTr*transl(0,0,-0.1);
+                    qStep = self.model.ikine(stepTr,qStep,Mask);
+                else
+                    stepTr = tempStepTr;
+                    qStep = tempQStep; 
+                end
+                qWaypoints = [qWaypoints;qStep];
+              % go up when collision with obstacle
+                while EllipCheckNew(self,obstacle,qStep,'obs',obsPoints)
+                    stepTr = stepTr*transl(0,0,-0.05);
+                    qStep = self.model.ikine(stepTr,qStep,Mask);
+                end
+
+              % lean forward when collision with goods
+                while EllipCheckNew(self,goods,qStep,'goods')
+                    stepTr = stepTr*transl(0,-0.05,0);
+                    qStep = self.model.ikine(stepTr,qStep,Mask);
+                end
+
+
+                qMatrixBe4End = InterpolateWaypointRMRC(self,[qStep; qBe4Goal],50);
+                if ~((EllipCheckNew(self,goods,qMatrixBe4End,'goods')) || (EllipCheckNew(self,obstacle,qMatrixBe4End,'obs',obsPoints)))
+                    % Reached be4goal waypoint without collision, so break out
+                    break;
+                end
+                qMatrixBe4End = [];
+                if (sum(qStep' < self.model.qlim(:,1)) ~= 0) || (sum(qStep' > self.model.qlim(:,2)) ~= 0)
+                    disp('cannot avoid the obstacle');
+                    break
+%                     qMatrix = [];
+%                     return;
+                end
+           end
+           
+          % Join all the waypoints
+          qMatrixStart = InterpolateWaypointRadians(qWaypoints,deg2rad(10));
+          qMatrix = [qMatrixStart;qMatrixBe4End];
+          qMatrix = [qMatrix; InterpolateWaypointRadians([qBe4Goal;qGoal],deg2rad(5))];
+          self.qMatrix = qMatrix;
+
+        end
+        %%
+        function qMatrix = ElipsoidResetQgen(self,obstacle)
+            qStart = self.model.getpos;
+            qGoal = self.qz;
+            
+            obsPoints = obstacle.CreateMesh(false); 
+            ObsTr = obstacle.pos_;
+            
+            firstStepX = 1.25;
+            firstStepY = 0.35;
+            firstStepZ = ObsTr(3,4) - 0.02;
+            
+            firstStepTransl = [ firstStepX, firstStepY, firstStepZ ];
+            firstStepTr = transl(firstStepTransl)*troty(pi);
+            
+            qFirstStep = self.IKine(firstStepTr);
+            qWaypoints = [qStart;qFirstStep];
+            stepTr = firstStepTr;
+            qStep = qFirstStep;
+            planning = true;
+%             Mask=[1,1,1,0,0,0];
+            
+            while(planning)
                    % turn joint 1 5 deg when there isn't collision. If there is,go up 
-                    tempQStep = [qStep(1)+deg2rad(5), qStep(2:end)];
-                    tempStepTr = stepTr*transl(-0.1,0,0);
-                    if EllipCheckNew(self,obstacle,tempQStep,'obs',obsPoints)
+                    tempQStep = [qStep(1)-deg2rad(20), qStep(2:end)];
+                    tempStepTr = self.model.fkine(tempQStep);
+                    if EllipCheckNew(self,obstacle,tempQStep,'return',obsPoints)
                         stepTr = stepTr*transl(0,0,-0.1);
-                        qStep = self.model.ikine(stepTr,qStep,Mask);
+                        qStep = self.model.ikcon(stepTr,qStep);
                     else
                         stepTr = tempStepTr;
                         qStep = tempQStep; 
                     end
-                    qWaypoints = [qWaypoints;qStep];
-                  % go up when collision with obstacle
-                    while EllipCheckNew(self,obstacle,qStep,'obs',obsPoints)
-                        stepTr = stepTr*transl(0,0,-0.05);
-                        qStep = self.model.ikine(stepTr,qStep,Mask);
-                    end
-                    
-                  % lean forward when collision with goods
-                    while EllipCheckNew(self,goods,qStep,'goods')
-                        stepTr = stepTr*transl(0,0.05,0);
-                        qStep = self.model.ikine(stepTr,qStep,Mask);
-                    end
-                    
+                    qWaypoints = [qWaypoints;qStep];                  
 
-                    qMatrixBe4End = InterpolateWaypointRMRCNew(self,[qStep; qBe4Goal],50);
-                    if ~((EllipCheckNew(self,goods,qMatrixBe4End,'goods')) || (EllipCheckNew(self,obstacle,qMatrixBe4End,'obs',obsPoints)))
-                        % Reached be4goal waypoint without collision, so break out
+%                     qMatrixEnd = InterpolateWaypointRMRCNew(self,[qStep; qGoal],100);
+                    qMatrixEnd = InterpolateWaypointRadians([qStep; qGoal],deg2rad(5));
+                    
+                    if ~EllipCheckNew(self,obstacle,qMatrixEnd,'return',obsPoints)
+                        % Reached goal way point without collision, so break out
                         break;
                     end
-                    qMatrixBe4End = [];
-                    if (sum(qStep' < self.model.qlim(:,1)) ~= 0) || (sum(qStep' > self.model.qlim(:,2)) ~= 0)
-                        disp('cannot avoid the obstacle');
-                        qMatrix = [];
-                        return;
-%                         break;
-                    end
-               end
-              qMatrixStart = InterpolateWaypointRadians(qWaypoints,deg2rad(10));
-              qMatrix = [qMatrixStart;qMatrixBe4End];
-              qMatrix = [qMatrix; InterpolateWaypointRadians([qBe4Goal;qGoal],deg2rad(5))];
-              self.qMatrix = qMatrix;
-              
-%               actualTr = self.model.fkine(qMatrix(end,:));
-%               desireTr = self.model.fkine(qGoal);
-%               if (sum(actualTr ~= desireTr))
-%                 qMatrixExtra = jtraj(qMatrix(end,:),qGoal,10);
-%               end
-%               qMatrix = [qMatrix; qMatrixExtra];
-%               self.qMatrix = qMatrix;
-%               qStep
-%               stepTr
+                    qMatrixEnd = [];
+            end
+               
+            qMatrixStart = InterpolateWaypointRadians(qWaypoints,deg2rad(1));
+            qMatrix = [qMatrixStart;qMatrixEnd];
+            self.qMatrix = qMatrix;
+
         end
-
-
         %% 
         function Lidar(self,robot,qMatrix)
             pNormal = [-0.3090, 0.9511, 0];            % Create questions

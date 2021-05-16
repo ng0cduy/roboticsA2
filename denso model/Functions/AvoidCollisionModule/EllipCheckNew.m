@@ -2,6 +2,8 @@
 function isCollision = EllipCheckNew(robot,obj,qMatrix,option,obsPoints)
      % option = 'goods' means self collision detection when carry the goods
      % option = 'obs' means collision-with-environment detection when carry the goods
+     % option = 'return' means collision-with-environment detection when
+     % return to the initial position
 
     %% number of arguments = 4 means it uses the point cloud created within the function 
     % otherwise the point cloud will be passed into the input arguments    
@@ -13,8 +15,8 @@ function isCollision = EllipCheckNew(robot,obj,qMatrix,option,obsPoints)
     
     % parameters for ellipsoid
     centerPoint = [0 0 0]; 
-    radiiSmall = [0.13,0.2,0.13];       % use for self collision detection
-    radiiLarge = [0.25,0.25,0.18];      % use for collision-with-environment detection
+    radiiLarge = [0.25,0.25,0.18];      % use for option 'obs'
+    radiiSmall = [0.13,0.2,0.13];       % use for other options
     isCollision = 0;
     
     % Go through each set of q
@@ -33,8 +35,8 @@ function isCollision = EllipCheckNew(robot,obj,qMatrix,option,obsPoints)
         tr = GetLinkPoses(qSet,robot);
 
         % Go through each ellipsoid
-        % turn off the last three ellipsoids for self-collision detection 
-        if strcmp(option,'goods') %|| strcmp(option,'obs')
+        % Only turn on the first four ellipsoids for self-collision detection 
+        if strcmp(option,'goods') 
             for i = 1: (size(tr,3)-3)
                 cubePointsAndOnes = (tr(:,:,i) \ [cubePoints,ones(size(cubePoints,1),1)]')';
                 updatedCubePoints = cubePointsAndOnes(:,1:3);
@@ -46,13 +48,28 @@ function isCollision = EllipCheckNew(robot,obj,qMatrix,option,obsPoints)
             end
         end
         
-        % turn off the first 5 ellipsoids for collision-with-environment
-        % detection. This is for optimisation.
+        % Only turn on the last 2 ellipsoids for collision-with-environment
+        % detection, assume that the goods is part of the end-effector. 
         if strcmp(option,'obs')
-            for i = 6:7
+            for i = (size(tr,3)-1):(size(tr,3))
                 cubePointsAndOnes = ((tr(:,:,i)) \ [cubePoints,ones(size(cubePoints,1),1)]')';
                 updatedCubePoints = cubePointsAndOnes(:,1:3);
                 algebraicDist = GetAlgebraicDist(updatedCubePoints, centerPoint, radiiLarge);
+                isCollision = ~isempty(find((algebraicDist < 1),1));
+                if isCollision == 1
+                    return
+                end
+            end
+
+        end
+        
+        % only turn on some of the last ellipsoids for collision-with-environment
+        % detection when return to the initial pose. This is for optimisation.
+        if strcmp(option,'return')
+            for i = (size(tr,3)-4):(size(tr,3)-1)
+                cubePointsAndOnes = ((tr(:,:,i)) \ [cubePoints,ones(size(cubePoints,1),1)]')';
+                updatedCubePoints = cubePointsAndOnes(:,1:3);
+                algebraicDist = GetAlgebraicDist(updatedCubePoints, centerPoint, radiiSmall);
                 isCollision = ~isempty(find((algebraicDist < 1),1));
                 if isCollision == 1
                     return
