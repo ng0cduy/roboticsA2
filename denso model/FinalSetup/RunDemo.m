@@ -2,19 +2,21 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
     clc;
     view(60,40);
     pan on;
-    zoom(2.5);
+    zoom(2.2);
     ob=Obstacle('UFO.ply',transl(1.15,-0.05,0.45));
 %      Reset the robot to intial place
     pickUpRobot.Reset();
     redOrder = 0;
     blueOrder = 0;
     greenOrder = 0;
-%     q0=[0,0,0,0,0,0]';
+    
     Tc0= transl(0,0,2)*troty(pi);
     Ecam = CentralCamera('focal', 0.08, 'pixel', 10e-5, ...
                                 'resolution', [1024 1024],...
                                 'centre', [512 512],'name', 'Environment Cam');
     Ecam.plot_camera('Tcam',Tc0, 'label','scale',0.2);
+    
+    disp('Simulation Start');
   
     %% coming to objects
     %% define parameters
