@@ -501,14 +501,16 @@ classdef DensoVS060<handle
                     return;
                 end
            end
-           
+
           % Join all the waypoints
           qMatrixStart = InterpolateWaypointRadians(qWaypoints,deg2rad(10));
           qMatrix = [qMatrixStart;qMatrixBe4End];
           qMatrix = [qMatrix; InterpolateWaypointRadians([qBe4Goal;qGoal],deg2rad(5))];
           self.qMatrix = qMatrix;
 
+                    
         end
+
 
     end
 end

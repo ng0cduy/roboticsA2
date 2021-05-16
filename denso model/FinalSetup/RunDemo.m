@@ -3,7 +3,7 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
     view(60,40);
     pan on;
     zoom(2.5);
-    ob=Obstacle('UFO.ply',transl(1.15,-0.1,0.45));
+    ob=Obstacle('UFO.ply',transl(1.15,-0.1,0.35));
 %      Reset the robot to intial place
     pickUpRobot.Reset();
     redOrder = 0;
@@ -45,7 +45,7 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
     if strcmpi(good{i}.color,'red') == 1
         guiobj.ColorLamp.Color = 'r';
     elseif strcmpi(good{i}.color,'green') ==1
-        guiobj.ColorLamp.Color = 'r';
+        guiobj.ColorLamp.Color = 'g';
     elseif strcmpi(good{i}.color,'blue') ==1
         guiobj.ColorLamp.Color = 'b';
     end
