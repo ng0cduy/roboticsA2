@@ -82,7 +82,7 @@ classdef Obstacle <handle
             y=self.y;
             z=self.z;
         end
-        %% function to determine object's P for visual servo to detect pose
+        %% function to determine object's points for visual servo to detect pose
         function CalculateP(self)
             x_=self.vUpdate(:,1,1);
             y_=self.vUpdate(:,2,1);

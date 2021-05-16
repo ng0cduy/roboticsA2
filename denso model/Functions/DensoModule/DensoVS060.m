@@ -5,7 +5,6 @@ classdef DensoVS060<handle
     properties(Access =public)
         steps = 50;
         isCollision = false;
-%                         checkedTillWaypoint = 1;
         base;
         endEffector;
         model;
@@ -36,19 +35,16 @@ classdef DensoVS060<handle
         end
         %% Create Denso Links
         function getDensoVS060(self)       
-%             L1 = Link([pi     0       0       pi/2    1.001]);
             L1=Link('alpha',pi/2,'a',0, 'd',0.148, 'offset',pi,'qlim',[deg2rad(-170), deg2rad(170)] );
             L2=Link('alpha',0,'a',0.305, 'd',0, 'offset',pi/2,'qlim',[deg2rad(-120), deg2rad(120)]);
             L3=Link('alpha',-pi/2,'a',0, 'd',0, 'offset',0,'qlim',[deg2rad(-125), deg2rad(155)]);
             L4=Link('alpha',pi/2,'a',0, 'd',0.3, 'offset',0,'qlim',[deg2rad(-270), deg2rad(270)]);
             L5=Link('alpha',-pi/2,'a',0, 'd',0, 'offset',pi/2,'qlim',[deg2rad(-120), deg2rad(120)]);
-            L6=Link('alpha',0,'a',0, 'd',0.06, 'offset',0,'qlim',[deg2rad(-360), deg2rad(360)]);
-%             L1.qlim = [-0.8 0];            
+            L6=Link('alpha',0,'a',0, 'd',0.06, 'offset',0,'qlim',[deg2rad(-360), deg2rad(360)]);           
             self.model = SerialLink([L1 L2 L3 L4 L5 L6],'name',self.name);
         end
         %% Set Denso Base Location 
         function SetBase(self,base)
-%             self.model.base=base*trotz(-pi/2)*trotx(pi/2);
             self.model.base = base * transl(0,0,0.202);
             base = self.model.base;
             self.PlotandColorUR3();
@@ -62,7 +58,6 @@ classdef DensoVS060<handle
                 self.model.points{linkIndex + 1} = vertexData;
             end
             self.model.plot3d(zeros(1,self.model.n),'noarrow','workspace',self.workspace);
-%             self.model.plot3d(zeros(1,self.model.n),'workspace',self.workspace);
             if isempty(findobj(get(gca,'Children'),'Type','Light'))
                 camlight
             end  
@@ -88,7 +83,6 @@ classdef DensoVS060<handle
         end
         %% InverseKinematic for UR3
         function q_ = IKine(self,transform)
-    %           self.pose=transform;
               steps = 15;
               poseArr   = cell(1,steps);
               qArr      = cell(1,steps);
@@ -119,7 +113,6 @@ classdef DensoVS060<handle
                if sum(self.model.getpos() ~= self.qz) ~= 0
                    self.qMatrix_gen('jtraj',poseNew,50);
                    self.Plot(self.qMatrix);
-%                    drawnow();
                else
                    self.model.animate(self.qz);
                    drawnow();
@@ -161,7 +154,6 @@ classdef DensoVS060<handle
                 m(i) = sqrt(det(J*J'));
                 if m(i) < epsilon
                         lambda = (1-(m(i)/epsilon))*5E-2;
-%                         disp(['Reach to singularities at q[' num2str(i),']','Adjusting lambda']);
                 else
                         lambda = 0;
                 end
@@ -174,7 +166,6 @@ classdef DensoVS060<handle
                         qdot(i,j) = 0;
                     end
                 end 
-%                 qdot = J\xdot;
                 qMatrixx(i+1,:) = qMatrixx(i,:) + deltaTime* qdot(i,:);
             end
             qMatrix = qMatrixx;
@@ -205,9 +196,7 @@ classdef DensoVS060<handle
 %               check if the trajectory collide with the table
               self.qMatrix = LinePlane_Collision(self,qNew,obstacle);
               qMatrix=self.qMatrix; 
-%               disp(5);
             end
-%             self.Plot(self.qMatrix);
             qMatrix=self.qMatrix;   
         end
         %% Check eStopState 
@@ -222,17 +211,11 @@ classdef DensoVS060<handle
         %% qMatrix plotting
         function Plot(self,qMatrix,object)
             [row,col] = size(qMatrix);
-%             if self.lcState == true
-%                 ob=Obstacle('UFO.ply',transl(4,0,1));
-%             end
             for i=1:1:row
                     self.checkEStop();
-%                     self.Lidar(self,self.qMatrix(i,:));
                     self.model.animate(qMatrix(i,:));
-%                     drawnow();
                     pause(0.005);                    
                     if(nargin==3)
-%                         self.checkEStop();
                         self.FKine(self.qMatrix(i,:));
                         object.pos_ = self.endEffector*troty(pi)*transl(0,0,-0.08);
                         object.Move(object.pos_);
@@ -252,7 +235,6 @@ classdef DensoVS060<handle
                        qM(i,:)=self.model.ikcon(pose_,qM(i-1,:));
                    end
             end
-%             keyboard;
             for i = 1:1:self.steps
                    result= IsCollision(self,qM(i,:),object.f,object.vUpdate,object.faceNormals);
                    %               Check if there is any collision with all joins
@@ -311,7 +293,7 @@ classdef DensoVS060<handle
                                 temp_=self.FKine(qW(i,:));
                                 qRand = self.IKine(temp_*transl(0,0,-0.4));
                             end
-                            %join the innial path with the new waypoints
+                            %join the initial path with the new waypoints
                             qW =[qWaypoints(1:i,:); qRand; qWaypoints(i+1:end,:)];
                             break;
                         end
@@ -324,11 +306,9 @@ classdef DensoVS060<handle
 
         %% Create a lidar scan at the endEffector
         function Lidar(self,robot,qMatrix)
-            pNormal = [-0.3090, 0.9511, 0];            % Create questions
-            pPoint = [0,0.2,0];                          % Create questions
+            pNormal = [-0.3090, 0.9511, 0];            
+            pPoint = [0,0.2,0];                          
             tr =[];
-%             [row,col] = size(qMatrix);
-%             line_h = [];
             for i=1:1:3
                 if i == 1
                     tr=robot.FKine(robot.model.getpos);
@@ -340,12 +320,11 @@ classdef DensoVS060<handle
                     tr=robot.FKine(robot.model.getpos)*trotx(deg2rad(-20));
                 end
                 startP = tr(1:3,4)';
-                endP = tr(1:3,4)' + 3 * tr(1:3,3)';                             % Create questions
-                intersectP = LinePlaneIntersection(pNormal,pPoint,startP,endP);  % Create questions
+                endP = tr(1:3,4)' + 3 * tr(1:3,3)';                             
+                intersectP = LinePlaneIntersection(pNormal,pPoint,startP,endP);  
                 dist = dist2pts(startP,intersectP)  ;
                 endP = tr(1:3,4)' + dist * tr(1:3,3)';
-%                 self.line_h = plot3([startP(1),endP(1)],[startP(2),endP(2)],[startP(3),endP(3)],'r');
-%                 m=plot3(endP(1),endP(2),endP(3),'r*');
+
                 if i==1
                     self.verts = endP;
                 else
@@ -375,24 +354,11 @@ classdef DensoVS060<handle
                 % Find a central point of the triangle
                 trianglePoint = sum(self.verts)/3;
 
-                % Plot the point/normal of the triangle
-%                 plot3(trianglePoint(1),trianglePoint(2),trianglePoint(3),'g*');
-%                 plot3([trianglePoint(1),trianglePoint(1)+triangleNormal(1)] ...
-%                      ,[trianglePoint(2),trianglePoint(2)+triangleNormal(2)] ...
-%                      ,[trianglePoint(3),trianglePoint(3)+triangleNormal(3)],'b');
-%                 drawnow();
-%                 pause(1);
-
                 % Transform the points on the default plane, to matches the actual triangle
                 points = [X(:),Y(:),Z(:)] * tr(1:3,1:3) + repmat(trianglePoint,prod(sizeMat),1);
                 X = reshape(points(:,1),sizeMat(1),sizeMat(2));
                 Y = reshape(points(:,2),sizeMat(1),sizeMat(2));
                 Z = reshape(points(:,3),sizeMat(1),sizeMat(2));
-
-                % Make points where Z<0 to be = zero
-%                 Z(Z<0)= 0;
-%                 surf(X,Y,Z);
-%                 pause(1);
 
                 maxRange = 0.6; % meters
 
@@ -438,7 +404,7 @@ classdef DensoVS060<handle
             w = plot3(scanData(:,1),scanData(:,2),scanData(:,3),'r.');
             pause(0.005);
             try delete(w); end; 
-%             try delete(m); end;
+
         end  
            
 %% Function to generate qMatrix, avoid collision using ellipsoid method
@@ -554,7 +520,6 @@ classdef DensoVS060<handle
                     end
                     qWaypoints = [qWaypoints;qStep];                  
 
-%                     qMatrixEnd = InterpolateWaypointRMRCNew(self,[qStep; qGoal],100);
                     qMatrixEnd = InterpolateWaypointRadians([qStep; qGoal],deg2rad(5));
                     
                     if ~EllipCheckNew(self,obstacle,qMatrixEnd,'return',obsPoints)

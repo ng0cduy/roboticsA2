@@ -1,3 +1,4 @@
+%% class use light curtain to detect collision  
 classdef LightCurtain<handle
     properties(Constant)
 %         qz=zeros(1,6);
@@ -26,17 +27,6 @@ classdef LightCurtain<handle
         function Plot_LC(self)
             if(self.mode == true)
                 for i = -self.a:0.12:self.a
-%                     for y = 1:4
-%                         hold on;
-%                         if y==1
-%                             self.tr = transl(i,self.a,self.z);
-%                         elseif y == 2
-%                             self.tr = transl(self.a,i,self.z);
-%                         elseif y==3
-%                             self.tr = transl(i,-self.a,self.z);
-%                         else
-%                             self.tr = transl(-self.a,i,self.z);
-%                         end
                     for j = 1:3
                         hold on;
                         if j==1
@@ -50,8 +40,7 @@ classdef LightCurtain<handle
 
                         endP = self.tr(1:3,4)' + self.dist * self.tr(1:3,3)';
                         line1_h = plot3([startP(1),endP(1)],[startP(2),endP(2)],[startP(3),endP(3)],'r*');
-                        plot3(endP(1),endP(2),endP(3),'r*');
-%                         axis equal;
+                        plot3(endP(1),endP(2),endP(3),'r*');    
                         temp = self.tr(1:3,4)';
                         self.pose = [self.pose;temp];
                     end
@@ -61,10 +50,11 @@ classdef LightCurtain<handle
             end
         end
         
+%           Check collision by checking the distance of the object to the
+%           workspace
         function collisionDetect = DetectObstacle(self,obstacle)
               center =[0 0];
               [x,y,~] = obstacle.GetSize();
-%               poseTemp = obstacle.UpdatePose();
               x0 = obstacle.pos_(1,4);
               y0 = obstacle.pos_(2,4);
               points= [x0 ,y0+y/2; x0+x/2,y0; x0,y0-y/2; x0-x/2,y0];  
@@ -72,14 +62,6 @@ classdef LightCurtain<handle
             if obstacle.pos_(3,4) > self.z + self.dist || obstacle.pos_(3,4) < self.z
                 self.collision = false;
             else 
-%                 for i=1:size(self.pose(:,1),1) % each ray of the light curtain 
-%                     if(transpose(obstacle.pos_(1:2,4)) <= self.pose(i,1:2)+0.01 |...
-%                                 transpose(obstacle.pos_(1:2,4)) > self.pose(i,1:2)-0.05 )
-%                         self.collision = true;
-%                         return
-%                     end
-% 
-%                 end
                     pointsInside = find(distFromCenter < self.a);
                     pointsOutside = find(distFromCenter > self.a);
                     if size(pointsInside,2) > 0 && size(pointsOutside,2) >0
