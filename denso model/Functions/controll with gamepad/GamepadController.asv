@@ -8,17 +8,16 @@ function GamepadController(denso,gui)
     dt = 0.15;
     n =0;
     denso.model.delay=0.001;
-    kLinear = 0.15;
-    kAngular = 0.7;
-    lambda =0.01;
+    kLinear = 0.2;
+    kAngular = 0.8;
+    lambda =0.1;
     %%
     tic;
     while(toc <duration)
         n = n+1;
         [axes, buttons, povs] = read(joy);
-        
         J = denso.model.jacob0(q);
-        JDLS_inv = (J'*J + lambda*eye(6))\(J');
+        JDSL = 
         vx = kLinear*axes(1);
         vy = kLinear*axes(2);
         vz = kLinear*axes(3);
@@ -26,8 +25,8 @@ function GamepadController(denso,gui)
         wy = kAngular*(buttons(7)-buttons(5));
         wz = kAngular*(buttons(8)-buttons(6));
         xdot = [vx;vy;vz;wx;wy;wz];
-        qdot = JDLS_inv*xdot;
-%         qdot = J\xdot;
+        qdot = J\xdot;
+        % Update plot
         q = q + dt*qdot';
         % pass value to gui
         gui.q1EditField.Value = num2str(rad2deg(q(1,1)));
@@ -45,14 +44,12 @@ function GamepadController(denso,gui)
         gui.rEditField.Value = num2str(round(RPY(1),4));
         gui.pEditField.Value = num2str(round(RPY(2),4));
         gui.y_EditField.Value = num2str(round(RPY(3),4));
-        denso.model.animate(q); 
+        denso.model.animate(q);  
         for joint = 1:1:6
             if q(joint) < denso.model.qlim(joint,1)
                 q(joint) = denso.model.qlim(joint,1);
-                qdot(joint) =0;
             elseif q(joint) > denso.model.qlim(joint,2)
                 q(joint) = denso.model.qlim(joint,2);
-                qdot(joint) = 0;
             end 
         end
         % wait until loop time elapsed

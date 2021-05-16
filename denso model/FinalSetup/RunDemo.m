@@ -3,7 +3,7 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
     view(60,40);
     pan on;
     zoom(2.5);
-    ob=Obstacle('UFO.ply',transl(1.15,-0.1,0.35));
+    ob=Obstacle('UFO.ply',transl(1.15,-0.05,0.45));
 %      Reset the robot to intial place
     pickUpRobot.Reset();
     redOrder = 0;
@@ -79,6 +79,10 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
      disp('Checking collision before drop off, please wait');
      qMatrix=dropOffRobot.EllipsoidQGen(goodsTr,good{i},ob);
      dropOffRobot.Plot(qMatrix,good{i});
+     
+     % reset to its initial pose
+     qMatrix=dropOffRobot.ElipsoidResetQgen(ob);
+     dropOffRobot.Plot(qMatrix);
      dropOffRobot.Reset();
     end
     disp('End of the Simulation');
