@@ -29,6 +29,7 @@ classdef VisServo<handle
         end
         
         function Run_VisualServo(self,r,object)
+            disp('Estimating the good pose, Please wait');
             cam = self.cam_;
             self.fps=60;
             P=object.P;

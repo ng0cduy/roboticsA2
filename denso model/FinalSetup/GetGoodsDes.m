@@ -4,10 +4,10 @@ function goodsDesTr = GetGoodsDes(obj,order)
     if strcmpi(obj.color,'red') == 1
         type = 1;
 
-    elseif strcmpi(obj.color,'blue') == 1
+    elseif strcmpi(obj.color,'green') == 1
         type = 2;
 
-    elseif strcmpi(obj.color,'green') == 1
+    elseif strcmpi(obj.color,'blue') == 1
         type = 3;
     else
         type = -1;
@@ -36,4 +36,6 @@ function goodsDesTr = GetGoodsDes(obj,order)
     % extract the demand position
     goodsDes = dropMatrix(order,:,type);
     goodsDesTr = transl(goodsDes(1), goodsDes(2), goodsDes(3))*troty(pi);
+    
+
 end

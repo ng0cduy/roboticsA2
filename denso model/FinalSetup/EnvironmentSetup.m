@@ -17,7 +17,22 @@ function [robot1,robot2,boxes,lightcurtain,conveyor] = EnvironmentSetup
     human = goods('human.ply',transl(2,2,0.64));
     brickwall=goods('brick_wall.ply',transl(0.4,3,1.3));
     fire_ext=goods('ext.ply',transl(-2,2.4,0.2)*trotz(pi));
+%     
+    red_qx=[1.25-0.12,1.25-0.12;1.25+0.12,1.25+0.12];
+    red_qy=[0.2-0.12,0.2+0.12;0.2-0.12,0.2+0.12];
+    red_qz=[-0,-0;-0,-0];
+    red=ImgRead(red_qx,red_qy,red_qz,'red.png');
     
+    green_qx=[1.25-0.12,1.25-0.12;1.25+0.12,1.25+0.12];
+    green_qy=[0.32,0.56;0.32,0.56];
+    green_qz=[-0,-0;-0,-0];
+    green=ImgRead(green_qx,green_qy,green_qz,'green.png');
+    
+    blue_qx=[1.25-0.12,1.25-0.12;1.25+0.12,1.25+0.12];
+    blue_qy=[0.56,0.56+0.24;0.56,0.56+0.24];
+    blue_qz=[-0,-0;-0,-0];
+    blue=ImgRead(blue_qx,blue_qy,blue_qz,'blue.png');
+ 
     ground_qx=[-5,-5;5,5];
     ground_qy=[-5,5;-5,5];
     ground_qz=[-0.49,-0.49;-0.49,-0.49];

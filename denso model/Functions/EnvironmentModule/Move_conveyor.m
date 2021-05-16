@@ -6,7 +6,7 @@ classdef Move_conveyor<handle
         function self=Move_conveyor(object)
             for i=-0.5:0.01:0.8
                  object.Move(transl(i,-0.08,0.32));
-                 pause(0.05);
+%                  pause(0.05);
             end
         end
     end

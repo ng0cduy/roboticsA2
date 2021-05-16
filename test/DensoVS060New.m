@@ -236,7 +236,7 @@ classdef DensoVS060New<handle
             end
         end
         %% Check collision Function
-        function qMatrix = Check_Collision(self,goalTr,goods,obstacle)          
+        function qMatrix = LinePlane_Collision(self,goalTr,goods,obstacle)          
                obsPoints = obstacle.CreateMesh(false);
 %                plot3(obsPoints(:,1),obsPoints(:,2),obsPoints(:,3),'cyan*');
                

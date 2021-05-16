@@ -12,5 +12,5 @@ robot.Plot(qMatrix);
 %%
 goodsTr = GetGoodsDes(g,2); 
 
-qMatrix=robot.Check_Collision(goodsTr,g,ob);
+qMatrix=robot.LinePlane_Collision(goodsTr,g,ob);
 robot.Plot(qMatrix,g);

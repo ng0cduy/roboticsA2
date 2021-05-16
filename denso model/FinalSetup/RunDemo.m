@@ -2,17 +2,10 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
     clc;
     view(60,40);
     pan on;
-%      zoom(2.2);
-<<<<<<< HEAD:denso model/FinalSetup/NewMain.m
-     ob=Obstacle('UFO.ply',transl(1.15,-0.1,0.35));
+    zoom(2.5);
+    ob=Obstacle('UFO.ply',transl(1.15,-0.1,0.35));
 %      Reset the robot to intial place
-     pickUpRobot.Reset();
-=======
-    ob=Obstacle('UFO.ply',transl(1.15,-0.05,0.45));
     pickUpRobot.Reset();
-    dropOffRobot.Reset();
-
->>>>>>> 033e138a330d4c33bbdf54fc09c7445d80cd4f26:denso model/FinalSetup/RunDemo.m
     redOrder = 0;
     blueOrder = 0;
     greenOrder = 0;
@@ -85,6 +78,5 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
      dropOffRobot.Plot(qMatrix,good{i});
      dropOffRobot.Reset();
     end
-    
-
+    disp('End of the Simulation');
 end

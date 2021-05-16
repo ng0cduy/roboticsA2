@@ -183,7 +183,7 @@ classdef DensoVS060<handle
         end
         
         %% Trajectory generator
-        function qMatrix = qMatrix_gen(self,option,pose,steps,obstacle1,obstacle2)
+        function qMatrix = qMatrix_gen(self,option,pose,steps,obstacle)
             self.qMatrix = [];
             self.isCollision =false;
             self.steps=steps;
@@ -203,13 +203,9 @@ classdef DensoVS060<handle
             
             if(nargin==5)       
 %               check if the trajectory collide with the table
-              self.qMatrix = Check_Collision(self,qNew,obstacle1);
+              self.qMatrix = LinePlane_Collision(self,qNew,obstacle);
               qMatrix=self.qMatrix; 
 %               disp(5);
-            elseif(nargin==6)
-                qM = Check_Collision(self,qNew,obstacle1);
-                self.qMatrix = Check_Collision(self,qM,obstacle2);
-
             end
 %             self.Plot(self.qMatrix);
             qMatrix=self.qMatrix;   
@@ -245,7 +241,7 @@ classdef DensoVS060<handle
             end
         end
         %% Check collision using LinePlane intersection
-        function qMatrix = Check_Collision(self,q,object)
+        function qMatrix = LinePlane_Collision(self,q,object)
             qM=[];
             for i = 1:1:self.steps                   
                    temp = self.model.fkine(self.qMatrix(i,:));
@@ -308,6 +304,7 @@ classdef DensoVS060<handle
                                 temp_=self.FKine(qW(i,:));
                                 qRand = self.IKine(temp_*transl(0,0,-0.4));
                             end
+                            %join the innial path with the new waypoints
                             qW =[qWaypoints(1:i,:); qRand; qWaypoints(i+1:end,:)];
                             break;
                         end
