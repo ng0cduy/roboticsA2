@@ -1,12 +1,18 @@
-function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtain)
-     clc;
-%      conveyor =Obstacle('conveyor1.ply',transl(0,-0.05,0.2));
-     view(60,40);
-     pan on;
+function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
+    clc;
+    view(60,40);
+    pan on;
 %      zoom(2.2);
+<<<<<<< HEAD:denso model/FinalSetup/NewMain.m
      ob=Obstacle('UFO.ply',transl(1.15,-0.1,0.35));
 %      Reset the robot to intial place
      pickUpRobot.Reset();
+=======
+    ob=Obstacle('UFO.ply',transl(1.15,-0.05,0.45));
+    pickUpRobot.Reset();
+    dropOffRobot.Reset();
+
+>>>>>>> 033e138a330d4c33bbdf54fc09c7445d80cd4f26:denso model/FinalSetup/RunDemo.m
     redOrder = 0;
     blueOrder = 0;
     greenOrder = 0;
@@ -75,8 +81,7 @@ function NewMain(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor,lightcurtai
      
      % deliver the goods
      goodsTr = GetGoodsDes(good{i},goodsOrder); 
-     qGoal = dropOffRobot.IKine(goodsTr);
-     qMatrix=dropOffRobot.Check_Collision1(qGoal,good{i},ob);
+     qMatrix=dropOffRobot.EllipsoidQGen(goodsTr,good{i},ob);
      dropOffRobot.Plot(qMatrix,good{i});
      dropOffRobot.Reset();
     end
