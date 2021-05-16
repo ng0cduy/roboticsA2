@@ -498,6 +498,7 @@ classdef DensoVS060<handle
                 if (sum(qStep' < self.model.qlim(:,1)) ~= 0) || (sum(qStep' > self.model.qlim(:,2)) ~= 0)
                     disp('cannot avoid the obstacle');
                     qMatrix = [];
+                    self.eStopState = 2; % stop the system if it cannot avoid the obstacle.
                     return;
                 end
            end
