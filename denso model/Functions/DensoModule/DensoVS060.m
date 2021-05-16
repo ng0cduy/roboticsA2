@@ -456,8 +456,8 @@ classdef DensoVS060<handle
 
            % Create a safe waypoint be4GoalTr that under the height of the obstacle 
            ObsTr = obstacle.pos_;
-           be4GoalZ = ObsTr(3,4) - 0.02;
-           be4GoalY = 0.35;
+           be4GoalZ = ObsTr(3,4);
+           be4GoalY = 0.55;
 
            be4GoalLastCol = [ goalTr(1,4); be4GoalY; be4GoalZ;  1 ];
            be4GoalTr = [goalTr(:,1:3), be4GoalLastCol];
