@@ -26,7 +26,7 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
     good{i} = goodsArray{i}; %assign the goods from the array
     pose = good{i}.pos_*transl(0,0,-0.08); %take the pose of the good
 
-    qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,100); %generate the path from the
+    qMatrix = pickUpRobot.qMatrix_gen('rmrc',pose,80); %generate the path from the
                                                         %to the good
     pickUpRobot.Plot(qMatrix); %plot the path
     
@@ -43,7 +43,8 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
      pickUpRobot.Plot(qMatrix,good{i}); 
      pickUpRobot.Reset(); 
 
-     Move_conveyor(pickUpRobot,good{i});   
+     Move_conveyor(pickUpRobot,good{i});
+     pause(0.5);
      camview{i} = EEcam(dropOffRobot);
      
      view(60,40);
@@ -60,7 +61,7 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
         guiobj.ColorLamp.Color = 'b';
     end
     b{i}=VisServo(dropOffRobot,good{i}); %Use visual servo to estimate the pose of the goods
-%      pause(1);
+    
 %      adjust the endEffector
      qMatrix=dropOffRobot.qMatrix_gen('jtraj',b{i}.object_pose*troty(pi),80);
      dropOffRobot.Plot(qMatrix);
@@ -94,5 +95,6 @@ function RunDemo(pickUpRobot,dropOffRobot,goodsArray,guiobj,conveyor)
      dropOffRobot.Plot(qMatrix);
      dropOffRobot.Reset();
     end
+    clc;
     disp('End of the Simulation');
 end

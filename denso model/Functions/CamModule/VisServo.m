@@ -131,7 +131,7 @@ classdef VisServo<handle
 
 %                  pause(1/self.fps)
 
-                if ~isempty(200) && (self.i > 200)
+                if ~isempty(150) && (self.i > 150)
                     break;
                 end
 
