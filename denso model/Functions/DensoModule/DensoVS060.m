@@ -51,11 +51,11 @@ classdef DensoVS060<handle
 %             self.model.base=base*trotz(-pi/2)*trotx(pi/2);
             self.model.base = base * transl(0,0,0.202);
             base = self.model.base;
-            self.PlotandColorUR3();
+            self.PlotandColorDenso();
         end
         
         %% Import PLY files to get the 3D model
-        function PlotandColorUR3(self)
+        function PlotandColorDenso(self)
             for linkIndex = 0:self.model.n
                 [ faceData, vertexData, plyData{linkIndex + 1} ] = plyread(['J',num2str(linkIndex),'.ply'],'tri'); 
                 self.model.faces{linkIndex + 1} = faceData;
@@ -81,12 +81,12 @@ classdef DensoVS060<handle
                 end
             end
         end
-        %% ForWard Kinematic for UR3
+        %% ForWard Kinematic for Denso
         function ee_pose = FKine(self,q)
               self.endEffector = self.model.fkine(q);
               ee_pose = self.endEffector;
         end
-        %% InverseKinematic for UR3
+        %% InverseKinematic for Denso
         function q_ = IKine(self,transform)
     %           self.pose=transform;
               steps = 15;
