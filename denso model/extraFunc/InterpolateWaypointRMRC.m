@@ -1,4 +1,4 @@
-%% InterpolateWaypointRadians
+%% InterpolateWaypointRMRC
 % Given a set of waypoints, finely intepolate them using RMRC
 function qMatrix = InterpolateWaypointRMRC(robot,waypointRadians,steps)
         qMatrix = [];

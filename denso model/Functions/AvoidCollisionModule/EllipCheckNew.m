@@ -8,9 +8,9 @@ function isCollision = EllipCheckNew(robot,obj,qMatrix,option,obsPoints)
     %% number of arguments = 4 means it uses the point cloud created within the function 
     % otherwise the point cloud will be passed into the input arguments    
     if nargin == 4
-        obsPoints = false;
+        obsPoints = false; % for goods
     else
-        cubePoints = obsPoints;
+        cubePoints = obsPoints; % others
     end
     
     % parameters for ellipsoid
